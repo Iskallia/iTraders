@@ -1,0 +1,9 @@
+entity.trader.name=Trader
+entity.fighter.name=Fighter
+item.bit_100.name=100 Bits
+item.bit_500.name=500 Bits
+item.bit_1000.name=1000 Bits
+item.bit_5000.name=5000 Bits
+item.bit_10000.name=10000 Bits
+item.spawn_egg_fighter.name=Spawn Fighter
+itemGroup.itraders=iTraders

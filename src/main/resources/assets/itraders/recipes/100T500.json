@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {"item": "itraders:bit_100"},
+        {"item": "itraders:bit_100"},
+        {"item": "itraders:bit_100"},
+        {"item": "itraders:bit_100"},
+        {"item": "itraders:bit_100"}
+    ],
+    "result": {
+        "item": "itraders:bit_500",
+        "count": 1
+    }
+}
