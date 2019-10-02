@@ -48,7 +48,6 @@ public class RenderFighter extends RenderLivingBase<EntityFighter> {
     }
 
     public void doRender(EntityFighter entity, double x, double y, double z, float entityYaw, float partialTicks) { 
-    	this.mainModel = new ModelPlayer(0.0F, entity.isSlim());
     	double d0 = y;
 
         if (entity.isSneaking()) {

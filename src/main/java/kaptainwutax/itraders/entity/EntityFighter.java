@@ -120,8 +120,19 @@ public class EntityFighter extends EntityZombie {
 		super.readEntityFromNBT(compound);		
 		if(compound.hasKey("SizeMultiplier"))this.changeSize(compound.getFloat("SizeMultiplier"));	
 		
+		boolean needsGear = true;
+		
         for(EntityEquipmentSlot s: EntityEquipmentSlot.values()) {
-        	this.setItemStackToSlot(s, this.loot.enchant(this.loot.getRandomLoot(s)));
+        	if(s == EntityEquipmentSlot.HEAD)continue;
+        	ItemStack stack = this.getItemStackFromSlot(s);
+        	needsGear &= stack.getCount() == 0;
+        }
+		
+        if(needsGear) {
+	        for(EntityEquipmentSlot s: EntityEquipmentSlot.values()) {
+	        	if(s == EntityEquipmentSlot.HEAD)continue;
+	        	this.setItemStackToSlot(s, this.loot.enchant(this.loot.getRandomLoot(s)));
+	        }
         }
 	}
 	
