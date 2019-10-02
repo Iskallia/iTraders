@@ -1,23 +1,18 @@
 package kaptainwutax.itraders.item;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.entity.EntityFighter;
 import kaptainwutax.itraders.init.InitItem;
-import kaptainwutax.itraders.util.Randomizer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,27 +41,16 @@ import net.minecraft.world.World;
 public class ItemSpawnEggFighter extends Item {
 
     public static boolean shouldSpawnEntity(NBTTagCompound compound) {
-        if (compound == null)
-            return true;
-
-        // NBT does not contain EntityTag COMPOUND
-        if (!compound.hasKey("EntityTag", 10)) // 10 - COMPOUND
-            return true;
-
-        // Fetch EntityTag from NBT
+        if(compound == null)return true;
+        
+        if (!compound.hasKey("EntityTag", 10))return true;
         NBTTagCompound entityTagNBT = compound.getCompoundTag("EntityTag");
+        
+        if(!entityTagNBT.hasKey("SizeMultiplier"))return true;
+        float sizeMultiplier = entityTagNBT.getFloat("SizeMultiplier");
 
-        // EntityTag does not contain SizeMultiplier FLOAT or DOUBLE
-        if (!entityTagNBT.hasKey("SizeMultiplier", 5) // 5 - FLOAT
-                && !entityTagNBT.hasKey("SizeMultiplier", 6)) // 6 - DOUBLE
-            return true;
-
-        // Fetch SizeMultiplier (default:0) from EntityTag
-        double sizeMultiplier = entityTagNBT.getDouble("SizeMultiplier");
-
-        // Perform percentage roll
-        double percentage = MathHelper.clamp(sizeMultiplier / 5d, 0.1d, 1.0d);
-        return Randomizer.booleanWithPercentage(percentage);
+        double percentage = MathHelper.clamp(sizeMultiplier / 5.0f, 0.1f, 1.0f);
+        return Math.random() < percentage;
     }
 
     public ItemSpawnEggFighter(String name) {

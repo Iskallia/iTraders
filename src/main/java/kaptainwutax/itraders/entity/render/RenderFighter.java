@@ -27,7 +27,6 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 public class RenderFighter extends RenderLivingBase<EntityFighter> {
 	
 	protected static IRenderFactory renderFactory = new Factory();
-	
     private final boolean smallArms;
 
     public RenderFighter(RenderManager renderManager) {
@@ -48,7 +47,8 @@ public class RenderFighter extends RenderLivingBase<EntityFighter> {
         return (ModelPlayer)super.getMainModel();
     }
 
-    public void doRender(EntityFighter entity, double x, double y, double z, float entityYaw, float partialTicks) {  	
+    public void doRender(EntityFighter entity, double x, double y, double z, float entityYaw, float partialTicks) { 
+    	this.mainModel = new ModelPlayer(0.0F, entity.isSlim());
     	double d0 = y;
 
         if (entity.isSneaking()) {
@@ -134,40 +134,6 @@ public class RenderFighter extends RenderLivingBase<EntityFighter> {
         }
 
         super.renderEntityName(entityIn, x, y, z, name, distanceSq);
-    }
-
-    public void renderRightArm(EntityFighter clientPlayer) {
-        float f = 1.0F;
-        GlStateManager.color(1.0F, 1.0F, 1.0F);
-        float f1 = 0.0625F;
-        ModelPlayer modelplayer = this.getMainModel();
-        this.setModelVisibilities(clientPlayer);
-        GlStateManager.enableBlend();
-        modelplayer.swingProgress = 0.0F;
-        modelplayer.isSneak = false;
-        modelplayer.setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, clientPlayer);
-        modelplayer.bipedRightArm.rotateAngleX = 0.0F;
-        modelplayer.bipedRightArm.render(0.0625F);
-        modelplayer.bipedRightArmwear.rotateAngleX = 0.0F;
-        modelplayer.bipedRightArmwear.render(0.0625F);
-        GlStateManager.disableBlend();
-    }
-
-    public void renderLeftArm(EntityFighter clientPlayer) {
-        float f = 1.0F;
-        GlStateManager.color(1.0F, 1.0F, 1.0F);
-        float f1 = 0.0625F;
-        ModelPlayer modelplayer = this.getMainModel();
-        this.setModelVisibilities(clientPlayer);
-        GlStateManager.enableBlend();
-        modelplayer.isSneak = false;
-        modelplayer.swingProgress = 0.0F;
-        modelplayer.setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, clientPlayer);
-        modelplayer.bipedLeftArm.rotateAngleX = 0.0F;
-        modelplayer.bipedLeftArm.render(0.0625F);
-        modelplayer.bipedLeftArmwear.rotateAngleX = 0.0F;
-        modelplayer.bipedLeftArmwear.render(0.0625F);
-        GlStateManager.disableBlend();
     }
 
     protected void renderLivingAt(EntityFighter entityLivingBaseIn, double x, double y, double z) {
