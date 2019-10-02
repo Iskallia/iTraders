@@ -44,7 +44,7 @@ public class EntityFighter extends EntityZombie {
 	
 	public String lastName = "Fighter";
 	
-	public float sizeMultiplier = this.rand.nextFloat() * 2 + 1;
+	public float sizeMultiplier = this.rand.nextFloat() * 2.0f + 0.8f;
 	public TieredLoot loot = TieredLoot.get(TieredLoot.Tier.COMMON);
 	
 	public EntityFighter(World world) {
@@ -163,8 +163,7 @@ public class EntityFighter extends EntityZombie {
 	}
 
 	public void updateSkin(String name) {
-		if(!this.world.isRemote)return;
-		
+		if(!this.world.isRemote)return;		
 		gameProfile.set(new GameProfile(null, name));
 		gameProfile.set(TileEntitySkull.updateGameprofile(gameProfile.get()));
 		playerInfo.set(new NetworkPlayerInfo(gameProfile.get()));

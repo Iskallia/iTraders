@@ -100,15 +100,9 @@ public class EntityTrader extends EntityVillager {
 
 	public void updateSkin(String name) {
 		if(!this.world.isRemote)return;
-		
-		new Thread() {
-			@Override
-			public void run() {
-				gameProfile.set(new GameProfile(null, name));
-				gameProfile.set(TileEntitySkull.updateGameprofile(gameProfile.get()));
-				playerInfo.set(new NetworkPlayerInfo(gameProfile.get()));
-			}
-		}.start();
+		gameProfile.set(new GameProfile(null, name));
+		gameProfile.set(TileEntitySkull.updateGameprofile(gameProfile.get()));
+		playerInfo.set(new NetworkPlayerInfo(gameProfile.get()));
 	}
 	
 	@SideOnly(value = Side.CLIENT)

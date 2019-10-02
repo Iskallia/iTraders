@@ -1,5 +1,7 @@
 package kaptainwutax.itraders.init;
 
+import java.util.Random;
+
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.item.ItemBit;
 import kaptainwutax.itraders.item.ItemSpawnEggFighter;
@@ -9,12 +11,14 @@ import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -41,16 +45,23 @@ public class InitItem {
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(SPAWN_EGG_FIGHTER, new BehaviorDefaultDispenseItem() {
             public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
                 EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
-                double d0 = source.getX() + (double)enumfacing.getFrontOffsetX();
-                double d1 = (double)((float)(source.getBlockPos().getY() + enumfacing.getFrontOffsetY()) + 0.2F);
-                double d2 = source.getZ() + (double)enumfacing.getFrontOffsetZ();
-                Entity entity = ItemSpawnEggFighter.spawnCreature(source.getWorld(), ItemMonsterPlacer.getNamedIdFrom(stack), d0, d1, d2);
+                double x = source.getX() + (double)enumfacing.getFrontOffsetX();
+                double y = (double)((float)(source.getBlockPos().getY() + enumfacing.getFrontOffsetY()) + 0.2F);
+                double z = source.getZ() + (double)enumfacing.getFrontOffsetZ();
 
-                if (entity instanceof EntityLivingBase && stack.hasDisplayName()) {
-                    entity.setCustomNameTag(stack.getDisplayName());
+                if(stack.hasDisplayName() && new Random().nextBoolean()) {                    
+        			ItemStack headDrop = new ItemStack(Items.SKULL, 1, 3);
+        			NBTTagCompound nbt = new NBTTagCompound();
+        			nbt.setString("SkullOwner", stack.getDisplayName());
+        			headDrop.setTagCompound(nbt);
+        			EntityItem itemItem = new EntityItem(source.getWorld(), x, y, z, headDrop);
+        			source.getWorld().spawnEntity(itemItem);
+                } else {
+                    Entity entity = ItemSpawnEggFighter.spawnCreature(source.getWorld(), ItemSpawnEggFighter.getNamedIdFrom(stack), x, y, z);
+                	if(stack.hasDisplayName())entity.setCustomNameTag(stack.getDisplayName());
+                    ItemMonsterPlacer.applyItemEntityDataToEntity(source.getWorld(), (EntityPlayer)null, stack, entity);
                 }
 
-                ItemMonsterPlacer.applyItemEntityDataToEntity(source.getWorld(), (EntityPlayer)null, stack, entity);
                 stack.shrink(1);
                 return stack;
             }
