@@ -124,9 +124,12 @@ public class EntityFighter extends EntityZombie {
 		if(compound.hasKey("SizeMultiplier"))
 			this.changeSize(compound.getFloat("SizeMultiplier"));
 
-		// Equip with loot
-		for(EntityEquipmentSlot s: EntityEquipmentSlot.values()) {
-			this.setItemStackToSlot(s, this.loot.enchant(this.loot.getRandomLoot(s)));
+		// Equip with loot, except for HEAD slot
+		for(EntityEquipmentSlot slot: EntityEquipmentSlot.values()) {
+			if(slot == EntityEquipmentSlot.HEAD)
+				continue;
+
+			this.setItemStackToSlot(slot, this.loot.enchant(this.loot.getRandomLoot(slot)));
 		}
 	}
 
