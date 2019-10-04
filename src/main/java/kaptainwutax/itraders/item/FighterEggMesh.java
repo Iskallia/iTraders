@@ -28,12 +28,12 @@ public class FighterEggMesh implements ItemMeshDefinition {
 			}
 		}
 	}
-	 * */
+	 **/
 	
 	public FighterEggMesh(ItemSpawnEggFighter item) {
 		for(int i = 0; i < 5; i++) {
 			TEXTURES[i] = new ModelResourceLocation(
-					Traders.MOD_ID + ":" + "iskall_badge_" + (i + 1),
+					Traders.MOD_ID + ":" + "badge_" + (i + 1),
 					"inventory"
 				);
 		}
