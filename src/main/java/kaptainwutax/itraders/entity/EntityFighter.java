@@ -53,7 +53,7 @@ public class EntityFighter extends EntityZombie {
 		
 		if(!this.world.isRemote) {
 			this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED)
-					.setBaseValue(this.rand.nextFloat() * 0.2d + 0.22d);	
+					.setBaseValue(this.rand.nextFloat() * 0.25d + 0.5d);	
 			
 			 this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 			 
@@ -101,7 +101,9 @@ public class EntityFighter extends EntityZombie {
 			InitPacket.PIPELINE.sendToAllTracking(new S2CFighterHeight(this), this);
 		}
 		
-		if(this.moveForward > 0.2f) {
+		double amplitude = this.motionX * this.motionX + this.motionZ * this.motionZ;
+
+		if(amplitude > 0.0031D) {
 			this.setSprinting(true);
 			this.getJumpHelper().setJumping();
 		} else {

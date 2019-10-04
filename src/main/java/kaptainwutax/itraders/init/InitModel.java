@@ -1,5 +1,6 @@
 package kaptainwutax.itraders.init;
 
+import kaptainwutax.itraders.item.FighterEggMesh;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
@@ -12,7 +13,8 @@ public class InitModel {
 		registerSimpleItemModel(InitItem.BIT_1000, 0);
 		registerSimpleItemModel(InitItem.BIT_5000, 0);
 		registerSimpleItemModel(InitItem.BIT_10000, 0);
-		registerSimpleItemModel(InitItem.SPAWN_EGG_FIGHTER, 0);
+		
+		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_FIGHTER, new FighterEggMesh(InitItem.SPAWN_EGG_FIGHTER));
 	}
 	
 	private static void registerSimpleItemModel(Item item, int meta) {
