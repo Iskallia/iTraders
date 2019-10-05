@@ -1,16 +1,14 @@
 package kaptainwutax.itraders.init;
 
-import java.util.Random;
-
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.item.ItemBit;
+import kaptainwutax.itraders.item.ItemEggPouch;
 import kaptainwutax.itraders.item.ItemSpawnEggFighter;
 import kaptainwutax.itraders.tab.CreativeTabsITraders;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -33,6 +31,7 @@ public class InitItem {
     public static ItemBit BIT_10000 = new ItemBit("bit_10000", 10000);
 
     public static ItemSpawnEggFighter SPAWN_EGG_FIGHTER = new ItemSpawnEggFighter("spawn_egg_fighter");
+    public static ItemEggPouch EGG_POUCH = new ItemEggPouch("egg_pouch");
 
     public static void registerItems(IForgeRegistry<Item> registry) {
         registerItem(BIT_100, registry);
@@ -41,6 +40,7 @@ public class InitItem {
         registerItem(BIT_5000, registry);
         registerItem(BIT_10000, registry);
         registerItem(SPAWN_EGG_FIGHTER, registry);
+        registerItem(EGG_POUCH, registry);
 
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(SPAWN_EGG_FIGHTER, new BehaviorDefaultDispenseItem() {
             public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
