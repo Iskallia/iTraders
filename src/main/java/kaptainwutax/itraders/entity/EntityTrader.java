@@ -101,7 +101,7 @@ public class EntityTrader extends EntityVillager {
 	public void updateSkin(String name) {
 		if(!this.world.isRemote)return;
 		gameProfile.set(new GameProfile(null, name));
-		gameProfile.set(TileEntitySkull.updateGameprofile(gameProfile.get()));
+		gameProfile.set(TileEntitySkull.updateGameProfile(gameProfile.get()));
 		playerInfo.set(new NetworkPlayerInfo(gameProfile.get()));
 	}
 	

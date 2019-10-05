@@ -63,7 +63,7 @@ public class ItemSpawnEggFighter extends Item {
     }
 
     public ItemSpawnEggFighter(String name) {
-        this.setUnlocalizedName(name);
+        this.setTranslationKey(name);
         this.setRegistryName(Traders.getResource(name));
         this.setCreativeTab(InitItem.ITRADERS_TAB);
     }

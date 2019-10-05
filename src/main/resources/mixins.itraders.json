@@ -1,0 +1,9 @@
+{
+    "required": true,
+    "package": "kaptainwutax.itraders.mixin",
+    "refmap": "mixins.itraders.refmap.json",
+    "minVersion": "0.7.3",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [
+    ]
+}
