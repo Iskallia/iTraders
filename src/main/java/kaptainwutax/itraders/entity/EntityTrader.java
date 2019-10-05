@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.mojang.authlib.GameProfile;
 
+import kaptainwutax.itraders.PlayerSkin;
 import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.util.Trade;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -27,9 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityTrader extends EntityVillager {
 	
-	public AtomicReference<GameProfile> gameProfile = new AtomicReference<GameProfile>();
-	public AtomicReference<NetworkPlayerInfo> playerInfo = new AtomicReference<NetworkPlayerInfo>();
-	
+	public final PlayerSkin skin = new PlayerSkin();
 	private String lastName = "Trader";
 	
 	public EntityTrader(World world) {
@@ -50,7 +49,7 @@ public class EntityTrader extends EntityVillager {
 			String name = this.getCustomNameTag();
 			
 			if(!lastName.equals(name)) {
-				this.updateSkin(name);
+				this.skin.updateSkin(name);
 				this.lastName = name;
 			}
 		}
@@ -97,21 +96,5 @@ public class EntityTrader extends EntityVillager {
 			e.printStackTrace();
 		}
 	}
-
-	public void updateSkin(String name) {
-		if(!this.world.isRemote)return;
-		gameProfile.set(new GameProfile(null, name));
-		gameProfile.set(TileEntitySkull.updateGameProfile(gameProfile.get()));
-		playerInfo.set(new NetworkPlayerInfo(gameProfile.get()));
-	}
-	
-	@SideOnly(value = Side.CLIENT)
-    public ResourceLocation getLocationSkin() {
-    	if(this.playerInfo == null || this.playerInfo.get() == null) {
-    		return DefaultPlayerSkin.getDefaultSkinLegacy();
-    	}		
-    	
-        return this.playerInfo.get().getLocationSkin();
-    }
 
 }

@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 public class MixinForgeLoader implements IFMLLoadingPlugin {
 
     public MixinForgeLoader() {
-    	System.out.println("STARTING MIXIN!=========================");
+    	System.out.println("STARTING MIXINS!=========================");
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.itraders.json");
     }

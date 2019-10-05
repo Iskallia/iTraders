@@ -5,5 +5,7 @@
     "minVersion": "0.7.3",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
+	"MixinPlayerProfileCache",
+	"MixinTileEntityItemStackRenderer"
     ]
 }

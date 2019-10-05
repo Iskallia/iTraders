@@ -108,7 +108,7 @@ public class RenderFighter extends RenderLivingBase<EntityFighter> {
     }
 
     public ResourceLocation getEntityTexture(EntityFighter entity) {
-        return entity.getLocationSkin();
+        return entity.skin.getLocationSkin();
     }
 
     public void transformHeldFull3DItemLayer() {

@@ -115,7 +115,7 @@ public class RenderTrader extends RenderLivingBase<EntityTrader> {
     }
 
     public ResourceLocation getEntityTexture(EntityTrader entity) {
-        return entity.getLocationSkin();
+        return entity.skin.getLocationSkin();
     }
 
     public void transformHeldFull3DItemLayer() {

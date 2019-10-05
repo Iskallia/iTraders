@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationException;
 
+import kaptainwutax.itraders.PlayerSkin;
 import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.init.InitPacket;
 import kaptainwutax.itraders.net.packet.S2CFighterHeight;
@@ -39,9 +40,7 @@ import scala.reflect.internal.Trees.This;
 
 public class EntityFighter extends EntityZombie {
 	
-	public AtomicReference<GameProfile> gameProfile = new AtomicReference<GameProfile>();
-	public AtomicReference<NetworkPlayerInfo> playerInfo = new AtomicReference<NetworkPlayerInfo>();
-	
+	public final PlayerSkin skin = new PlayerSkin();	
 	public String lastName = "Fighter";
 	
 	public float sizeMultiplier = this.rand.nextFloat() * 2.0f + 0.8f;
@@ -93,7 +92,8 @@ public class EntityFighter extends EntityZombie {
 			String name = this.getCustomNameTag();
 			
 			if(!lastName.equals(name)) {
-				this.updateSkin(name);
+				this.skin.updateSkin(name);
+				this.lastName = name;
 			}
 		}	
 		
@@ -178,31 +178,6 @@ public class EntityFighter extends EntityZombie {
 		IEntityLivingData livingdata1 = super.onInitialSpawn(difficulty, livingdata);
 		this.setCustomNameTag(this.getCustomNameTag());	
 		return livingdata1;
-	}
-
-	public void updateSkin(String name) {
-		if(!this.world.isRemote)return;		
-		gameProfile.set(new GameProfile(null, name));
-		gameProfile.set(TileEntitySkull.updateGameProfile(gameProfile.get()));
-		playerInfo.set(new NetworkPlayerInfo(gameProfile.get()));
-		this.lastName = name;
-	}
-	
-	@SideOnly(value = Side.CLIENT)
-    public ResourceLocation getLocationSkin() {
-    	if(this.playerInfo == null || this.playerInfo.get() == null) {
-    		return DefaultPlayerSkin.getDefaultSkinLegacy();
-    	}		
-    	
-        return this.playerInfo.get().getLocationSkin();
-    }
-	
-	public boolean isSlim() {
-    	if(this.playerInfo == null || this.playerInfo.get() == null) {
-    		return false;
-    	}		
-    	
-        return this.playerInfo.get().getSkinType().equals("slim");
 	}
 	
 	@Override
