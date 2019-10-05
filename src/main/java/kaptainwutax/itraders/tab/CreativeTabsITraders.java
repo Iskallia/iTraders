@@ -11,9 +11,9 @@ public class CreativeTabsITraders extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getTabIconItem() {
+	public ItemStack createIcon() {
 		return new ItemStack(InitItem.SPAWN_EGG_FIGHTER, 1);
-	}
+	}	
 	
 	@Override
 	public boolean hasSearchBar() {
