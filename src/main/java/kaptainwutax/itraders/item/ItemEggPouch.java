@@ -1,8 +1,9 @@
 package kaptainwutax.itraders.item;
 
 import kaptainwutax.itraders.Traders;
+import kaptainwutax.itraders.gui.GuiHandler;
 import kaptainwutax.itraders.init.InitItem;
-import kaptainwutax.itraders.storage.EggPouchWorldSavedData;
+import kaptainwutax.itraders.world.data.DataEggPouch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,22 +26,14 @@ public class ItemEggPouch extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        ItemStack pouchItemStack = playerIn.getHeldItem(handIn);
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack pouchItemStack = player.getHeldItem(hand);
 
-        if (worldIn.isRemote) {
-            return new ActionResult<>(EnumActionResult.PASS, pouchItemStack);
+        if(world.isRemote) {
+            player.openGui(Traders.getInstance(), GuiHandler.POUCH, world, 0, 0, 0);
         }
-
-        if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) { // TODO: Remove. Here for debug purposes
-            Item spawn_egg_fighter = Item.REGISTRY.getObject(new ResourceLocation(Traders.MOD_ID, "spawn_egg_fighter"));
-            EggPouchWorldSavedData.get(worldIn).putSpawnEgg("iGoodie", new ItemStack(spawn_egg_fighter, 1));
-            return super.onItemRightClick(worldIn, playerIn, handIn);
-        }
-
-        List<ItemStack> eggsOfiGoodie = EggPouchWorldSavedData.get(worldIn).getPouchContent("iGoodie");
-        System.out.printf("Eggs of iGoodie: %s\n", eggsOfiGoodie);
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        
+        return super.onItemRightClick(world, player, hand);
     }
 
 }
