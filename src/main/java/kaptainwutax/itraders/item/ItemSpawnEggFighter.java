@@ -110,7 +110,7 @@ public class ItemSpawnEggFighter extends Item {
                 worldIn.spawnEntity(itemItem);
             } else {
                 Entity entity = ItemSpawnEggFighter.spawnCreature(worldIn, ItemSpawnEggFighter.getNamedIdFrom(stack), (double) blockpos.getX() + 0.5D, (double) blockpos.getY() + d0, (double) blockpos.getZ() + 0.5D);
-                if(stack.hasDisplayName())entity.setCustomNameTag(UUID.randomUUID().toString());
+                if(stack.hasDisplayName())entity.setCustomNameTag(stack.getDisplayName());
                 ItemMonsterPlacer.applyItemEntityDataToEntity(worldIn, (EntityPlayer) null, stack, entity);
             }
 
