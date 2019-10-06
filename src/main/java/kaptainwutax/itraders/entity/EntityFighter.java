@@ -2,11 +2,7 @@ package kaptainwutax.itraders.entity;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.exceptions.AuthenticationException;
 
 import kaptainwutax.itraders.PlayerSkin;
 import kaptainwutax.itraders.init.InitConfig;
@@ -14,29 +10,18 @@ import kaptainwutax.itraders.init.InitPacket;
 import kaptainwutax.itraders.net.packet.S2CFighterHeight;
 import kaptainwutax.itraders.util.Product;
 import kaptainwutax.itraders.util.TieredLoot;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import scala.reflect.internal.Trees.This;
 
 public class EntityFighter extends EntityZombie {
 	

@@ -2,7 +2,6 @@ package kaptainwutax.itraders.item;
 
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.init.InitItem;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
 public class ItemBit extends Item {

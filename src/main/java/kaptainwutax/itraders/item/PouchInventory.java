@@ -1,16 +1,10 @@
 package kaptainwutax.itraders.item;
 
-import javax.annotation.Nonnull;
-
-import org.omg.CORBA.PRIVATE_MEMBER;
-
 import kaptainwutax.itraders.init.InitItem;
-import net.minecraft.client.renderer.texture.Stitcher.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
-import scala.reflect.internal.Trees.This;
 
 public class PouchInventory extends ItemStackHandler {
 
@@ -22,22 +16,22 @@ public class PouchInventory extends ItemStackHandler {
 		this.deserializeNBT(nbt);
 	}
 
-    @Override
-    public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-    	this.expandToSlot(slot);
-    	super.setStackInSlot(slot, stack);
-    }
-    
-    @Override
-    public ItemStack getStackInSlot(int slot) {
-    	this.expandToSlot(slot);
-    	return super.getStackInSlot(slot);
-    }
+	@Override
+	public void setSize(int size) {
+		this.stacks = NonNullList.create();
+		this.expandToSlot(size - 1);
+	}
 	
 	public void expand(int rows) {
 		for(int i = 0; i < rows * 9; i++) {
 			this.stacks.add(ItemStack.EMPTY);
 		}
+	}
+	
+	@Override
+	protected void validateSlotIndex(int slot) {
+		this.expandToSlot(slot);
+		super.validateSlotIndex(slot);
 	}
 	
 	public void expandToSlot(int slot) {
@@ -55,7 +49,7 @@ public class PouchInventory extends ItemStackHandler {
 		return super.isItemValid(slot, stack);
 	}
 	
-    protected void onContentsChanged(int slot) {  
+	public void rescaleToFit() {
     	boolean full = true;
     	
     	for (ItemStack stack : this.stacks) {
@@ -68,13 +62,17 @@ public class PouchInventory extends ItemStackHandler {
     	if(full) {
     		this.expand(1);
     	}
+	}
+	
+    protected void onContentsChanged(int slot) {  
+    	this.rescaleToFit();
     }
-
-	public void purge() {
+	
+    public void purge() {
 		for(int slot = this.stacks.size() - 1; slot >= 0; slot--) {
 			if(!this.getStackInSlot(slot).isEmpty())break;
 			else this.stacks.remove(slot);
-		}
-	}
-	
+		}		
+    }
+    
 }

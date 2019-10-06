@@ -5,7 +5,6 @@ import kaptainwutax.itraders.gui.container.GuiContainerEggPouch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-import scala.reflect.internal.Trees.New;
 
 public class GuiHandler implements IGuiHandler {
 

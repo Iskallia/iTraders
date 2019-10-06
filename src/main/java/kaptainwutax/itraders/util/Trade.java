@@ -1,7 +1,6 @@
 package kaptainwutax.itraders.util;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.JsonAdapter;
 
 public class Trade {
 	

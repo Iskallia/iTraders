@@ -3,28 +3,19 @@ package kaptainwutax.itraders.entity;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-
-import com.mojang.authlib.GameProfile;
 
 import kaptainwutax.itraders.PlayerSkin;
 import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.util.Trade;
-import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntitySkull;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityTrader extends EntityVillager {
 	

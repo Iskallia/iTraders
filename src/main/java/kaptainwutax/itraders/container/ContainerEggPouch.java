@@ -8,7 +8,6 @@ import kaptainwutax.itraders.item.PouchInventory;
 import kaptainwutax.itraders.world.data.DataEggPouch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
@@ -19,7 +18,9 @@ public class ContainerEggPouch extends Container {
 
 	protected PouchInventory pouchInventory;
 	protected List<SlotItemHandler> pouchSlots = new ArrayList<>();
-	protected int pouchOffset = 0;
+
+	public int currentScroll = 1;
+	public int totalScroll = 1;
 	
 	public ContainerEggPouch(World world, EntityPlayer player) {
 		DataEggPouch data = DataEggPouch.get(world);
@@ -82,13 +83,13 @@ public class ContainerEggPouch extends Container {
 		return stack;
 	}
 	
-	public void onMove(int amount) {
-		if(amount == 0)return;
-		int lastPouchOffset = this.pouchOffset;
-		this.pouchOffset += amount;
-		int rows = MathHelper.ceil((float)this.pouchInventory.getSlots() / 9.0f);
-		this.pouchOffset = MathHelper.clamp(this.pouchOffset, 0, rows - 6);
-		int diff = this.pouchOffset - lastPouchOffset;
+	public void onMove(int amount) {	
+		this.pouchInventory.rescaleToFit();
+		int lastScroll = this.currentScroll;
+		this.currentScroll += amount;
+		this.totalScroll = MathHelper.ceil((float)this.pouchInventory.getSlots() / 9.0f) - 5;
+		this.currentScroll = MathHelper.clamp(this.currentScroll, 1, this.totalScroll);
+		int diff = this.currentScroll - lastScroll;
 		if(diff == 0)return;
 		
 		//This is super hacky, gonna have to implement a custom SlotItemHandler at some point.
@@ -106,7 +107,7 @@ public class ContainerEggPouch extends Container {
 		});
 		
 		this.detectAndSendChanges();
-	}
+	}	
 	
 	@Override
 	public void onContainerClosed(EntityPlayer player) {

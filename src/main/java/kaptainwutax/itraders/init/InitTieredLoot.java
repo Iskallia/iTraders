@@ -2,8 +2,6 @@ package kaptainwutax.itraders.init;
 
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import kaptainwutax.itraders.util.TieredLoot;
 
 public class InitTieredLoot {

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Items;

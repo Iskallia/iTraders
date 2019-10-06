@@ -2,11 +2,9 @@ package kaptainwutax.itraders.net.packet;
 
 import io.netty.buffer.ByteBuf;
 import kaptainwutax.itraders.entity.EntityFighter;
-import kaptainwutax.itraders.entity.EntityTrader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;

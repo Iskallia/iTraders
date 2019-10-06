@@ -6,7 +6,6 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 
 import kaptainwutax.itraders.util.Product;
-import kaptainwutax.itraders.util.Trade;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;

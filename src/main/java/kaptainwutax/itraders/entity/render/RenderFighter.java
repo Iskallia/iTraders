@@ -1,7 +1,6 @@
 package kaptainwutax.itraders.entity.render;
 
 import kaptainwutax.itraders.entity.EntityFighter;
-import kaptainwutax.itraders.entity.EntityFighter;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
