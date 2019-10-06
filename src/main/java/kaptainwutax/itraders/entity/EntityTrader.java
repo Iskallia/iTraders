@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import kaptainwutax.itraders.PlayerSkin;
+import kaptainwutax.itraders.SkinProfile;
 import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.util.Trade;
 import net.minecraft.entity.IEntityLivingData;
@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 
 public class EntityTrader extends EntityVillager {
 	
-	public final PlayerSkin skin = new PlayerSkin();
+	public final SkinProfile skin = new SkinProfile();
 	private String lastName = "Trader";
 	
 	public EntityTrader(World world) {

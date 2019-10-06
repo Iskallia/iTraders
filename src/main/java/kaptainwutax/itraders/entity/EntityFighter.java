@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import kaptainwutax.itraders.PlayerSkin;
+import kaptainwutax.itraders.SkinProfile;
 import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.init.InitPacket;
 import kaptainwutax.itraders.net.packet.S2CFighterHeight;
@@ -25,7 +25,7 @@ import net.minecraft.world.WorldServer;
 
 public class EntityFighter extends EntityZombie {
 	
-	public final PlayerSkin skin = new PlayerSkin();	
+	public final SkinProfile skin = new SkinProfile();	
 	public String lastName = "Fighter";
 	
 	public float sizeMultiplier = this.rand.nextFloat() * 2.0f + 0.8f;

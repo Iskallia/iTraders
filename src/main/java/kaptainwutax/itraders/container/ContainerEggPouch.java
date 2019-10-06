@@ -4,9 +4,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import kaptainwutax.itraders.init.InitPacket;
 import kaptainwutax.itraders.item.PouchInventory;
+import kaptainwutax.itraders.net.packet.S2CPouchScroll;
 import kaptainwutax.itraders.world.data.DataEggPouch;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -16,6 +19,9 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerEggPouch extends Container {
 
+	private EntityPlayer player;
+	private World world;
+	
 	protected PouchInventory pouchInventory;
 	protected List<SlotItemHandler> pouchSlots = new ArrayList<>();
 
@@ -23,6 +29,9 @@ public class ContainerEggPouch extends Container {
 	public int totalScroll = 1;
 	
 	public ContainerEggPouch(World world, EntityPlayer player) {
+		this.world = world;
+		this.player = player; 
+		
 		DataEggPouch data = DataEggPouch.get(world);
 		this.pouchInventory = data.getOrCreatePouch(player);
 		
@@ -79,7 +88,7 @@ public class ContainerEggPouch extends Container {
 
             slot.onTake(player, stackInSlot);
         }
-        
+
 		return stack;
 	}
 	
@@ -107,6 +116,10 @@ public class ContainerEggPouch extends Container {
 		});
 		
 		this.detectAndSendChanges();
+		
+		if(!this.world.isRemote) {
+			InitPacket.PIPELINE.sendTo(new S2CPouchScroll(this.currentScroll, this.totalScroll), (EntityPlayerMP)this.player);
+		}
 	}	
 	
 	@Override

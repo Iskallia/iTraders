@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PlayerSkin {
+public class SkinProfile {
 	
 	private static ExecutorService service = Executors.newFixedThreadPool(5);
 	public AtomicReference<GameProfile> gameProfile = new AtomicReference<GameProfile>();
@@ -34,7 +34,11 @@ public class PlayerSkin {
     		return DefaultPlayerSkin.getDefaultSkinLegacy();
     	}		
     	
-        return this.playerInfo.get().getLocationSkin();
+    	try {
+    		return this.playerInfo.get().getLocationSkin();
+    	} catch(Exception e) {
+    		return DefaultPlayerSkin.getDefaultSkinLegacy();
+    	}
     }
 	
 	public static void updateGameProfile(GameProfile input, Consumer<GameProfile> consumer) {

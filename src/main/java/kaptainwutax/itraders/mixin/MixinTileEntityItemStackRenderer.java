@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import com.mojang.authlib.GameProfile;
 
-import kaptainwutax.itraders.PlayerSkin;
+import kaptainwutax.itraders.SkinProfile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockShulkerBox;
@@ -86,7 +86,7 @@ public class MixinTileEntityItemStackRenderer {
                     nbttagcompound.setTag("SkullOwner", NBTUtil.writeGameProfile(new NBTTagCompound(), gameprofile));
                 	*/
                 	
-                    PlayerSkin.updateGameProfile(new GameProfile((UUID)null, nbttagcompound.getString("SkullOwner")), newProfile -> {
+                    SkinProfile.updateGameProfile(new GameProfile((UUID)null, nbttagcompound.getString("SkullOwner")), newProfile -> {
                     	nbttagcompound.removeTag("SkullOwner");
                         nbttagcompound.setTag("SkullOwner", NBTUtil.writeGameProfile(new NBTTagCompound(), newProfile));
                     });
