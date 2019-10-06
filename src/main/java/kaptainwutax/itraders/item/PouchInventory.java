@@ -41,7 +41,6 @@ public class PouchInventory extends ItemStackHandler {
 	}
 	
 	public void expandToSlot(int slot) {
-		if(this.stacks.size() <= slot)System.out.println("To " + slot);
 		while(this.stacks.size() <= slot) {
 			this.stacks.add(ItemStack.EMPTY);
 		}

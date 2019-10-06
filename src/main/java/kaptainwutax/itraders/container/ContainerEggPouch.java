@@ -22,7 +22,6 @@ public class ContainerEggPouch extends Container {
 	protected int pouchOffset = 0;
 	
 	public ContainerEggPouch(World world, EntityPlayer player) {
-		System.out.println(world.isRemote);
 		DataEggPouch data = DataEggPouch.get(world);
 		this.pouchInventory = data.getOrCreatePouch(player);
 		
@@ -78,7 +77,6 @@ public class ContainerEggPouch extends Container {
             }
 
             slot.onTake(player, stackInSlot);
-
         }
         
 		return stack;
@@ -108,8 +106,6 @@ public class ContainerEggPouch extends Container {
 		});
 		
 		this.detectAndSendChanges();
-		
-		System.out.println(this.pouchOffset);
 	}
 	
 	@Override
