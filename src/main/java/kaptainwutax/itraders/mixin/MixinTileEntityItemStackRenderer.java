@@ -38,14 +38,14 @@ import net.minecraft.util.EnumFacing;
 @Mixin(TileEntityItemStackRenderer.class)
 public class MixinTileEntityItemStackRenderer {
 
-	@Shadow @Final private static TileEntityShulkerBox[] SHULKER_BOXES = new TileEntityShulkerBox[16];
-    @Shadow @Final private TileEntityChest chestBasic = new TileEntityChest(BlockChest.Type.BASIC);
-    @Shadow @Final private TileEntityChest chestTrap = new TileEntityChest(BlockChest.Type.TRAP);
-    @Shadow @Final private TileEntityEnderChest enderChest = new TileEntityEnderChest();
-    @Shadow @Final private TileEntitySkull skull = new TileEntitySkull();
+	@Shadow private static TileEntityShulkerBox[] SHULKER_BOXES = new TileEntityShulkerBox[16];
+    @Shadow private TileEntityChest chestBasic = new TileEntityChest(BlockChest.Type.BASIC);
+    @Shadow private TileEntityChest chestTrap = new TileEntityChest(BlockChest.Type.TRAP);
+    @Shadow private TileEntityEnderChest enderChest = new TileEntityEnderChest();
+    @Shadow private TileEntitySkull skull = new TileEntitySkull();
 	@Shadow @Final private TileEntityBanner banner;
 	@Shadow @Final private TileEntityBed bed;
-    @Shadow @Final private ModelShield modelShield = new ModelShield();
+    @Shadow private ModelShield modelShield = new ModelShield();
     
 	@Overwrite
     public void renderByItem(ItemStack stack, float partialTicks)

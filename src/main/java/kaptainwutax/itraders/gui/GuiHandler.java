@@ -13,9 +13,7 @@ public class GuiHandler implements IGuiHandler {
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		System.out.println("RUN SERVER");
 		if(id == POUCH) {
-			System.out.println("POUCH");
 			return new ContainerEggPouch(world, player);
 		}
 		
@@ -24,9 +22,7 @@ public class GuiHandler implements IGuiHandler {
 
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		System.out.println("RUN CLIENT");
 		if(id == POUCH) {
-			System.out.println("POUCH");
 			return new GuiContainerEggPouch(world, player);
 		}
 		

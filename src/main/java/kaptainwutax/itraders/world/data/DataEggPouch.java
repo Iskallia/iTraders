@@ -1,8 +1,8 @@
 package kaptainwutax.itraders.world.data;
 
-import kaptainwutax.itraders.PouchInventory;
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.item.ItemSpawnEggFighter;
+import kaptainwutax.itraders.item.PouchInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -50,8 +50,6 @@ public class DataEggPouch extends WorldSavedData {
 				this.pouchesMap.put(pouch.getString("key"), new PouchInventory(pouch.getCompoundTag("value")));
 			});
 		}
-		
-		System.out.println(nbt);
 	}
 
 	@Override
@@ -66,8 +64,12 @@ public class DataEggPouch extends WorldSavedData {
 		});
 		
 		compound.setTag("pouches", pouches);
-		System.out.println(compound);
 		return compound;
+	}
+	
+	@Override
+	public boolean isDirty() {
+		return true;
 	}
 	
     public static DataEggPouch get(World world) {

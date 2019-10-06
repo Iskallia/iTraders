@@ -27,12 +27,7 @@ public class ItemEggPouch extends Item {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-        ItemStack pouchItemStack = player.getHeldItem(hand);
-
-        if(world.isRemote) {
-            player.openGui(Traders.getInstance(), GuiHandler.POUCH, world, 0, 0, 0);
-        }
-        
+        player.openGui(Traders.getInstance(), GuiHandler.POUCH, world, 0, 0, 0);   
         return super.onItemRightClick(world, player, hand);
     }
 
