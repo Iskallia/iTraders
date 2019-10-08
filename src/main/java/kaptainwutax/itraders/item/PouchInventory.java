@@ -6,6 +6,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+
 public class PouchInventory extends ItemStackHandler {
 
 	public PouchInventory() {
@@ -14,6 +16,34 @@ public class PouchInventory extends ItemStackHandler {
 	
 	public PouchInventory(NBTTagCompound nbt) {
 		this.deserializeNBT(nbt);
+	}
+
+	public boolean isFull() {
+		for (ItemStack stack : this.stacks) {
+			if(stack.isEmpty()) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public boolean putStackOnFirstEmpty(ItemStack stack) {
+		boolean expanded = false;
+
+		if(isFull()) {
+			expand(1);
+			expanded = true;
+		}
+
+		for (int i = 0; i < this.stacks.size(); i++) {
+			if(this.stacks.get(i) == ItemStack.EMPTY) {
+				this.stacks.set(i, stack);
+				break;
+			}
+		}
+
+		return expanded;
 	}
 
 	@Override
@@ -50,16 +80,7 @@ public class PouchInventory extends ItemStackHandler {
 	}
 	
 	public void rescaleToFit() {
-    	boolean full = true;
-    	
-    	for (ItemStack stack : this.stacks) {
-    		if(stack.isEmpty()) {
-    			full = false;
-    			break;
-    		}
-		}
-
-    	if(full) {
+    	if(isFull()) {
     		this.expand(1);
     	}
 	}

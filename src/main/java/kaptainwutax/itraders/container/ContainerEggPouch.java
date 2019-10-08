@@ -21,48 +21,50 @@ public class ContainerEggPouch extends Container {
 
 	private EntityPlayer player;
 	private World world;
-	
+
 	protected PouchInventory pouchInventory;
 	protected List<SlotItemHandler> pouchSlots = new ArrayList<>();
 
 	public int currentScroll = 1;
 	public int totalScroll = 1;
-	
+
 	public ContainerEggPouch(World world, EntityPlayer player) {
 		this.world = world;
 		this.player = player;
-		
+
 		DataEggPouch data = DataEggPouch.get(world);
 		this.pouchInventory = data.getOrCreatePouch(player);
-		
+
 		for(int row = 0; row < 6; row++) {
 			for(int column = 0; column < 9; column++) {
-				int slotId = row * 9 + column;	
+				int slotId = row * 9 + column;
 				SlotItemHandler slot = new SlotItemHandler(this.pouchInventory, slotId, 8 + column * 18, 18 + row * 18);
 				this.addSlotToContainer(slot);
 				this.pouchSlots.add(slot);
 			}
 		}
-		
+
 		for(int row = 0; row < 3; row++) {
 			for(int column = 0; column < 9; column++) {
-				int slotId = row * 9 + column + 9;				
+				int slotId = row * 9 + column + 9;
 				this.addSlotToContainer(new Slot(player.inventory, slotId, 8 + column * 18, 140 + row * 18));
 			}
 		}
-		
+
 		for(int hotbar = 0; hotbar < 9; hotbar++) {
 			this.addSlotToContainer(new Slot(player.inventory, hotbar, 8 + hotbar * 18, 198));
 		}
 	}
-	
+
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return true;
 	}
-	
+
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int index) {
+        boolean fromPlayerInventory = 54 <= index && index <= 89;
+        boolean fromEggPouch = 0 <= index && index <= 53;
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
 
@@ -70,15 +72,19 @@ public class ContainerEggPouch extends Container {
             ItemStack stackInSlot = slot.getStack();
             stack = stackInSlot.copy();
 
-            int containerSlots = this.inventorySlots.size() - player.inventory.mainInventory.size();
+			int containerSlots = this.inventorySlots.size() - player.inventory.mainInventory.size();
 
-            if(index < containerSlots) {
-                if(!this.mergeItemStack(stackInSlot, containerSlots, this.inventorySlots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if(!this.mergeItemStack(stackInSlot, 0, containerSlots, false)) {
-                return ItemStack.EMPTY;
-            }
+			if (fromEggPouch) {
+				if (!this.mergeItemStack(stackInSlot, containerSlots, this.inventorySlots.size(), true)) {
+					return ItemStack.EMPTY;
+				}
+
+			} else if (fromPlayerInventory) {
+				this.pouchInventory.putStackOnFirstEmpty(stack);
+				slot.putStack(ItemStack.EMPTY);
+				this.detectAndSendChanges();
+				return ItemStack.EMPTY;
+			}
 
             if(stackInSlot.getCount() == 0) {
                 slot.putStack(ItemStack.EMPTY);
@@ -95,8 +101,8 @@ public class ContainerEggPouch extends Container {
 	public void filter(String searchQuery) {
 
 	}
-	
-	public void onMove(int amount) {	
+
+	public void onMove(int amount) {
 		this.pouchInventory.rescaleToFit();
 		int lastScroll = this.currentScroll;
 		this.currentScroll += amount;
@@ -104,12 +110,12 @@ public class ContainerEggPouch extends Container {
 		this.currentScroll = MathHelper.clamp(this.currentScroll, 1, this.totalScroll);
 		int diff = this.currentScroll - lastScroll;
 		if(diff == 0)return;
-		
+
 		//This is super hacky, gonna have to implement a custom SlotItemHandler at some point.
 		this.pouchSlots.forEach(slot -> {
 			Field field = SlotItemHandler.class.getDeclaredFields()[2];
 			field.setAccessible(true);
-			
+
 			try {
 				field.set(slot, (int)field.get(slot) + diff * 9);
 			} catch (IllegalArgumentException e) {
@@ -118,17 +124,17 @@ public class ContainerEggPouch extends Container {
 				e.printStackTrace();
 			}
 		});
-		
+
 		this.detectAndSendChanges();
-		
+
 		if(!this.world.isRemote) {
 			InitPacket.PIPELINE.sendTo(new S2CPouchScroll(this.currentScroll, this.totalScroll), (EntityPlayerMP)this.player);
 		}
-	}	
-	
+	}
+
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
-		super.onContainerClosed(player);	
+		super.onContainerClosed(player);
 		this.pouchInventory.purge();
 	}
 
