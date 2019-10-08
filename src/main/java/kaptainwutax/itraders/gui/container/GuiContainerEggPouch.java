@@ -54,9 +54,18 @@ public class GuiContainerEggPouch extends GuiContainer {
 
         this.searchField.drawTextBox();
 
-        this.drawHoveringText(this.currentScroll + "/" + this.totalScroll,
-                (this.width / 2) + 54,
-                (this.height / 2) - 95);
+//        this.drawHoveringText(this.currentScroll + "/" + this.totalScroll,
+//                (this.width / 2) + 54,
+//                (this.height / 2) - 95);
+
+		int height = 100;
+		int scrollBarHeight = 109;
+		float scrollBarUnit = ((float)scrollBarHeight) / (6 + this.totalScroll - 1);
+		int scrollBarX = (this.width / 2) + 82;
+		int scrollBarY = (int) ((this.height / 2) - 95 + (scrollBarUnit * (this.currentScroll - 1)));
+		int scrollBarY2 = (int) (scrollBarY + (6 * scrollBarUnit));
+		this.drawVerticalLine(scrollBarX+1, scrollBarY, scrollBarY2, 0xFF_C3C3C3);
+		this.drawVerticalLine(scrollBarX, scrollBarY, scrollBarY2, 0xFF_000000);
 
         this.renderHoveredToolTip(mouseX, mouseY);
     }
