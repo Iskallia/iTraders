@@ -63,7 +63,8 @@ public class PouchInventory extends ItemStackHandler {
     		this.expand(1);
     	}
 	}
-	
+
+	@Override
     protected void onContentsChanged(int slot) {  
     	this.rescaleToFit();
     }

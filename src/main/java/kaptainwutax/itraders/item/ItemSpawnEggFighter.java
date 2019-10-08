@@ -66,6 +66,7 @@ public class ItemSpawnEggFighter extends Item {
         this.setTranslationKey(name);
         this.setRegistryName(Traders.getResource(name));
         this.setCreativeTab(InitItem.ITRADERS_TAB);
+        this.setMaxStackSize(1);
     }
 
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {

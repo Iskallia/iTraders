@@ -30,7 +30,7 @@ public class ContainerEggPouch extends Container {
 	
 	public ContainerEggPouch(World world, EntityPlayer player) {
 		this.world = world;
-		this.player = player; 
+		this.player = player;
 		
 		DataEggPouch data = DataEggPouch.get(world);
 		this.pouchInventory = data.getOrCreatePouch(player);
@@ -90,6 +90,10 @@ public class ContainerEggPouch extends Container {
         }
 
 		return stack;
+	}
+
+	public void filter(String searchQuery) {
+
 	}
 	
 	public void onMove(int amount) {	
