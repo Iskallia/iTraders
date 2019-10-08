@@ -58,7 +58,6 @@ public class GuiContainerEggPouch extends GuiContainer {
 //                (this.width / 2) + 54,
 //                (this.height / 2) - 95);
 
-		int height = 100;
 		int scrollBarHeight = 109;
 		float scrollBarUnit = ((float)scrollBarHeight) / (6 + this.totalScroll - 1);
 		int scrollBarX = (this.width / 2) + 82;
