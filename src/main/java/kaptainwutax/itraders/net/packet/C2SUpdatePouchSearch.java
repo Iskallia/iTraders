@@ -2,24 +2,20 @@ package kaptainwutax.itraders.net.packet;
 
 import io.netty.buffer.ByteBuf;
 import kaptainwutax.itraders.container.ContainerEggPouch;
-import kaptainwutax.itraders.gui.container.GuiContainerEggPouch;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.nio.charset.StandardCharsets;
 
-public class S2CUpdatePouch implements IMessage {
+public class C2SUpdatePouchSearch implements IMessage {
 
     String searchQuery;
 
-    public S2CUpdatePouch() {}
+    public C2SUpdatePouchSearch() {}
 
-    public S2CUpdatePouch(String searchQuery) {
+    public C2SUpdatePouchSearch(String searchQuery) {
         this.searchQuery = searchQuery;
     }
 
@@ -34,19 +30,20 @@ public class S2CUpdatePouch implements IMessage {
         buf.writeCharSequence(this.searchQuery, StandardCharsets.UTF_8);
     }
 
-    public static class S2CUpdatePouchHandler implements IMessageHandler<S2CUpdatePouch, IMessage> {
+    public static class C2SUpdatePouchSearchHandler implements IMessageHandler<C2SUpdatePouchSearch, S2CUpdatePouchSearch> {
 
         @Override
-        public IMessage onMessage(S2CUpdatePouch message, MessageContext ctx) {
-            Minecraft minecraft = Minecraft.getMinecraft();
+        public S2CUpdatePouchSearch onMessage(C2SUpdatePouchSearch message, MessageContext ctx) {
+            EntityPlayerMP playerMP = ctx.getServerHandler().player;
 
-            System.out.printf("Got S2C update pouch %s\n", message.searchQuery);
+            System.out.printf("Got C2S update pouch\n");
 
-            if (minecraft.currentScreen instanceof GuiContainerEggPouch) {
-                GuiContainerEggPouch gui = (GuiContainerEggPouch) minecraft.currentScreen;
-                ContainerEggPouch container = (ContainerEggPouch) gui.inventorySlots;
+            if (playerMP.openContainer instanceof ContainerEggPouch) {
+                ContainerEggPouch container = (ContainerEggPouch) playerMP.openContainer;
                 container.searchQuery = message.searchQuery;
                 container.updateSlots();
+                container.detectAndSendChanges();
+                return new S2CUpdatePouchSearch(message.searchQuery);
             }
 
             return null;
