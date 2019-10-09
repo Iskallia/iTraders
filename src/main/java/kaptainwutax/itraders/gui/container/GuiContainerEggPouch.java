@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class GuiContainerEggPouch extends GuiContainer {
 
@@ -40,12 +41,12 @@ public class GuiContainerEggPouch extends GuiContainer {
         this.searchField = new GuiTextField(0, this.fontRenderer,
                 (this.width / 2) - 62,
                 (this.height / 2) - 100,
-                80, this.fontRenderer.FONT_HEIGHT);
+                140, this.fontRenderer.FONT_HEIGHT);
         this.searchField.setMaxStringLength(60);
-        this.searchField.setEnableBackgroundDrawing(true);
         this.searchField.setText("");
         this.searchField.setVisible(true);
         this.searchField.setTextColor(0xFF_FFFFFF);
+        this.searchField.setEnabled(true);
         this.searchField.setEnableBackgroundDrawing(false);
 
         InitPacket.PIPELINE.sendToServer(new C2SMovePouchRow(0));
