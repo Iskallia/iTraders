@@ -107,7 +107,7 @@ public class ContainerEggPouch extends Container {
 					int row = i / 9;
 					int col = i % 9;
 					int index = filteredIndices.next();
-					SlotItemHandler slot = new SlotItemHandler(this.pouchInventory, index, 8 + col * 18, 18 + row * 18);
+					SlotItemHandler slot = new SlotItemHandler(this.pouchInventory, index, 8 + col * 18, 28 + row * 18);
 					this.addSlotToContainer(slot);
 					this.pouchSlots.add(slot);
 				}
@@ -117,7 +117,7 @@ public class ContainerEggPouch extends Container {
 			for(int row = 0; row < 6; row++) {
 				for(int column = 0; column < 9; column++) {
 					int slotId = row * 9 + column;
-					SlotItemHandler slot = new SlotItemHandler(this.pouchInventory, slotId, 8 + column * 18, 18 + row * 18);
+					SlotItemHandler slot = new SlotItemHandler(this.pouchInventory, slotId, 8 + column * 18, 28 + row * 18);
 					this.addSlotToContainer(slot);
 					this.pouchSlots.add(slot);
 				}

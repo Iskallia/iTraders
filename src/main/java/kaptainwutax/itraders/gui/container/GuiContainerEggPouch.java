@@ -1,5 +1,6 @@
 package kaptainwutax.itraders.gui.container;
 
+import kaptainwutax.itraders.Traders;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.resources.I18n;
@@ -20,7 +21,7 @@ import java.io.IOException;
 public class GuiContainerEggPouch extends GuiContainer {
 
     private static Minecraft MINECRAFT = Minecraft.getMinecraft();
-    private static final ResourceLocation INVENTORY_TEXTURE = new ResourceLocation("minecraft", "textures/gui/container/generic_54.png");
+    private static final ResourceLocation INVENTORY_TEXTURE = new ResourceLocation(Traders.MOD_ID, "textures/gui/container/pouch_gui.png");
 
     private int currentScroll = 1;
     private int totalScroll = 1;
@@ -37,14 +38,15 @@ public class GuiContainerEggPouch extends GuiContainer {
         super.initGui();
 
         this.searchField = new GuiTextField(0, this.fontRenderer,
-                (this.width / 2) - 80,
-                (this.height / 2) - 105,
+                (this.width / 2) - 62,
+                (this.height / 2) - 100,
                 80, this.fontRenderer.FONT_HEIGHT);
-        this.searchField.setMaxStringLength(50);
+        this.searchField.setMaxStringLength(60);
         this.searchField.setEnableBackgroundDrawing(true);
         this.searchField.setText("");
         this.searchField.setVisible(true);
-        this.searchField.setTextColor(16777215);
+        this.searchField.setTextColor(0xFF_FFFFFF);
+        this.searchField.setEnableBackgroundDrawing(false);
 
         InitPacket.PIPELINE.sendToServer(new C2SMovePouchRow(0));
     }
@@ -59,7 +61,7 @@ public class GuiContainerEggPouch extends GuiContainer {
             int scrollBarHeight = 109;
             float scrollBarUnit = ((float) scrollBarHeight) / (6 + this.totalScroll - 1);
             int scrollBarX = (this.width / 2) + 82;
-            int scrollBarY = (int) ((this.height / 2) - 95 + (scrollBarUnit * (this.currentScroll - 1)));
+            int scrollBarY = (int) ((this.height / 2) - 85 + (scrollBarUnit * (this.currentScroll - 1)));
             int scrollBarY2 = (int) (scrollBarY + (6 * scrollBarUnit));
             this.drawVerticalLine(scrollBarX + 1, scrollBarY, scrollBarY2, 0xFF_C3C3C3);
             this.drawVerticalLine(scrollBarX, scrollBarY, scrollBarY2, 0xFF_000000);
