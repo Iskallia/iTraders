@@ -24,7 +24,9 @@ public class PouchInventory extends ItemStackHandler {
 		List<Integer> filtered = new LinkedList<>();
 
 		for (int i = 0; i < this.stacks.size(); i++) {
-			if(this.stacks.get(i).getDisplayName().toLowerCase().contains(searchQuery.toLowerCase()))
+			ItemStack itemStack = this.stacks.get(i);
+			if(itemStack == ItemStack.EMPTY) continue;
+			if(itemStack.getDisplayName().toLowerCase().contains(searchQuery.toLowerCase()))
 				filtered.add(i);
 		}
 
@@ -51,7 +53,7 @@ public class PouchInventory extends ItemStackHandler {
 
 		for (int i = 0; i < this.stacks.size(); i++) {
 			if(this.stacks.get(i) == ItemStack.EMPTY) {
-				this.stacks.set(i, stack);
+				this.stacks.set(i, stack.copy());
 				break;
 			}
 		}

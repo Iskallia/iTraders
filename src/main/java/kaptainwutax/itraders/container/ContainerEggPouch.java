@@ -18,6 +18,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -74,6 +75,9 @@ public class ContainerEggPouch extends Container {
 				}
 
 			} else if (fromPlayerInventory) {
+				if(inSearchMode())
+					return  ItemStack.EMPTY;
+
 				if(stack.getItem() instanceof ItemSpawnEggFighter) {
 					this.pouchInventory.putStackOnFirstEmpty(stack);
 					slot.putStack(ItemStack.EMPTY);
@@ -99,14 +103,21 @@ public class ContainerEggPouch extends Container {
 		this.inventorySlots.clear();
 		this.inventoryItemStacks.clear();
 
+		System.out.printf("%s\n",  this.pouchInventory.filterIndices(searchQuery));
+
 		if(inSearchMode()) {
-			// TODO fix
 			Iterator<Integer> filteredIndices = this.pouchInventory.filterIndices(searchQuery).iterator();
 			for (int i = 0; i < 54; i++) {
+				int row = i / 9;
+				int col = i % 9;
 				if(filteredIndices.hasNext()) {
-					int row = i / 9;
-					int col = i % 9;
 					int index = filteredIndices.next();
+					SlotItemHandler slot = new SlotItemHandler(this.pouchInventory, index, 8 + col * 18, 28 + row * 18);
+					this.addSlotToContainer(slot);
+					this.pouchSlots.add(slot);
+				} else {
+					// TODO: put empty slots instead of index#0 (?)
+					int index = 0;
 					SlotItemHandler slot = new SlotItemHandler(this.pouchInventory, index, 8 + col * 18, 28 + row * 18);
 					this.addSlotToContainer(slot);
 					this.pouchSlots.add(slot);
@@ -124,16 +135,18 @@ public class ContainerEggPouch extends Container {
 			}
 		}
 
-		for(int row = 0; row < 3; row++) {
-			for(int column = 0; column < 9; column++) {
+		for (int row = 0; row < 3; row++) {
+			for (int column = 0; column < 9; column++) {
 				int slotId = row * 9 + column + 9;
 				this.addSlotToContainer(new Slot(player.inventory, slotId, 8 + column * 18, 140 + row * 18));
 			}
 		}
 
-		for(int hotbar = 0; hotbar < 9; hotbar++) {
+		for (int hotbar = 0; hotbar < 9; hotbar++) {
 			this.addSlotToContainer(new Slot(player.inventory, hotbar, 8 + hotbar * 18, 198));
 		}
+
+		detectAndSendChanges();
 	}
 
 	public void onMove(int amount) {

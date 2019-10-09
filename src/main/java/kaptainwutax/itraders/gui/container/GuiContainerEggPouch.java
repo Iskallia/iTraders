@@ -1,6 +1,7 @@
 package kaptainwutax.itraders.gui.container;
 
 import kaptainwutax.itraders.Traders;
+import kaptainwutax.itraders.net.packet.C2SUpdatePouch;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.resources.I18n;
@@ -82,9 +83,10 @@ public class GuiContainerEggPouch extends GuiContainer {
         if (!this.searchField.textboxKeyTyped(typedChar, keyCode))
             super.keyTyped(typedChar, keyCode);
         else {
-            ContainerEggPouch container = (ContainerEggPouch) this.inventorySlots;
-            container.searchQuery = this.searchField.getText();
-            container.updateSlots();
+            InitPacket.PIPELINE.sendToServer(new C2SUpdatePouch(this.searchField.getText()));
+//            ContainerEggPouch container = (ContainerEggPouch) this.inventorySlots;
+//            container.searchQuery = this.searchField.getText();
+//            container.updateSlots();
         }
     }
 
