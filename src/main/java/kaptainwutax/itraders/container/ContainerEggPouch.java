@@ -2,20 +2,26 @@ package kaptainwutax.itraders.container;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import kaptainwutax.itraders.init.InitPacket;
+import kaptainwutax.itraders.item.ItemSpawnEggFighter;
 import kaptainwutax.itraders.item.PouchInventory;
 import kaptainwutax.itraders.net.packet.S2CPouchScroll;
 import kaptainwutax.itraders.world.data.DataEggPouch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
+
+import javax.annotation.Nonnull;
 
 public class ContainerEggPouch extends Container {
 
@@ -28,6 +34,8 @@ public class ContainerEggPouch extends Container {
 	public int currentScroll = 1;
 	public int totalScroll = 1;
 
+	public @Nonnull	String searchQuery = "";
+
 	public ContainerEggPouch(World world, EntityPlayer player) {
 		this.world = world;
 		this.player = player;
@@ -35,25 +43,11 @@ public class ContainerEggPouch extends Container {
 		DataEggPouch data = DataEggPouch.get(world);
 		this.pouchInventory = data.getOrCreatePouch(player);
 
-		for(int row = 0; row < 6; row++) {
-			for(int column = 0; column < 9; column++) {
-				int slotId = row * 9 + column;
-				SlotItemHandler slot = new SlotItemHandler(this.pouchInventory, slotId, 8 + column * 18, 18 + row * 18);
-				this.addSlotToContainer(slot);
-				this.pouchSlots.add(slot);
-			}
-		}
+		updateSlots();
+	}
 
-		for(int row = 0; row < 3; row++) {
-			for(int column = 0; column < 9; column++) {
-				int slotId = row * 9 + column + 9;
-				this.addSlotToContainer(new Slot(player.inventory, slotId, 8 + column * 18, 140 + row * 18));
-			}
-		}
-
-		for(int hotbar = 0; hotbar < 9; hotbar++) {
-			this.addSlotToContainer(new Slot(player.inventory, hotbar, 8 + hotbar * 18, 198));
-		}
+	public boolean inSearchMode() {
+		return !searchQuery.isEmpty();
 	}
 
 	@Override
@@ -80,9 +74,11 @@ public class ContainerEggPouch extends Container {
 				}
 
 			} else if (fromPlayerInventory) {
-				this.pouchInventory.putStackOnFirstEmpty(stack);
-				slot.putStack(ItemStack.EMPTY);
-				this.detectAndSendChanges();
+				if(stack.getItem() instanceof ItemSpawnEggFighter) {
+					this.pouchInventory.putStackOnFirstEmpty(stack);
+					slot.putStack(ItemStack.EMPTY);
+					this.detectAndSendChanges();
+				}
 				return ItemStack.EMPTY;
 			}
 
@@ -98,8 +94,46 @@ public class ContainerEggPouch extends Container {
 		return stack;
 	}
 
-	public void filter(String searchQuery) {
+	public void updateSlots() {
+		this.pouchSlots.clear();
+		this.inventorySlots.clear();
+		this.inventoryItemStacks.clear();
 
+		if(inSearchMode()) {
+			// TODO fix
+			Iterator<Integer> filteredIndices = this.pouchInventory.filterIndices(searchQuery).iterator();
+			for (int i = 0; i < 54; i++) {
+				if(filteredIndices.hasNext()) {
+					int row = i / 9;
+					int col = i % 9;
+					int index = filteredIndices.next();
+					SlotItemHandler slot = new SlotItemHandler(this.pouchInventory, index, 8 + col * 18, 18 + row * 18);
+					this.addSlotToContainer(slot);
+					this.pouchSlots.add(slot);
+				}
+			}
+
+		} else {
+			for(int row = 0; row < 6; row++) {
+				for(int column = 0; column < 9; column++) {
+					int slotId = row * 9 + column;
+					SlotItemHandler slot = new SlotItemHandler(this.pouchInventory, slotId, 8 + column * 18, 18 + row * 18);
+					this.addSlotToContainer(slot);
+					this.pouchSlots.add(slot);
+				}
+			}
+		}
+
+		for(int row = 0; row < 3; row++) {
+			for(int column = 0; column < 9; column++) {
+				int slotId = row * 9 + column + 9;
+				this.addSlotToContainer(new Slot(player.inventory, slotId, 8 + column * 18, 140 + row * 18));
+			}
+		}
+
+		for(int hotbar = 0; hotbar < 9; hotbar++) {
+			this.addSlotToContainer(new Slot(player.inventory, hotbar, 8 + hotbar * 18, 198));
+		}
 	}
 
 	public void onMove(int amount) {

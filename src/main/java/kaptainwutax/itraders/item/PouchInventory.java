@@ -7,6 +7,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PouchInventory extends ItemStackHandler {
 
@@ -16,6 +18,17 @@ public class PouchInventory extends ItemStackHandler {
 	
 	public PouchInventory(NBTTagCompound nbt) {
 		this.deserializeNBT(nbt);
+	}
+
+	public List<Integer> filterIndices(String searchQuery) {
+		List<Integer> filtered = new LinkedList<>();
+
+		for (int i = 0; i < this.stacks.size(); i++) {
+			if(this.stacks.get(i).getDisplayName().toLowerCase().contains(searchQuery.toLowerCase()))
+				filtered.add(i);
+		}
+
+		return filtered;
 	}
 
 	public boolean isFull() {
