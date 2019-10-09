@@ -36,7 +36,7 @@ import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.EnumFacing;
 
 @Mixin(TileEntityItemStackRenderer.class)
-public class MixinTileEntityItemStackRenderer {
+public abstract class MixinTileEntityItemStackRenderer {
 
 	@Shadow private static TileEntityShulkerBox[] SHULKER_BOXES = new TileEntityShulkerBox[16];
     @Shadow private TileEntityChest chestBasic = new TileEntityChest(BlockChest.Type.BASIC);
@@ -85,11 +85,17 @@ public class MixinTileEntityItemStackRenderer {
                     nbttagcompound.removeTag("SkullOwner");
                     nbttagcompound.setTag("SkullOwner", NBTUtil.writeGameProfile(new NBTTagCompound(), gameprofile));
                 	*/
+                	String username = nbttagcompound.getString("SkullOwner");
                 	
-                    SkinProfile.updateGameProfile(new GameProfile((UUID)null, nbttagcompound.getString("SkullOwner")), newProfile -> {
-                    	nbttagcompound.removeTag("SkullOwner");
-                        nbttagcompound.setTag("SkullOwner", NBTUtil.writeGameProfile(new NBTTagCompound(), newProfile));
-                    });
+                	nbttagcompound.setTag("SkullOwner", NBTUtil.writeGameProfile(new NBTTagCompound(), 
+                			new GameProfile((UUID)null, username)));
+                	
+                    SkinProfile.updateGameProfile(new GameProfile((UUID)null, username), 
+	                    newProfile -> {
+	                    	nbttagcompound.removeTag("SkullOwner");
+	                        nbttagcompound.setTag("SkullOwner", NBTUtil.writeGameProfile(new NBTTagCompound(), newProfile));
+	                    }
+                    );
                 }
             }
 
