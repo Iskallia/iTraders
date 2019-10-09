@@ -6,6 +6,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+import java.util.LinkedList;
+import java.util.List;
+
 public class PouchInventory extends ItemStackHandler {
 
 	public PouchInventory() {
@@ -14,6 +18,47 @@ public class PouchInventory extends ItemStackHandler {
 	
 	public PouchInventory(NBTTagCompound nbt) {
 		this.deserializeNBT(nbt);
+	}
+
+	public List<Integer> filterIndices(String searchQuery) {
+		List<Integer> filtered = new LinkedList<>();
+
+		for (int i = 0; i < this.stacks.size(); i++) {
+			ItemStack itemStack = this.stacks.get(i);
+			if(itemStack == ItemStack.EMPTY) continue;
+			if(itemStack.getDisplayName().toLowerCase().contains(searchQuery.toLowerCase()))
+				filtered.add(i);
+		}
+
+		return filtered;
+	}
+
+	public boolean isFull() {
+		for (ItemStack stack : this.stacks) {
+			if(stack.isEmpty()) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public boolean putStackOnFirstEmpty(ItemStack stack) {
+		boolean expanded = false;
+
+		if(isFull()) {
+			expand(1);
+			expanded = true;
+		}
+
+		for (int i = 0; i < this.stacks.size(); i++) {
+			if(this.stacks.get(i) == ItemStack.EMPTY) {
+				this.stacks.set(i, stack.copy());
+				break;
+			}
+		}
+
+		return expanded;
 	}
 
 	@Override
@@ -50,20 +95,12 @@ public class PouchInventory extends ItemStackHandler {
 	}
 	
 	public void rescaleToFit() {
-    	boolean full = true;
-    	
-    	for (ItemStack stack : this.stacks) {
-    		if(stack.isEmpty()) {
-    			full = false;
-    			break;
-    		}
-		}
-
-    	if(full) {
+    	if(isFull()) {
     		this.expand(1);
     	}
 	}
-	
+
+	@Override
     protected void onContentsChanged(int slot) {  
     	this.rescaleToFit();
     }
