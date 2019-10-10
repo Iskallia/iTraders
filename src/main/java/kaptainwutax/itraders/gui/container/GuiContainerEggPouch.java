@@ -1,6 +1,7 @@
 package kaptainwutax.itraders.gui.container;
 
 import kaptainwutax.itraders.Traders;
+import kaptainwutax.itraders.gui.component.GuiScrollbar;
 import kaptainwutax.itraders.net.packet.C2SUpdatePouchSearch;
 import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.input.Mouse;
@@ -21,8 +22,7 @@ public class GuiContainerEggPouch extends GuiContainer {
     private static Minecraft MINECRAFT = Minecraft.getMinecraft();
     private static final ResourceLocation INVENTORY_TEXTURE = new ResourceLocation(Traders.MOD_ID, "textures/gui/container/pouch_gui.png");
 
-    private int currentScroll = 1;
-    private int totalScroll = 1;
+    private GuiScrollbar scrollbar;
     private GuiTextField searchField;
 
     public GuiContainerEggPouch(World world, EntityPlayer player) {
@@ -46,6 +46,11 @@ public class GuiContainerEggPouch extends GuiContainer {
         this.searchField.setEnabled(true);
         this.searchField.setEnableBackgroundDrawing(false);
 
+        this.scrollbar = new GuiScrollbar(
+                (this.width / 2) + 82,
+                (this.height / 2) - 85
+        );
+
         InitPacket.PIPELINE.sendToServer(new C2SMovePouchRow(0));
     }
 
@@ -61,15 +66,8 @@ public class GuiContainerEggPouch extends GuiContainer {
                 (this.height / 2) - 120,
                 0xFF_FFFFFF);
 
-        if(!((ContainerEggPouch)this.inventorySlots).inSearchMode()) {
-            int scrollBarHeight = 109;
-            float scrollBarUnit = ((float) scrollBarHeight) / (6 + this.totalScroll - 1);
-            int scrollBarX = (this.width / 2) + 82;
-            int scrollBarY = (int) ((this.height / 2) - 85 + (scrollBarUnit * (this.currentScroll - 1)));
-            int scrollBarY2 = (int) (scrollBarY + (6 * scrollBarUnit));
-            this.drawVerticalLine(scrollBarX + 1, scrollBarY, scrollBarY2, 0xFF_C3C3C3);
-            this.drawVerticalLine(scrollBarX, scrollBarY, scrollBarY2, 0xFF_000000);
-        }
+        if (!((ContainerEggPouch) this.inventorySlots).inSearchMode())
+            this.scrollbar.drawScrollbar();
 
         this.renderHoveredToolTip(mouseX, mouseY);
     }
@@ -100,7 +98,7 @@ public class GuiContainerEggPouch extends GuiContainer {
         int scroll = Mouse.getDWheel();
         int rawMove = 0;
 
-        if(((ContainerEggPouch) this.inventorySlots).inSearchMode())
+        if (((ContainerEggPouch) this.inventorySlots).inSearchMode())
             return;
 
         while (scroll >= 120) {
@@ -125,8 +123,10 @@ public class GuiContainerEggPouch extends GuiContainer {
     }
 
     public void setScroll(int currentScroll, int totalScroll) {
-        this.currentScroll = Math.max(currentScroll, 1);
-        this.totalScroll = Math.max(totalScroll, 1);
+        this.scrollbar.updateScroll(
+                Math.max(currentScroll, 1),
+                Math.max(totalScroll, 1)
+        );
     }
 
 }
