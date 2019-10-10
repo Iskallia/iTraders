@@ -103,8 +103,6 @@ public class ContainerEggPouch extends Container {
 		this.inventorySlots.clear();
 		this.inventoryItemStacks.clear();
 
-		System.out.printf("%s\n",  this.pouchInventory.filterIndices(searchQuery));
-
 		if(inSearchMode()) {
 			Iterator<Integer> filteredIndices = this.pouchInventory.filterIndices(searchQuery).iterator();
 			for (int i = 0; i < 54; i++) {

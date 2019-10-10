@@ -36,8 +36,6 @@ public class C2SUpdatePouchSearch implements IMessage {
         public S2CUpdatePouchSearch onMessage(C2SUpdatePouchSearch message, MessageContext ctx) {
             EntityPlayerMP playerMP = ctx.getServerHandler().player;
 
-            System.out.printf("Got C2S update pouch\n");
-
             if (playerMP.openContainer instanceof ContainerEggPouch) {
                 ContainerEggPouch container = (ContainerEggPouch) playerMP.openContainer;
                 container.searchQuery = message.searchQuery;

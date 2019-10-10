@@ -55,6 +55,12 @@ public class GuiContainerEggPouch extends GuiContainer {
 
         this.searchField.drawTextBox();
 
+        this.drawString(this.fontRenderer,
+                "WIP: Search",
+                (this.width / 2) - 80,
+                (this.height / 2) - 120,
+                0xFF_FFFFFF);
+
         if(!((ContainerEggPouch)this.inventorySlots).inSearchMode()) {
             int scrollBarHeight = 109;
             float scrollBarUnit = ((float) scrollBarHeight) / (6 + this.totalScroll - 1);
@@ -79,7 +85,8 @@ public class GuiContainerEggPouch extends GuiContainer {
         if (!this.searchField.textboxKeyTyped(typedChar, keyCode))
             super.keyTyped(typedChar, keyCode);
         else {
-            InitPacket.PIPELINE.sendToServer(new C2SUpdatePouchSearch(this.searchField.getText()));
+            // TODO: Enable search to filter inventory
+//            InitPacket.PIPELINE.sendToServer(new C2SUpdatePouchSearch(this.searchField.getText()));
 //            ContainerEggPouch container = (ContainerEggPouch) this.inventorySlots;
 //            container.searchQuery = this.searchField.getText();
 //            container.updateSlots();
