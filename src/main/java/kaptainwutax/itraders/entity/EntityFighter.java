@@ -37,7 +37,7 @@ public class EntityFighter extends EntityZombie {
 		
 		if(!this.world.isRemote) {
 			this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED)
-					.setBaseValue(this.rand.nextFloat() * 0.25d + 0.5d);	
+					.setBaseValue(this.rand.nextFloat() * 0.25d + 0.25d);	
 			
 			 this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 			 
