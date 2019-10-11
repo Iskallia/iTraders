@@ -32,7 +32,7 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	private List<Container> listeners = new ArrayList<>();
 	
 	public PouchInventory() {
-
+		
 	}
 
 	public PouchInventory(NBTTagCompound nbt) {
@@ -41,6 +41,7 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	
 	public void addListener(Container container) {
 		this.listeners.add(container);
+		this.listeners.forEach(c -> c.detectAndSendChanges());
 	}
 	
 	public void removeListener(Container container) {
@@ -57,7 +58,6 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 		this.totalScroll = MathHelper.ceil((float)this.inventoryStacks.size() / 9.0f) - 5;
 		if(this.totalScroll < 1)this.totalScroll = 1;
 		if(this.currentScroll < 1)this.currentScroll = 1;
-		//this.totalScroll = 5;
 		if(this.currentScroll > this.totalScroll)this.currentScroll = this.totalScroll;
 		this.onContentsChanged();
 	}
@@ -101,7 +101,6 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	public void onContentsChanged() {		
 		this.inventoryStacks.removeIf(stack -> stack.isEmpty());	
 		this.updateFakeInventory();
-		this.listeners.forEach(container -> container.detectAndSendChanges());
 	}
 	
 	@Override

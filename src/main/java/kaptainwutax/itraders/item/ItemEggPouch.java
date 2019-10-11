@@ -35,8 +35,9 @@ public class ItemEggPouch extends Item {
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (player.isSneaking() && !world.isRemote) {
             ItemStack itemStack = DataEggPouch.get(world).getOrCreatePouch(player).randomEgg();
-            if (itemStack != null && (itemStack.getItem() instanceof ItemSpawnEggFighter)) {
-                ItemSpawnEggFighter eggItem = (ItemSpawnEggFighter) itemStack.getItem();
+            
+            if(itemStack != null && (itemStack.getItem() instanceof ItemSpawnEggFighter)) {
+                ItemSpawnEggFighter eggItem = (ItemSpawnEggFighter)itemStack.getItem();
                 eggItem.onItemUse(itemStack, player, world, pos, hand, facing, hitX, hitY, hitZ);
             }
         }
