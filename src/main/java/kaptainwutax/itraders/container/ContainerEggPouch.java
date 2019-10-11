@@ -13,6 +13,7 @@ import kaptainwutax.itraders.world.data.DataEggPouch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -29,13 +30,7 @@ public class ContainerEggPouch extends Container {
 	private EntityPlayer player;
 	private World world;
 
-	protected PouchInventory pouchInventory;
-	protected List<SlotItemHandler> pouchSlots = new ArrayList<>();
-
-	public int currentScroll = 1;
-	public int totalScroll = 1;
-
-	public @Nonnull	String searchQuery = "";
+	public PouchInventory pouchInventory;
 
 	public ContainerEggPouch(World world, EntityPlayer player) {
 		this.world = world;
@@ -43,13 +38,32 @@ public class ContainerEggPouch extends Container {
 
 		DataEggPouch data = DataEggPouch.get(world);
 		this.pouchInventory = data.getOrCreatePouch(player);
+		
+		for(int row = 0; row < 6; row++) {
+			for(int column = 0; column < 9; column++) {
+				int slotId = row * 9 + column;
+				PouchSlot slot = new PouchSlot(this.pouchInventory, slotId, 8 + column * 18, 28 + row * 18);
+				this.addSlotToContainer(slot);
+			}
+		}
 
-		updateSlots();
-	}
+		FakeSlot fakeSlot = new FakeSlot(this.pouchInventory, 0, 0);
+		this.addSlotToContainer(fakeSlot);
+		
+		for (int row = 0; row < 3; row++) {
+			for (int column = 0; column < 9; column++) {
+				int slotId = row * 9 + column + 9;
+				this.addSlotToContainer(new Slot(player.inventory, slotId, 8 + column * 18, 140 + row * 18));
+			}
+		}
+		
+		for (int hotbar = 0; hotbar < 9; hotbar++) {
+			this.addSlotToContainer(new Slot(player.inventory, hotbar, 8 + hotbar * 18, 198));
+		}		
 
-	public boolean inSearchMode() {
-		return !searchQuery.isEmpty();
-	}
+		this.pouchInventory.addListener(this);
+		this.detectAndSendChanges();
+	}	
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
@@ -57,9 +71,7 @@ public class ContainerEggPouch extends Container {
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int index) {
-        boolean fromPlayerInventory = 54 <= index && index <= 89;
-        boolean fromEggPouch = 0 <= index && index <= 53;
+	public ItemStack transferStackInSlot(EntityPlayer player, int index) {	
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
 
@@ -67,24 +79,15 @@ public class ContainerEggPouch extends Container {
             ItemStack stackInSlot = slot.getStack();
             stack = stackInSlot.copy();
 
-			int containerSlots = this.inventorySlots.size() - player.inventory.mainInventory.size();
+            int containerSlots = this.inventorySlots.size() - player.inventory.mainInventory.size();
 
-			if (fromEggPouch) {
-				if (!this.mergeItemStack(stackInSlot, containerSlots, this.inventorySlots.size(), true)) {
-					return ItemStack.EMPTY;
-				}
-
-			} else if (fromPlayerInventory) {
-				if(inSearchMode())
-					return  ItemStack.EMPTY;
-
-				if(stack.getItem() instanceof ItemSpawnEggFighter) {
-					this.pouchInventory.putStackOnFirstEmpty(stack);
-					slot.putStack(ItemStack.EMPTY);
-					this.detectAndSendChanges();
-				}
-				return ItemStack.EMPTY;
-			}
+            if(index < containerSlots) {
+                if(!this.mergeItemStack(stackInSlot, containerSlots, this.inventorySlots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if(!this.mergeItemStack(stackInSlot, 0, containerSlots, false)) {
+                return ItemStack.EMPTY;
+            }
 
             if(stackInSlot.getCount() == 0) {
                 slot.putStack(ItemStack.EMPTY);
@@ -93,94 +96,29 @@ public class ContainerEggPouch extends Container {
             }
 
             slot.onTake(player, stackInSlot);
-        }
 
+        }
+        
 		return stack;
 	}
-
-	public void updateSlots() {
-		this.pouchSlots.clear();
-		this.inventorySlots.clear();
-		this.inventoryItemStacks.clear();
-
-		if(inSearchMode()) {
-			Iterator<Integer> filteredIndices = this.pouchInventory.filterIndices(searchQuery).iterator();
-			for (int i = 0; i < 54; i++) {
-				int row = i / 9;
-				int col = i % 9;
-				if(filteredIndices.hasNext()) {
-					int index = filteredIndices.next();
-					SlotItemHandler slot = new SlotItemHandler(this.pouchInventory, index, 8 + col * 18, 28 + row * 18);
-					this.addSlotToContainer(slot);
-					this.pouchSlots.add(slot);
-				} else {
-					// TODO: put empty slots instead of index#0 (?)
-					int index = 0;
-					SlotItemHandler slot = new SlotItemHandler(this.pouchInventory, index, 8 + col * 18, 28 + row * 18);
-					this.addSlotToContainer(slot);
-					this.pouchSlots.add(slot);
-				}
-			}
-
-		} else {
-			for(int row = 0; row < 6; row++) {
-				for(int column = 0; column < 9; column++) {
-					int slotId = row * 9 + column;
-					SlotItemHandler slot = new SlotItemHandler(this.pouchInventory, slotId, 8 + column * 18, 28 + row * 18);
-					this.addSlotToContainer(slot);
-					this.pouchSlots.add(slot);
-				}
-			}
-		}
-
-		for (int row = 0; row < 3; row++) {
-			for (int column = 0; column < 9; column++) {
-				int slotId = row * 9 + column + 9;
-				this.addSlotToContainer(new Slot(player.inventory, slotId, 8 + column * 18, 140 + row * 18));
-			}
-		}
-
-		for (int hotbar = 0; hotbar < 9; hotbar++) {
-			this.addSlotToContainer(new Slot(player.inventory, hotbar, 8 + hotbar * 18, 198));
-		}
-
-		detectAndSendChanges();
+	
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
 	}
 
 	public void onMove(int amount) {
-		this.pouchInventory.rescaleToFit();
-		int lastScroll = this.currentScroll;
-		this.currentScroll += amount;
-		this.totalScroll = MathHelper.ceil((float)this.pouchInventory.getSlots() / 9.0f) - 5;
-		this.currentScroll = MathHelper.clamp(this.currentScroll, 1, this.totalScroll);
-		int diff = this.currentScroll - lastScroll;
-		if(diff == 0)return;
-
-		//This is super hacky, gonna have to implement a custom SlotItemHandler at some point.
-		this.pouchSlots.forEach(slot -> {
-			Field field = SlotItemHandler.class.getDeclaredFields()[2];
-			field.setAccessible(true);
-
-			try {
-				field.set(slot, (int)field.get(slot) + diff * 9);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		});
-
-		this.detectAndSendChanges();
-
+		this.pouchInventory.move(amount);
+		this.pouchInventory.onContentsChanged();
 		if(!this.world.isRemote) {
-			InitPacket.PIPELINE.sendTo(new S2CPouchScroll(this.currentScroll, this.totalScroll), (EntityPlayerMP)this.player);
+			InitPacket.PIPELINE.sendTo(new S2CPouchScroll(this.pouchInventory.currentScroll, this.pouchInventory.totalScroll), (EntityPlayerMP)this.player);
 		}
 	}
-
+	
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
-		this.pouchInventory.purge();
+		this.pouchInventory.removeListener(this);
 	}
 
 }

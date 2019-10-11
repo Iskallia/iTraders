@@ -37,7 +37,7 @@ public class C2SMovePouchRow implements IMessage {
 			if(playerMP.openContainer instanceof ContainerEggPouch) {
 				ContainerEggPouch container = (ContainerEggPouch)playerMP.openContainer;
 				container.onMove(message.amount);
-				return new S2CPouchScroll(container.currentScroll, container.totalScroll);
+				return new S2CPouchScroll(container.pouchInventory.currentScroll, container.pouchInventory.totalScroll);
 			}
 			
 			return null;

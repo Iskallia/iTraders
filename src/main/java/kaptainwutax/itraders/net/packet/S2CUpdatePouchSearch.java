@@ -37,11 +37,10 @@ public class S2CUpdatePouchSearch implements IMessage {
         public IMessage onMessage(S2CUpdatePouchSearch message, MessageContext ctx) {
             Minecraft minecraft = Minecraft.getMinecraft();
 
-            if (minecraft.currentScreen instanceof GuiContainerEggPouch) {
+            if(minecraft.currentScreen instanceof GuiContainerEggPouch) {
                 GuiContainerEggPouch gui = (GuiContainerEggPouch) minecraft.currentScreen;
                 ContainerEggPouch container = (ContainerEggPouch) gui.inventorySlots;
-                container.searchQuery = message.searchQuery;
-//                container.updateSlots();
+                container.pouchInventory.searchQuery = message.searchQuery;
             }
 
             return null;

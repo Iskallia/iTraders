@@ -36,8 +36,8 @@ public class EventPickup {
 
         // Fetch pouch and put a copy of the egg on first empty slot
         PouchInventory pouch = DataEggPouch.get(player.world).getOrCreatePouch(player);
-        pouch.putStackOnFirstEmpty(itemStack.copy());
-
+        pouch.insertItem(PouchInventory.FAKE_SLOT, itemStack, false);
+        
         // Remove item from the item entity
         itemStack.setCount(0);
         itemEntity.setItem(itemStack);

@@ -8,8 +8,10 @@ import net.minecraft.client.renderer.RenderHelper;
 import org.lwjgl.input.Mouse;
 
 import kaptainwutax.itraders.container.ContainerEggPouch;
+import kaptainwutax.itraders.container.PouchSlot;
 import kaptainwutax.itraders.init.InitPacket;
 import kaptainwutax.itraders.net.packet.C2SMovePouchRow;
+import kaptainwutax.itraders.net.packet.C2SUpdatePouchSearch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -44,7 +46,7 @@ public class GuiContainerEggPouch extends GuiContainer {
         this.searchField.setMaxStringLength(60);
         this.searchField.setText("");
         this.searchField.setVisible(true);
-        this.searchField.setTextColor(0xFF_FFFFFF);
+        this.searchField.setTextColor(0xFFFFFF);
         this.searchField.setEnabled(true);
         this.searchField.setEnableBackgroundDrawing(false);
 
@@ -69,9 +71,8 @@ public class GuiContainerEggPouch extends GuiContainer {
         RenderHelper.disableStandardItemLighting();
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
-
-        if (!((ContainerEggPouch) this.inventorySlots).inSearchMode())
-            this.scrollbar.drawScrollbar();
+        
+        this.scrollbar.drawScrollbar();
 
         this.searchField.drawTextBox();
 
@@ -81,7 +82,11 @@ public class GuiContainerEggPouch extends GuiContainer {
                 (this.height / 2) - 120,
                 0xAA_ABABAB);
 
+        this.scrollbar.drawScrollbar();
         this.renderHoveredToolTip(mouseX, mouseY);
+        
+        InitPacket.PIPELINE.sendToServer(new C2SUpdatePouchSearch(this.searchField.getText()));
+        ((ContainerEggPouch)this.inventorySlots).pouchInventory.searchQuery = this.searchField.getText();
     }
 
     @Override
@@ -99,15 +104,8 @@ public class GuiContainerEggPouch extends GuiContainer {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (!this.searchField.textboxKeyTyped(typedChar, keyCode))
-            super.keyTyped(typedChar, keyCode);
-        else {
-            // TODO: Enable search to filter inventory
-//            InitPacket.PIPELINE.sendToServer(new C2SUpdatePouchSearch(this.searchField.getText()));
-//            ContainerEggPouch container = (ContainerEggPouch) this.inventorySlots;
-//            container.searchQuery = this.searchField.getText();
-//            container.updateSlots();
-        }
+        this.searchField.textboxKeyTyped(typedChar, keyCode);
+        super.keyTyped(typedChar, keyCode);
     }
 
     @Override
@@ -117,14 +115,8 @@ public class GuiContainerEggPouch extends GuiContainer {
         int mouseX = (int) (Mouse.getX() * ((float) this.width / MINECRAFT.displayWidth));
         int mouseY = this.height - (int) (Mouse.getY() * ((float) this.height / MINECRAFT.displayHeight)) - 1;
         int scroll = Mouse.getDWheel();
-
-        if (((ContainerEggPouch) this.inventorySlots).inSearchMode())
-            return;
-
-        this.scrollbar.mouseMoved(mouseX, mouseY);
-
         int rawMove = 0;
-
+        
         while (scroll >= 120) {
             scroll -= 120;
             rawMove--;
@@ -135,7 +127,7 @@ public class GuiContainerEggPouch extends GuiContainer {
             rawMove++;
         }
 
-        if (rawMove != 0) InitPacket.PIPELINE.sendToServer(new C2SMovePouchRow(rawMove));
+        if (rawMove != 0)InitPacket.PIPELINE.sendToServer(new C2SMovePouchRow(rawMove));
     }
 
     @Override
@@ -151,6 +143,9 @@ public class GuiContainerEggPouch extends GuiContainer {
                 Math.max(currentScroll, 1),
                 Math.max(totalScroll, 1)
         );
+        
+        ((ContainerEggPouch)this.inventorySlots).pouchInventory.currentScroll = Math.max(currentScroll, 1);
+        ((ContainerEggPouch)this.inventorySlots).pouchInventory.totalScroll = Math.max(totalScroll, 1);
     }
 
 }
