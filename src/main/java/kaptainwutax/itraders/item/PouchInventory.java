@@ -8,6 +8,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import kaptainwutax.itraders.init.InitItem;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -229,8 +230,8 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
     
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-    	//return stack.getItem() == InitItem.SPAWN_EGG_FIGHTER;
-    	return true;
+    	return stack.getItem() == InitItem.SPAWN_EGG_FIGHTER;
+    	//return true;
     }
     
 	@Override
