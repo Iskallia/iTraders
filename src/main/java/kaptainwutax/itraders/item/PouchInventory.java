@@ -41,7 +41,6 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	
 	public void addListener(Container container) {
 		this.listeners.add(container);
-		this.listeners.forEach(c -> c.detectAndSendChanges());
 	}
 	
 	public void removeListener(Container container) {
