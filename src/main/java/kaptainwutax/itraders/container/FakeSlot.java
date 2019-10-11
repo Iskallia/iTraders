@@ -60,7 +60,7 @@ public class FakeSlot extends SlotItemHandler {
     @Nonnull
     public ItemStack getStack()
     {
-        return this.getItemHandler().getStackInSlot(this.getIndex());
+        return ItemStack.EMPTY;
     }
 
     // Override if your IItemHandler does not implement IItemHandlerModifiable
