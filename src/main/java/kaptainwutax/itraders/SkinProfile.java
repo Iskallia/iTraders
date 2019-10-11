@@ -20,12 +20,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SkinProfile {
 	
 	private static ExecutorService service = Executors.newFixedThreadPool(5);
-	
-	private static Minecraft MINECRAFT = Minecraft.getMinecraft();
-	private static Map<String, GameProfile> SKIN_CACHE = new ConcurrentHashMap<>();
-	private static Map<String, Long> SKIN_TIME_CACHE = new ConcurrentHashMap<>();
-	
-	private static ResourceLocation UNKNOWN_SKIN = Traders.getResource("textures/entity/unknown_skin.png");
+
+	// TODO: Remove unused? Crashes on SERVER side
+//	private static Minecraft MINECRAFT = Minecraft.getMinecraft();
+//	private static Map<String, GameProfile> SKIN_CACHE = new ConcurrentHashMap<>();
+//	private static Map<String, Long> SKIN_TIME_CACHE = new ConcurrentHashMap<>();
+//
+//	private static ResourceLocation UNKNOWN_SKIN = Traders.getResource("textures/entity/unknown_skin.png");
 	
 	public AtomicReference<GameProfile> gameProfile = new AtomicReference<GameProfile>();
 	public AtomicReference<NetworkPlayerInfo> playerInfo = new AtomicReference<NetworkPlayerInfo>();

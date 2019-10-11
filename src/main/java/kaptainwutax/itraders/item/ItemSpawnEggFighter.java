@@ -71,7 +71,10 @@ public class ItemSpawnEggFighter extends Item {
 
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
+        return this.onItemUse(stack, player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+    }
 
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote) {
             return EnumActionResult.SUCCESS;
         } else if (!player.canPlayerEdit(pos.offset(facing), facing, stack)) {

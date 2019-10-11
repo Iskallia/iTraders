@@ -1,6 +1,7 @@
 package kaptainwutax.itraders.item;
 
 import kaptainwutax.itraders.init.InitItem;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
@@ -9,6 +10,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class PouchInventory extends ItemStackHandler {
 
@@ -41,6 +43,29 @@ public class PouchInventory extends ItemStackHandler {
 		}
 
 		return true;
+	}
+
+	public ItemStack randomEgg() {
+		List<Integer> nonEmptySlots = new LinkedList<>();
+
+		for (int i = 0; i < this.stacks.size(); i++) {
+			if(!this.stacks.get(i).isEmpty()) {
+				nonEmptySlots.add(i);
+			}
+		}
+
+		if(nonEmptySlots.size() == 0)
+			return null;
+
+		// Pick a random non-empty slot
+		int index = nonEmptySlots.get(new Random().nextInt(nonEmptySlots.size()));
+		ItemStack itemStack = this.stacks.get(index);
+
+		// Remove from the inventory
+		this.stacks.set(index, ItemStack.EMPTY);
+
+		// Pass extracted item stack
+		return itemStack;
 	}
 
 	public boolean putStackOnFirstEmpty(ItemStack stack) {
