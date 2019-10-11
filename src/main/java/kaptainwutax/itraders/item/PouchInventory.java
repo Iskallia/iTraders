@@ -256,10 +256,7 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	public ItemStack randomEgg() {
 		if(this.inventoryStacks.size() == 0)return null;
 		int i = new Random().nextInt(this.inventoryStacks.size());
-		ItemStack stack = this.inventoryStacks.get(i);
-		ItemStack _stack = stack.copy();
-		stack.setCount(0);
-		return _stack;
+		return this.inventoryStacks.remove(i);
 	}
     
 }
