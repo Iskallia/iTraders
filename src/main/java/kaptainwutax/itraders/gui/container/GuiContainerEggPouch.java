@@ -2,8 +2,9 @@ package kaptainwutax.itraders.gui.container;
 
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.gui.component.GuiScrollbar;
-import kaptainwutax.itraders.net.packet.C2SUpdatePouchSearch;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import org.lwjgl.input.Mouse;
 
 import kaptainwutax.itraders.container.ContainerEggPouch;
@@ -27,7 +28,7 @@ public class GuiContainerEggPouch extends GuiContainer {
 
     public GuiContainerEggPouch(World world, EntityPlayer player) {
         super(new ContainerEggPouch(world, player));
-        this.xSize = 176;
+        this.xSize = 186;
         this.ySize = 222;
     }
 
@@ -35,8 +36,9 @@ public class GuiContainerEggPouch extends GuiContainer {
     public void initGui() {
         super.initGui();
 
+        // Search bar
         this.searchField = new GuiTextField(0, this.fontRenderer,
-                (this.width / 2) - 62,
+                (this.width / 2) - 68,
                 (this.height / 2) - 100,
                 140, this.fontRenderer.FONT_HEIGHT);
         this.searchField.setMaxStringLength(60);
@@ -46,10 +48,15 @@ public class GuiContainerEggPouch extends GuiContainer {
         this.searchField.setEnabled(true);
         this.searchField.setEnableBackgroundDrawing(false);
 
+        // Scroll bar
         this.scrollbar = new GuiScrollbar(
-                (this.width / 2) + 82,
-                (this.height / 2) - 85
+                (this.width / 2) + 79,
+                (this.height / 2) - 84,
+                107
         );
+        this.scrollbar.setKnobTexture(INVENTORY_TEXTURE, 188, 3, 8);
+        this.scrollbar.setKnobUpperUV(188, 0, 2);
+        this.scrollbar.setKnobLowerUV(188, 111, 2);
 
         InitPacket.PIPELINE.sendToServer(new C2SMovePouchRow(0));
     }
@@ -58,24 +65,36 @@ public class GuiContainerEggPouch extends GuiContainer {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        GlStateManager.disableRescaleNormal();
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+
+        if (!((ContainerEggPouch) this.inventorySlots).inSearchMode())
+            this.scrollbar.drawScrollbar();
+
         this.searchField.drawTextBox();
 
         this.drawString(this.fontRenderer,
                 "WIP: Search",
                 (this.width / 2) - 80,
                 (this.height / 2) - 120,
-                0xFF_FFFFFF);
-
-        if (!((ContainerEggPouch) this.inventorySlots).inSearchMode())
-            this.scrollbar.drawScrollbar();
+                0xAA_ABABAB);
 
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        this.scrollbar.mouseClicked(mouseX, mouseY, mouseButton);
         this.searchField.mouseClicked(mouseX, mouseY, mouseButton);
         super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int state) {
+        this.scrollbar.mouseReleased(mouseX, mouseY, state);
+        super.mouseReleased(mouseX, mouseY, state);
     }
 
     @Override
@@ -95,11 +114,16 @@ public class GuiContainerEggPouch extends GuiContainer {
     public void updateScreen() {
         super.updateScreen();
 
+        int mouseX = (int) (Mouse.getX() * ((float) this.width / MINECRAFT.displayWidth));
+        int mouseY = this.height - (int) (Mouse.getY() * ((float) this.height / MINECRAFT.displayHeight)) - 1;
         int scroll = Mouse.getDWheel();
-        int rawMove = 0;
 
         if (((ContainerEggPouch) this.inventorySlots).inSearchMode())
             return;
+
+        this.scrollbar.mouseMoved(mouseX, mouseY);
+
+        int rawMove = 0;
 
         while (scroll >= 120) {
             scroll -= 120;
@@ -123,7 +147,7 @@ public class GuiContainerEggPouch extends GuiContainer {
     }
 
     public void setScroll(int currentScroll, int totalScroll) {
-        this.scrollbar.updateScroll(
+        this.scrollbar.setScroll(
                 Math.max(currentScroll, 1),
                 Math.max(totalScroll, 1)
         );
