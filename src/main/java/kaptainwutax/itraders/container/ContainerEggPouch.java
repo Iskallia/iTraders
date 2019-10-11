@@ -35,9 +35,8 @@ public class ContainerEggPouch extends Container {
 	public ContainerEggPouch(World world, EntityPlayer player) {
 		this.world = world;
 		this.player = player;
-
-		DataEggPouch data = DataEggPouch.get(world);
-		this.pouchInventory = data.getOrCreatePouch(player);
+		
+		this.pouchInventory = world.isRemote ? new PouchInventory() : DataEggPouch.get(world).getOrCreatePouch(player);
 		
 		for(int row = 0; row < 6; row++) {
 			for(int column = 0; column < 9; column++) {
