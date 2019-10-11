@@ -7,6 +7,7 @@ import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.init.InitEntity;
 import kaptainwutax.itraders.init.InitPacket;
 import kaptainwutax.itraders.init.InitTieredLoot;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
