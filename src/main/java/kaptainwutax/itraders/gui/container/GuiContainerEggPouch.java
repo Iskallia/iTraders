@@ -86,7 +86,7 @@ public class GuiContainerEggPouch extends GuiContainer {
         this.renderHoveredToolTip(mouseX, mouseY);
         
         InitPacket.PIPELINE.sendToServer(new C2SUpdatePouchSearch(this.searchField.getText()));
-        ((ContainerEggPouch)this.inventorySlots).pouchInventory.searchQuery = this.searchField.getText();
+        ((ContainerEggPouch)this.inventorySlots).pouchInventory.setSearchQuery(this.searchField.getText());
     }
 
     @Override

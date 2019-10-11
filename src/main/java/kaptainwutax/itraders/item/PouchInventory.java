@@ -26,7 +26,7 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	protected List<ItemStack> fakeInventoryStacks = new ArrayList<>();
 	public int currentScroll = 1;
 	public int totalScroll = 1;
-	public String searchQuery = "";
+	protected String searchQuery = "";
 	
 	public Map<Integer, Integer> slotOffsets = new HashMap<>();
 	private List<Container> listeners = new ArrayList<>();
@@ -45,6 +45,11 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	
 	public void removeListener(Container container) {
 		this.listeners.remove(container);
+	}
+	
+	public void setSearchQuery(String searchQuery) {
+		this.searchQuery = searchQuery;
+		this.onContentsChanged();
 	}
 	
 	public void move(int amount) {
