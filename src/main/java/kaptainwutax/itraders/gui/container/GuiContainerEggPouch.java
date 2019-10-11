@@ -71,7 +71,7 @@ public class GuiContainerEggPouch extends GuiContainer {
         RenderHelper.disableStandardItemLighting();
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
-        
+
         this.scrollbar.drawScrollbar();
 
         this.searchField.drawTextBox();
@@ -84,7 +84,7 @@ public class GuiContainerEggPouch extends GuiContainer {
 
         this.scrollbar.drawScrollbar();
         this.renderHoveredToolTip(mouseX, mouseY);
-        
+
         InitPacket.PIPELINE.sendToServer(new C2SUpdatePouchSearch(this.searchField.getText()));
         ((ContainerEggPouch)this.inventorySlots).pouchInventory.setSearchQuery(this.searchField.getText());
     }
@@ -104,8 +104,9 @@ public class GuiContainerEggPouch extends GuiContainer {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        this.searchField.textboxKeyTyped(typedChar, keyCode);
-        super.keyTyped(typedChar, keyCode);
+        if(!this.searchField.textboxKeyTyped(typedChar, keyCode)) {
+            super.keyTyped(typedChar, keyCode);
+        }
     }
 
     @Override
@@ -116,7 +117,9 @@ public class GuiContainerEggPouch extends GuiContainer {
         int mouseY = this.height - (int) (Mouse.getY() * ((float) this.height / MINECRAFT.displayHeight)) - 1;
         int scroll = Mouse.getDWheel();
         int rawMove = 0;
-        
+
+        this.scrollbar.mouseMoved(mouseX, mouseY);
+
         while (scroll >= 120) {
             scroll -= 120;
             rawMove--;
@@ -143,7 +146,7 @@ public class GuiContainerEggPouch extends GuiContainer {
                 Math.max(currentScroll, 1),
                 Math.max(totalScroll, 1)
         );
-        
+
         ((ContainerEggPouch)this.inventorySlots).pouchInventory.currentScroll = Math.max(currentScroll, 1);
         ((ContainerEggPouch)this.inventorySlots).pouchInventory.totalScroll = Math.max(totalScroll, 1);
     }
