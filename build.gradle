@@ -17,7 +17,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = '0.2.6'
+version = '0.2.7'
 group = 'kaptainwutax' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'itraders'
 
