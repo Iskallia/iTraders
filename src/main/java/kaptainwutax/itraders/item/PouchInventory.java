@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
@@ -23,11 +25,19 @@ import net.minecraftforge.items.ItemHandlerHelper;
 public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INBTSerializable<NBTTagCompound> {
 
 	public static final int FAKE_SLOT = -1;
+	
+	public static final BiPredicate<ItemStack, String> LITERAL_FILTER = (stack, searchQuery) -> {
+		return stack.getDisplayName().contains(searchQuery);		
+	};
+	
 	protected List<ItemStack> inventoryStacks = new ArrayList<>();
 	protected List<ItemStack> fakeInventoryStacks = new ArrayList<>();
 	public int currentScroll = 1;
 	public int totalScroll = 1;
+	
 	protected String searchQuery = "";
+	protected BiPredicate<ItemStack, String> searchFilter = LITERAL_FILTER;
+	
 	
 	public Map<Integer, Integer> slotOffsets = new HashMap<>();
 	private List<Container> listeners = new ArrayList<>();
@@ -80,21 +90,20 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 				this.slotOffsets.put(realIndex - min, realIndex);
 			}
 		} else {
-			int realIndex = 0;
 			int currentIndex = 0;
 			
-			for(ItemStack stack: this.inventoryStacks) {							
+			for(int realIndex = 0; realIndex < this.inventoryStacks.size(); realIndex++) {	
+				ItemStack stack = this.inventoryStacks.get(realIndex);
+				
 				if(stack.hasDisplayName()) {
 					String name = stack.getDisplayName();
 				
-					if(name.contains(this.searchQuery)) {
+					if(this.searchFilter.test(stack, this.searchQuery)) {
 						this.fakeInventoryStacks.add(stack);
 						this.slotOffsets.put(currentIndex, realIndex);
 						currentIndex++;
 					}
 				}
-				
-				realIndex++;
 			}
 		}
 	}
@@ -116,9 +125,11 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 		
         if(!this.slotExists(realIndex)) {
         	return ItemStack.EMPTY;
+        } else if(index >= this.fakeInventoryStacks.size()) {
+        	return ItemStack.EMPTY;
         }
         
-        return this.inventoryStacks.get(realIndex);
+        return this.fakeInventoryStacks.get(index);
 	}
 	
 	public boolean slotExists(int index) {
