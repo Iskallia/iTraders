@@ -76,10 +76,10 @@ public class GuiContainerEggPouch extends GuiContainer {
 
         this.scrollbar.drawScrollbar();
 
-        this.searchField.drawTextBox();
-
         this.scrollbar.drawScrollbar();
         this.renderHoveredToolTip(mouseX, mouseY);
+
+        this.searchField.drawTextBox();
     }
 
     @Override
