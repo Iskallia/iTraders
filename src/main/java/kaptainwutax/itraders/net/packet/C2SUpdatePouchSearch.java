@@ -1,13 +1,13 @@
 package kaptainwutax.itraders.net.packet;
 
+import java.nio.charset.StandardCharsets;
+
 import io.netty.buffer.ByteBuf;
 import kaptainwutax.itraders.container.ContainerEggPouch;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
-import java.nio.charset.StandardCharsets;
 
 public class C2SUpdatePouchSearch implements IMessage {
 

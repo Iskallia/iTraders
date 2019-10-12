@@ -1,5 +1,8 @@
 package kaptainwutax.itraders.event;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import kaptainwutax.itraders.Traders;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -7,9 +10,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Mod.EventBusSubscriber(modid = Traders.MOD_ID)
 public class EventAnvil {

@@ -1,25 +1,23 @@
 package kaptainwutax.itraders.gui.container;
 
-import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.gui.component.GuiScrollbar;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
+import java.io.IOException;
+
 import org.lwjgl.input.Mouse;
 
+import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.container.ContainerEggPouch;
-import kaptainwutax.itraders.container.PouchSlot;
+import kaptainwutax.itraders.gui.component.GuiScrollbar;
 import kaptainwutax.itraders.init.InitPacket;
 import kaptainwutax.itraders.net.packet.C2SMovePouchRow;
 import kaptainwutax.itraders.net.packet.C2SUpdatePouchSearch;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import scala.reflect.internal.Trees.This;
-
-import java.io.IOException;
 
 public class GuiContainerEggPouch extends GuiContainer {
 

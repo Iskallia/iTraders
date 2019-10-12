@@ -1,29 +1,15 @@
 package kaptainwutax.itraders.container;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import kaptainwutax.itraders.init.InitPacket;
-import kaptainwutax.itraders.item.ItemSpawnEggFighter;
 import kaptainwutax.itraders.item.PouchInventory;
 import kaptainwutax.itraders.net.packet.S2CPouchScroll;
 import kaptainwutax.itraders.world.data.DataEggPouch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
-
-import javax.annotation.Nonnull;
 
 public class ContainerEggPouch extends Container {
 

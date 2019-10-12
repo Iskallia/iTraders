@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 
 import kaptainwutax.itraders.item.PouchInventory;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
