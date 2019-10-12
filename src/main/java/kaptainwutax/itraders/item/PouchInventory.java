@@ -38,7 +38,6 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	protected String searchQuery = "";
 	protected BiPredicate<ItemStack, String> searchFilter = LITERAL_FILTER;
 	
-	
 	public Map<Integer, Integer> slotOffsets = new HashMap<>();
 	private List<Container> listeners = new ArrayList<>();
 	
