@@ -19,6 +19,8 @@ public class EventPickup {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onFighterEggPickup(EntityItemPickupEvent event) {
+    	if(event.getEntityPlayer().world.isRemote)return;
+    	
         EntityItem itemEntity = event.getItem();
 
         if (itemEntity == null || itemEntity.isDead)

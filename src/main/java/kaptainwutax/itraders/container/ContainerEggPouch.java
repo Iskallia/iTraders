@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 
 public class ContainerEggPouch extends Container {
 
-	private EntityPlayer player;
+	public EntityPlayer player;
 	private World world;
 
 	public PouchInventory pouchInventory;
@@ -60,8 +60,7 @@ public class ContainerEggPouch extends Container {
 			this.addSlotToContainer(new Slot(player.inventory, hotbar, 8 + hotbar * 18, 198));
 		}		
 
-		this.pouchInventory.addListener(this);
-		this.detectAndSendChanges();
+		if(!this.world.isRemote)this.pouchInventory.addListener(this);
 	}	
 
 	@Override
@@ -101,6 +100,97 @@ public class ContainerEggPouch extends Container {
 		return stack;
 	}
 	
+    protected boolean mergeItemStack(ItemStack stack, int startIndex, int endIndex, boolean reverseDirection)
+    {
+        boolean flag = false;
+        int i = startIndex;
+
+        if(reverseDirection) {
+            i = endIndex - 1;
+        }
+
+        if(stack.isStackable()) {
+            while(!stack.isEmpty()) {
+                if(reverseDirection) {
+                    if(i < startIndex) {
+                        break;
+                    }
+                } else if(i >= endIndex) {
+                    break;
+                }
+
+                Slot slot = this.inventorySlots.get(i);
+                ItemStack stackInSlot = slot.getStack();
+
+                if(!stackInSlot.isEmpty() && stackInSlot.getItem() == stack.getItem() && 
+                		(!stack.getHasSubtypes() || stack.getMetadata() == stackInSlot.getMetadata()) && 
+                		ItemStack.areItemStackTagsEqual(stack, stackInSlot)) {
+                	
+                    int j = stackInSlot.getCount() + stack.getCount();
+                    int maxSize = Math.min(slot.getSlotStackLimit(), stack.getMaxStackSize());
+
+                    if(j <= maxSize) {
+                        stack.setCount(0);
+                        stackInSlot.setCount(j);
+                        slot.onSlotChanged();
+                        flag = true;
+                    } else if (stackInSlot.getCount() < maxSize) {
+                        stack.shrink(maxSize - stackInSlot.getCount());
+                        stackInSlot.setCount(maxSize);
+                        slot.onSlotChanged();
+                        flag = true;
+                    }
+                }
+
+                i += reverseDirection ? -1 : 1;
+            }
+        }
+
+        if(!stack.isEmpty()) {
+        	i = reverseDirection ? endIndex - 1 : startIndex;
+
+            while(true) {
+                if(reverseDirection) {
+                    if(i < startIndex) {
+                        break;
+                    }
+                } else if(i >= endIndex) {
+                    break;
+                }
+
+                Slot slot = this.inventorySlots.get(i);
+                ItemStack stackInSlot = slot.getStack();
+
+                if (stackInSlot.isEmpty() && slot.isItemValid(stack))
+                {
+                    if (stack.getCount() > slot.getSlotStackLimit())
+                    {
+                        slot.putStack(stack.splitStack(slot.getSlotStackLimit()));
+                    }
+                    else
+                    {
+                        slot.putStack(stack.splitStack(stack.getCount()));
+                    }
+
+                    slot.onSlotChanged();
+                    flag = true;
+                    break;
+                }
+
+                if (reverseDirection)
+                {
+                    --i;
+                }
+                else
+                {
+                    ++i;
+                }
+            }
+        }
+
+        return flag;
+    }
+	
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
@@ -108,7 +198,7 @@ public class ContainerEggPouch extends Container {
 
 	public void onMove(int amount) {
 		this.pouchInventory.move(amount);
-		this.pouchInventory.onContentsChanged();
+
 		if(!this.world.isRemote) {
 			InitPacket.PIPELINE.sendTo(new S2CPouchScroll(this.pouchInventory.currentScroll, this.pouchInventory.totalScroll), (EntityPlayerMP)this.player);
 		}
@@ -117,7 +207,7 @@ public class ContainerEggPouch extends Container {
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
-		this.pouchInventory.removeListener(this);
+		if(!this.world.isRemote)this.pouchInventory.removeListener(this);
 	}
 
 }

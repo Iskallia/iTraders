@@ -17,6 +17,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import scala.reflect.internal.Trees.This;
 
 import java.io.IOException;
 
@@ -25,9 +26,11 @@ public class GuiContainerEggPouch extends GuiContainer {
     private static Minecraft MINECRAFT = Minecraft.getMinecraft();
     private static final ResourceLocation INVENTORY_TEXTURE = new ResourceLocation(Traders.MOD_ID, "textures/gui/container/pouch_gui.png");
 
-    private GuiScrollbar scrollbar;
-    private GuiTextField searchField;
+    public GuiScrollbar scrollbar;
+    public GuiTextField searchField;
 
+    private String lastSearch = "";
+    
     public GuiContainerEggPouch(World world, EntityPlayer player) {
         super(new ContainerEggPouch(world, player));
         this.xSize = 186;
@@ -56,6 +59,7 @@ public class GuiContainerEggPouch extends GuiContainer {
                 (this.height / 2) - 84,
                 107
         );
+        
         this.scrollbar.setKnobTexture(INVENTORY_TEXTURE, 188, 3, 8);
         this.scrollbar.setKnobUpperUV(188, 0, 2);
         this.scrollbar.setKnobLowerUV(188, 111, 2);
@@ -84,9 +88,6 @@ public class GuiContainerEggPouch extends GuiContainer {
 
         this.scrollbar.drawScrollbar();
         this.renderHoveredToolTip(mouseX, mouseY);
-
-        InitPacket.PIPELINE.sendToServer(new C2SUpdatePouchSearch(this.searchField.getText()));
-        ((ContainerEggPouch)this.inventorySlots).pouchInventory.setSearchQuery(this.searchField.getText());
     }
 
     @Override
@@ -106,6 +107,9 @@ public class GuiContainerEggPouch extends GuiContainer {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if(!this.searchField.textboxKeyTyped(typedChar, keyCode)) {
             super.keyTyped(typedChar, keyCode);
+        } else {
+            InitPacket.PIPELINE.sendToServer(new C2SUpdatePouchSearch(this.searchField.getText()));
+            ((ContainerEggPouch)this.inventorySlots).pouchInventory.setSearchQuery(this.searchField.getText());
         }
     }
 
@@ -130,7 +134,8 @@ public class GuiContainerEggPouch extends GuiContainer {
             rawMove++;
         }
 
-        if (rawMove != 0)InitPacket.PIPELINE.sendToServer(new C2SMovePouchRow(rawMove));
+        if(rawMove != 0)InitPacket.PIPELINE.sendToServer(new C2SMovePouchRow(rawMove));
+        ((ContainerEggPouch)this.inventorySlots).pouchInventory.move(rawMove);
     }
 
     @Override

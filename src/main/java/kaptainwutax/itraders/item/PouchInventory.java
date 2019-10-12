@@ -46,6 +46,7 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	
 	public void removeListener(Container container) {
 		this.listeners.remove(container);
+		if(this.listeners.isEmpty())this.setSearchQuery("");
 	}
 	
 	public void setSearchQuery(String searchQuery) {
@@ -58,6 +59,7 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 		this.totalScroll = MathHelper.ceil((float)this.inventoryStacks.size() / 9.0f) - 5;
 		if(this.totalScroll < 1)this.totalScroll = 1;
 		if(this.currentScroll < 1)this.currentScroll = 1;
+		this.totalScroll = 10;
 		if(this.currentScroll > this.totalScroll)this.currentScroll = this.totalScroll;
 		this.onContentsChanged();
 	}
@@ -101,6 +103,7 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	public void onContentsChanged() {		
 		this.inventoryStacks.removeIf(stack -> stack.isEmpty());	
 		this.updateFakeInventory();
+		this.listeners.forEach(c -> c.detectAndSendChanges());
 	}
 	
 	@Override
@@ -110,13 +113,13 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 
 	@Override
 	public ItemStack getStackInSlot(int index) {
-        if(!this.slotExists(this.getOffsettedIndex(index))) {
-        	return ItemStack.EMPTY;
-        } else if(index >= this.fakeInventoryStacks.size()) {
+		int realIndex = this.getOffsettedIndex(index);
+		
+        if(!this.slotExists(realIndex)) {
         	return ItemStack.EMPTY;
         }
         
-        return this.fakeInventoryStacks.get(index);
+        return this.inventoryStacks.get(realIndex);
 	}
 	
 	public boolean slotExists(int index) {
@@ -129,7 +132,8 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	public ItemStack insertItem(int index, ItemStack stack, boolean simulate) {
 		if(!this.slotExists(this.getOffsettedIndex(index))) {
             if(!simulate) {
-            	this.inventoryStacks.add(stack.copy());
+            	this.inventoryStacks.add(stack);
+            	System.out.println(this.inventoryStacks.size() + ", " + index + ", " + stack);
                 this.onContentsChanged();
             }
             
@@ -230,8 +234,8 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
     
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-    	return stack.getItem() == InitItem.SPAWN_EGG_FIGHTER;
-    	//return true;
+    	//return stack.getItem() == InitItem.SPAWN_EGG_FIGHTER;
+    	return true;
     }
     
 	@Override
@@ -247,20 +251,22 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	@Override
 	public void setStackInSlot(int index, ItemStack stack) {	
 		int realIndex = this.getOffsettedIndex(index);
-		
+
 		if(!this.slotExists(realIndex)) {
 			this.inventoryStacks.add(stack);
 		} else if(this.inventoryStacks.get(realIndex).isEmpty()) {
 			this.inventoryStacks.set(realIndex, stack);
-		}
-		
+		}	
+
 		this.onContentsChanged();
 	}
 
 	public ItemStack randomEgg() {
 		if(this.inventoryStacks.size() == 0)return null;
 		int i = new Random().nextInt(this.inventoryStacks.size());
-		return this.inventoryStacks.remove(i);
+		ItemStack stack = this.inventoryStacks.remove(i);
+		this.onContentsChanged();
+		return stack;
 	}
     
 }
