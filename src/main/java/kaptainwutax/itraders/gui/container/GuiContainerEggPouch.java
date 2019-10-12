@@ -78,12 +78,6 @@ public class GuiContainerEggPouch extends GuiContainer {
 
         this.searchField.drawTextBox();
 
-        this.drawString(this.fontRenderer,
-                "WIP: Search",
-                (this.width / 2) - 80,
-                (this.height / 2) - 120,
-                0xAA_ABABAB);
-
         this.scrollbar.drawScrollbar();
         this.renderHoveredToolTip(mouseX, mouseY);
     }
