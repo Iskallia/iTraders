@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.item.PouchInventory;
+import kaptainwutax.itraders.world.storage.PouchInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

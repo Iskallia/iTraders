@@ -1,9 +1,9 @@
 package kaptainwutax.itraders.container;
 
 import kaptainwutax.itraders.init.InitPacket;
-import kaptainwutax.itraders.item.PouchInventory;
 import kaptainwutax.itraders.net.packet.S2CPouchScroll;
 import kaptainwutax.itraders.world.data.DataEggPouch;
+import kaptainwutax.itraders.world.storage.PouchInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;

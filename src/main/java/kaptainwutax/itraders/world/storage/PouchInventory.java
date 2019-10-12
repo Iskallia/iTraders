@@ -1,4 +1,4 @@
-package kaptainwutax.itraders.item;
+package kaptainwutax.itraders.world.storage;
 
 import java.util.ArrayList;
 import java.util.HashMap;

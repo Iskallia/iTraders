@@ -2,7 +2,7 @@ package kaptainwutax.itraders.container;
 
 import javax.annotation.Nonnull;
 
-import kaptainwutax.itraders.item.PouchInventory;
+import kaptainwutax.itraders.world.storage.PouchInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
