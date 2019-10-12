@@ -59,7 +59,6 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 		this.totalScroll = MathHelper.ceil((float)this.inventoryStacks.size() / 9.0f) - 5;
 		if(this.totalScroll < 1)this.totalScroll = 1;
 		if(this.currentScroll < 1)this.currentScroll = 1;
-		this.totalScroll = 10;
 		if(this.currentScroll > this.totalScroll)this.currentScroll = this.totalScroll;
 		this.onContentsChanged();
 	}
@@ -234,8 +233,7 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
     
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-    	//return stack.getItem() == InitItem.SPAWN_EGG_FIGHTER;
-    	return true;
+    	return stack.getItem() == InitItem.SPAWN_EGG_FIGHTER;
     }
     
 	@Override
