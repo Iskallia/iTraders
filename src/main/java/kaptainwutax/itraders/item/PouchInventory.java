@@ -132,7 +132,6 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 		if(!this.slotExists(this.getOffsettedIndex(index))) {
             if(!simulate) {
             	this.inventoryStacks.add(stack);
-            	System.out.println(this.inventoryStacks.size() + ", " + index + ", " + stack);
                 this.onContentsChanged();
             }
             

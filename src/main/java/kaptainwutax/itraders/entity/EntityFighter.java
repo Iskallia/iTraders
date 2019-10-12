@@ -80,20 +80,17 @@ public class EntityFighter extends EntityZombie {
 				this.skin.updateSkin(name);
 				this.lastName = name;
 			}
-		}	
-		
-		if(!this.world.isRemote && this.ticksExisted % 5 == 0) {
-			InitPacket.PIPELINE.sendToAllTracking(new S2CFighterHeight(this), this);
-		}
-		
-		double amplitude = this.motionX * this.motionX + this.motionZ * this.motionZ;
-
-		if(amplitude > 0.0031D) {
-			this.setSprinting(true);
-			this.getJumpHelper().setJumping();
 		} else {
-			this.setSprinting(false);
+			double amplitude = this.motionX * this.motionX + this.motionZ * this.motionZ;
+
+			if(amplitude > 0.0034D) {
+				this.setSprinting(true);
+				this.getJumpHelper().setJumping();
+			} else {
+				this.setSprinting(false);
+			}
 		}
+		
 	}
 	
 	@Override
@@ -128,14 +125,15 @@ public class EntityFighter extends EntityZombie {
 		this.sizeMultiplier = m;
 		this.setSize(0.6F * m, 1.95F * m);
 		this.multiplySize(1);
-		
+
 		if(!this.world.isRemote) {
 			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH)
 				.setBaseValue(this.rand.nextInt(91) + (10 * m));	
-			this.setHealth(this.getMaxHealth());
+			this.setHealth(this.getMaxHealth());			
+			
+			this.loot = this.getFromSize(this.sizeMultiplier);
+			InitPacket.PIPELINE.sendToAllTracking(new S2CFighterHeight(this), this);
 		}
-		
-		this.loot = this.getFromSize(this.sizeMultiplier);
 	}
 	
 	@Override

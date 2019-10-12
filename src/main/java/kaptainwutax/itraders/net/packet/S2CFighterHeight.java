@@ -39,15 +39,18 @@ public class S2CFighterHeight implements IMessage {
 	public static class S2CFighterHeightHandler implements IMessageHandler<S2CFighterHeight, IMessage> {
 		@Override
 		public IMessage onMessage(S2CFighterHeight message, MessageContext ctx) {
+			
 			Minecraft minecraft = Minecraft.getMinecraft();
-			EntityPlayerSP player = minecraft.player;
-			World world = player.world;
 			
-			Entity entity = world.getEntityByID(message.entityId);
-			if(entity == null || entity.isDead || !(entity instanceof EntityFighter))return null;
-			
-			EntityFighter fighter = (EntityFighter)entity;
-			fighter.changeSize(message.sizeMultiplier);
+			minecraft.addScheduledTask(() -> {
+				EntityPlayerSP player = minecraft.player;
+				World world = player.world;
+				Entity entity = world.getEntityByID(message.entityId);
+				if(entity == null || entity.isDead || !(entity instanceof EntityFighter))return;
+				EntityFighter fighter = (EntityFighter)entity;
+				fighter.changeSize(message.sizeMultiplier);			
+			});
+		
 			return null;
 		}
 	}
