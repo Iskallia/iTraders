@@ -28,7 +28,7 @@ public class DataEggPouch extends WorldSavedData {
     	String uuidString = player.getUniqueID().toString();
     	
     	if(!this.pouchesMap.containsKey(uuidString)) {
-    		this.pouchesMap.put(uuidString, new PouchInventory());    		
+    		this.pouchesMap.put(uuidString, new PouchInventory(false));    		
     	}
     	
     	return this.pouchesMap.get(uuidString);

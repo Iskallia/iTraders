@@ -107,7 +107,7 @@ public class GuiContainerEggPouch extends GuiContainer {
             super.keyTyped(typedChar, keyCode);
         } else {
             InitPacket.PIPELINE.sendToServer(new C2SUpdatePouchSearch(this.searchField.getText()));
-            ((ContainerEggPouch)this.inventorySlots).pouchInventory.setSearchQuery(this.searchField.getText());
+            //((ContainerEggPouch)this.inventorySlots).pouchInventory.setSearchQuery(this.searchField.getText());
         }
     }
 
@@ -133,7 +133,6 @@ public class GuiContainerEggPouch extends GuiContainer {
         }
 
         if(rawMove != 0)InitPacket.PIPELINE.sendToServer(new C2SMovePouchRow(rawMove));
-        ((ContainerEggPouch)this.inventorySlots).pouchInventory.move(rawMove);
     }
 
     @Override

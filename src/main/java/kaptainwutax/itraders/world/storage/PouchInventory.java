@@ -41,8 +41,10 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	public Map<Integer, Integer> slotOffsets = new HashMap<>();
 	private List<Container> listeners = new ArrayList<>();
 	
-	public PouchInventory() {
-		
+	public boolean isRemote;
+	
+	public PouchInventory(boolean isRemote) {
+		this.isRemote = isRemote;
 	}
 
 	public PouchInventory(NBTTagCompound nbt) {
@@ -107,10 +109,10 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 		}
 	}
 
-	public void onContentsChanged() {		
+	public void onContentsChanged() {	
+		if(this.isRemote)return;
 		this.inventoryStacks.removeIf(stack -> stack.isEmpty());	
 		this.updateFakeInventory();
-		this.listeners.forEach(c -> c.detectAndSendChanges());
 	}
 	
 	@Override
@@ -120,6 +122,14 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 
 	@Override
 	public ItemStack getStackInSlot(int index) {
+		if(this.isRemote) {
+	        if(!this.slotExists(index)) {
+	        	return ItemStack.EMPTY;
+	        }
+	        
+	        return this.inventoryStacks.get(index);
+		}
+		
 		int realIndex = this.getOffsettedIndex(index);
 		
         if(!this.slotExists(realIndex)) {
@@ -257,15 +267,27 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 	
 	@Override
 	public void setStackInSlot(int index, ItemStack stack) {	
+		if(this.isRemote) {
+			if(index == FAKE_SLOT) {
+				this.inventoryStacks.add(stack);
+				return;
+			}
+	
+			while(index >= this.inventoryStacks.size()) {
+				this.inventoryStacks.add(ItemStack.EMPTY);
+			}
+			
+			this.inventoryStacks.set(index, stack);
+			return;
+		}
+		
 		int realIndex = this.getOffsettedIndex(index);
-
+		
 		if(!this.slotExists(realIndex)) {
 			this.inventoryStacks.add(stack);
 		} else if(this.inventoryStacks.get(realIndex).isEmpty()) {
 			this.inventoryStacks.set(realIndex, stack);
 		}	
-
-		this.onContentsChanged();
 	}
 
 	public ItemStack randomEgg() {

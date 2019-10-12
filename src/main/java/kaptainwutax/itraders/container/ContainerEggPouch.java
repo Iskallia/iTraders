@@ -7,6 +7,7 @@ import kaptainwutax.itraders.world.storage.PouchInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -22,7 +23,7 @@ public class ContainerEggPouch extends Container {
 		this.world = world;
 		this.player = player;
 		
-		this.pouchInventory = world.isRemote ? new PouchInventory() : DataEggPouch.get(world).getOrCreatePouch(player);
+		this.pouchInventory = world.isRemote ? new PouchInventory(true) : DataEggPouch.get(world).getOrCreatePouch(player);
 		
 		for(int row = 0; row < 6; row++) {
 			for(int column = 0; column < 9; column++) {
@@ -179,7 +180,14 @@ public class ContainerEggPouch extends Container {
 	
 	@Override
 	public void detectAndSendChanges() {
+		this.pouchInventory.onContentsChanged();
 		super.detectAndSendChanges();
+		
+		for(int i = 0; i < this.inventorySlots.size(); ++i) {
+            for(int j = 0; j < this.listeners.size(); ++j) {
+                ((IContainerListener)this.listeners.get(j)).sendSlotContents(this, i, this.inventorySlots.get(i).getStack());
+            }
+		}
 	}
 
 	public void onMove(int amount) {
