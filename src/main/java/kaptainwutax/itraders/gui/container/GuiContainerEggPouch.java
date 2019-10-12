@@ -75,11 +75,10 @@ public class GuiContainerEggPouch extends GuiContainer {
         GlStateManager.disableDepth();
 
         this.scrollbar.drawScrollbar();
-
-        this.scrollbar.drawScrollbar();
+        this.searchField.drawTextBox();
+        
         this.renderHoveredToolTip(mouseX, mouseY);
 
-        this.searchField.drawTextBox();
     }
 
     @Override
