@@ -1,9 +1,7 @@
 package kaptainwutax.itraders.item;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 import javax.annotation.Nullable;
 
@@ -23,6 +21,16 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemSpawnEggTrader extends ItemSpawnEgg {
+
+	private static final Map<String, String> CURRENCY_SYMBOLS = new HashMap<>();
+
+	static {
+		CURRENCY_SYMBOLS.put("USD", "$");
+		CURRENCY_SYMBOLS.put("EUR", "€");
+		CURRENCY_SYMBOLS.put("GBP", "£");
+		CURRENCY_SYMBOLS.put("TRY", "₺");
+		CURRENCY_SYMBOLS.put("JPY", "¥");
+	}
 
 	public ItemSpawnEggTrader(String name) {
 		super(name, Traders.getResource("trader"));
@@ -60,9 +68,15 @@ public class ItemSpawnEggTrader extends ItemSpawnEgg {
 			float amount = subTag.getFloat("Amount");
 			StringBuilder sb = new StringBuilder();
 			sb.append(TextFormatting.GRAY + "Amount: ");
-			sb.append(TextFormatting.YELLOW + String.valueOf(amount) + "$");
+			sb.append(TextFormatting.YELLOW + String.valueOf(amount));
+			if(subTag.hasKey("Currency")) {
+				String currencyISO = subTag.getString("Currency").toUpperCase();
+				sb.append(CURRENCY_SYMBOLS.getOrDefault(currencyISO, currencyISO));
+			}
 			tooltip.add(sb.toString());
 		}
+
+
 
 		if (subTag.hasKey("Time")) {
 			long time = subTag.getLong("Time") * 1000;
