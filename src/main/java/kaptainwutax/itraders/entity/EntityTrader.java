@@ -16,10 +16,14 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityTrader extends EntityVillager {
 
+	@SideOnly(value = Side.CLIENT)
 	public final SkinProfile skin = new SkinProfile();
+	
 	private String lastName = "Trader";
 
 	public EntityTrader(World world) {

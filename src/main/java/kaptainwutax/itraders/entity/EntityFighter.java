@@ -24,10 +24,14 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityFighter extends EntityZombie {
 
+	@SideOnly(value = Side.CLIENT)
 	public final SkinProfile skin = new SkinProfile();
+	
 	public String lastName = "Fighter";
 
 	public float sizeMultiplier = this.rand.nextFloat() * 2.0f + 0.8f;

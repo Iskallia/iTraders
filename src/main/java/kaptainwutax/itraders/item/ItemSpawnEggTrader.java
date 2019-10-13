@@ -76,8 +76,6 @@ public class ItemSpawnEggTrader extends ItemSpawnEgg {
 			tooltip.add(sb.toString());
 		}
 
-
-
 		if (subTag.hasKey("Time")) {
 			long time = subTag.getLong("Time") * 1000;
 			SimpleDateFormat date1 = new SimpleDateFormat("HH:mm:ss");
