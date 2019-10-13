@@ -21,7 +21,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityTrader extends EntityVillager {
 
-	@SideOnly(value = Side.CLIENT)
 	public final SkinProfile skin = new SkinProfile();
 	
 	private String lastName = "Trader";

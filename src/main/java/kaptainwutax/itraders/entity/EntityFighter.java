@@ -29,7 +29,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityFighter extends EntityZombie {
 
-	@SideOnly(value = Side.CLIENT)
 	public final SkinProfile skin = new SkinProfile();
 	
 	public String lastName = "Fighter";

@@ -14,7 +14,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(value = Side.CLIENT)
 public class SkinProfile {
 
 	private static ExecutorService service = Executors.newFixedThreadPool(5);
