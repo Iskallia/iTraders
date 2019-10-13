@@ -1,7 +1,8 @@
-package kaptainwutax.itraders.item;
+package kaptainwutax.itraders.item.mesh;
 
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.init.InitItem;
+import kaptainwutax.itraders.item.ItemSpawnEggFighter;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;

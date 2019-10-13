@@ -268,9 +268,9 @@ public class ItemSpawnEggFighter extends Item {
 			
 			StringBuilder sb = new StringBuilder();
 			sb.append(TextFormatting.GRAY + "Time: ");
-			sb.append(TextFormatting.GREEN + date2.format(new Date(time)));
-			sb.append(" ");
 			sb.append(TextFormatting.GREEN + date1.format(new Date(time)));
+			sb.append(" ");
+			sb.append(TextFormatting.GREEN + date2.format(new Date(time)));
 			tooltip.add(sb.toString());
 		}
     }

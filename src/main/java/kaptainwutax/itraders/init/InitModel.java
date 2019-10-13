@@ -1,6 +1,6 @@
 package kaptainwutax.itraders.init;
 
-import kaptainwutax.itraders.item.FighterEggMesh;
+import kaptainwutax.itraders.item.mesh.FighterEggMesh;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;

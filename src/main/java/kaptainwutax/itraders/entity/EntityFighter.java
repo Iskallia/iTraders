@@ -15,10 +15,12 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -28,7 +30,8 @@ public class EntityFighter extends EntityZombie {
 	public final SkinProfile skin = new SkinProfile();	
 	public String lastName = "Fighter";
 	
-	public float sizeMultiplier = this.rand.nextFloat() * 2.0f + 0.8f;
+	//public float sizeMultiplier = this.rand.nextFloat() * 2.0f + 0.8f;
+	public float sizeMultiplier = 0.5f;
 	public TieredLoot loot = TieredLoot.get(TieredLoot.Tier.COMMON);
 	
 	public EntityFighter(World world) {
@@ -87,7 +90,7 @@ public class EntityFighter extends EntityZombie {
 				this.setSprinting(true);
 				this.getJumpHelper().setJumping();
 			} else {
-				this.setSprinting(false);
+				this.setSprinting(false);				
 			}
 		}
 		
@@ -194,6 +197,13 @@ public class EntityFighter extends EntityZombie {
 					EnumParticleTypes.SWEEP_ATTACK,
 					this.posX, this.posY, this.posZ, 
 					1, 0.0f, 0.0f, 0.0f, 0
+			);
+			
+			((WorldServer)this.world).playSound(
+					null, this.getPosition(), 
+					SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 
+					SoundCategory.PLAYERS, 1.0f, 
+					this.rand.nextFloat() - this.rand.nextFloat()
 			);
 		}
 		

@@ -12,6 +12,8 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class ItemEggPouch extends Item {
@@ -36,6 +38,15 @@ public class ItemEggPouch extends Item {
             
             if(itemStack != null && (itemStack.getItem() instanceof ItemSpawnEggFighter)) {
                 ItemSpawnEggFighter eggItem = (ItemSpawnEggFighter)itemStack.getItem();
+                
+                if(itemStack.hasDisplayName()) {
+        			StringBuilder sb = new StringBuilder();
+        			sb.append(TextFormatting.GREEN + itemStack.getDisplayName());
+        			sb.append(TextFormatting.GRAY + ", I choose you!");
+        			
+                    player.sendStatusMessage(new TextComponentString(sb.toString()), true);
+                }
+                
                 eggItem.onItemUse(itemStack, player, world, pos, hand, facing, hitX, hitY, hitZ);
             }
         }
