@@ -8,9 +8,9 @@ import net.minecraft.item.ItemStack;
  */
 public class FilterLiteral extends SearchFilter {
 
-    @Override
-    public boolean compare(String stackName, ItemStack stack, String searchString) {
-        return stackName.toLowerCase().contains(searchString.toLowerCase());
-    }
+	@Override
+	public boolean compare(String stackName, ItemStack stack, String searchString) {
+		return stackName.toLowerCase().contains(searchString.toLowerCase());
+	}
 
 }

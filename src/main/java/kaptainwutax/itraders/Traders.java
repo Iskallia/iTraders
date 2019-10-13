@@ -14,40 +14,40 @@ public class Traders {
 
 	@Mod.Instance
 	private static Traders INSTANCE;
-	
+
 	public static final String MOD_ID = "itraders";
 	public static final String MOD_NAME = "iTraders";
-	public static final String MOD_VERSION = "0.2.10";
-	
+	public static final String MOD_VERSION = "0.2.11";
+
 	public static Traders getInstance() {
 		return INSTANCE;
 	}
-	
+
 	@Mod.EventHandler
 	public void onConstruction(FMLConstructionEvent event) {
 		EventMod.onConstruction(event);
 	}
-	
+
 	@Mod.EventHandler
 	public void onPreInitialization(FMLPreInitializationEvent event) {
 		EventMod.onPreInitialization(event);
 	}
-	
+
 	@Mod.EventHandler
 	public void onInitialization(FMLInitializationEvent event) {
 		EventMod.onInitialization(event);
 	}
-	
+
 	@Mod.EventHandler
 	public void onPostInitialization(FMLPostInitializationEvent event) {
 		EventMod.onPostInitialization(event);
 	}
-	
+
 	@Mod.EventHandler
 	public void onServerStart(FMLServerStartingEvent event) {
 		EventMod.onServerStart(event);
 	}
-	
+
 	public static ResourceLocation getResource(String name) {
 		return new ResourceLocation(Traders.MOD_ID, name);
 	}

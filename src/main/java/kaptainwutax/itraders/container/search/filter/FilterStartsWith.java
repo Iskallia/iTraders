@@ -5,12 +5,12 @@ import net.minecraft.item.ItemStack;
 
 public class FilterStartsWith extends SearchFilter {
 
-    public FilterStartsWith() {
-        this.name = "startswith";
-    }
+	public FilterStartsWith() {
+		this.name = "startswith";
+	}
 
-    @Override
-    public boolean compare(String stackName, ItemStack stack, String searchString) {
-        return stackName.toLowerCase().startsWith(searchString.toLowerCase());
-    }
+	@Override
+	public boolean compare(String stackName, ItemStack stack, String searchString) {
+		return stackName.toLowerCase().startsWith(searchString.toLowerCase());
+	}
 }

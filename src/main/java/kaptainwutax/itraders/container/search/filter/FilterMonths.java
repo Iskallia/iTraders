@@ -5,36 +5,36 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class FilterMonths extends FilterNBT {
 
-    public FilterMonths() {
-        this.name = "months";
-    }
+	public FilterMonths() {
+		this.name = "months";
+	}
 
-    @Override
-    protected boolean compareNBT(ItemStack stack, double value) {
-        double stackMonths = extractMonths(stack);
-        return stackMonths != -1 && stackMonths == value;
-    }
+	@Override
+	protected boolean compareNBT(ItemStack stack, double value) {
+		double stackMonths = extractMonths(stack);
+		return stackMonths != -1 && stackMonths == value;
+	}
 
-    protected double extractMonths(ItemStack stack) {
-        NBTTagCompound stackNBT = stack.getTagCompound();
+	protected double extractMonths(ItemStack stack) {
+		NBTTagCompound stackNBT = stack.getTagCompound();
 
-        if (!stackNBT.hasKey("EntityTag", 10)) {
-            return -1;
-        }
+		if (!stackNBT.hasKey("EntityTag", 10)) {
+			return -1;
+		}
 
-        NBTTagCompound entityTagNBT = stackNBT.getCompoundTag("EntityTag");
+		NBTTagCompound entityTagNBT = stackNBT.getCompoundTag("EntityTag");
 
-        if (!entityTagNBT.hasKey("SubData", 10)) {
-            return -1;
-        }
+		if (!entityTagNBT.hasKey("SubData", 10)) {
+			return -1;
+		}
 
-        NBTTagCompound subDataNBT = entityTagNBT.getCompoundTag("SubData");
+		NBTTagCompound subDataNBT = entityTagNBT.getCompoundTag("SubData");
 
-        if (!subDataNBT.hasKey("Months")) {
-            return -1;
-        }
+		if (!subDataNBT.hasKey("Months")) {
+			return -1;
+		}
 
-        return subDataNBT.getDouble("Months");
-    }
+		return subDataNBT.getDouble("Months");
+	}
 
 }

@@ -13,11 +13,11 @@ public class S2CPouchScroll implements IMessage {
 
 	private int currentScroll;
 	private int totalScroll;
-	
+
 	public S2CPouchScroll() {
-		
+
 	}
-	
+
 	public S2CPouchScroll(int currentScroll, int totalScroll) {
 		this.currentScroll = currentScroll;
 		this.totalScroll = totalScroll;
@@ -32,9 +32,9 @@ public class S2CPouchScroll implements IMessage {
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(this.currentScroll);
-		buf.writeInt(this.totalScroll);		
+		buf.writeInt(this.totalScroll);
 	}
-	
+
 	public static class S2CPouchScrollHandler implements IMessageHandler<S2CPouchScroll, IMessage> {
 		@Override
 		public IMessage onMessage(S2CPouchScroll message, MessageContext ctx) {
@@ -42,13 +42,13 @@ public class S2CPouchScroll implements IMessage {
 			EntityPlayerSP player = minecraft.player;
 			World world = player.world;
 
-			if(minecraft.currentScreen instanceof GuiContainerEggPouch) {
-				GuiContainerEggPouch gui = (GuiContainerEggPouch)minecraft.currentScreen;
+			if (minecraft.currentScreen instanceof GuiContainerEggPouch) {
+				GuiContainerEggPouch gui = (GuiContainerEggPouch) minecraft.currentScreen;
 				gui.setScroll(message.currentScroll, message.totalScroll);
 			}
-			
+
 			return null;
 		}
 	}
-	
+
 }

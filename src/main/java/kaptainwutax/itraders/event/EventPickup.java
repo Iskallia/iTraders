@@ -17,45 +17,46 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber(modid = Traders.MOD_ID)
 public class EventPickup {
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onFighterEggPickup(EntityItemPickupEvent event) {
-    	if(event.getEntityPlayer().world.isRemote)return;
-    	
-        EntityItem itemEntity = event.getItem();
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onFighterEggPickup(EntityItemPickupEvent event) {
+		if (event.getEntityPlayer().world.isRemote)
+			return;
 
-        if (itemEntity == null || itemEntity.isDead)
-            return; // Item entity is gone/dead before the event
+		EntityItem itemEntity = event.getItem();
 
-        // Fetch player and the item stack they're picking up
-        ItemStack itemStack = itemEntity.getItem();
-        EntityPlayer player = event.getEntityPlayer();
+		if (itemEntity == null || itemEntity.isDead)
+			return; // Item entity is gone/dead before the event
 
-        if (!(itemStack.getItem() instanceof ItemSpawnEggFighter))
-            return; // Picked up anything other than a Fighter Spawn Egg
+		// Fetch player and the item stack they're picking up
+		ItemStack itemStack = itemEntity.getItem();
+		EntityPlayer player = event.getEntityPlayer();
 
-        if (!hasEggPouch(player))
-            return; // Player does not have an Egg Pouch
+		if (!(itemStack.getItem() instanceof ItemSpawnEggFighter))
+			return; // Picked up anything other than a Fighter Spawn Egg
 
-        // Fetch pouch and put a copy of the egg on first empty slot
-        PouchInventory pouch = DataEggPouch.get(player.world).getOrCreatePouch(player);
-        pouch.insertItem(PouchInventory.FAKE_SLOT, itemStack, false);
-        
-        // Remove item from the item entity
-        itemStack.setCount(0);
-        itemEntity.setItem(itemStack);
-        event.setResult(Event.Result.ALLOW);
-    }
+		if (!hasEggPouch(player))
+			return; // Player does not have an Egg Pouch
 
-    private static boolean hasEggPouch(EntityPlayer player) {
-        for (ItemStack itemStack : player.inventory.mainInventory) {
-            if (itemStack.getItem() instanceof ItemEggPouch)
-                return true;
-        }
-        for (ItemStack itemStack : player.inventory.offHandInventory) {
-            if (itemStack.getItem() instanceof ItemEggPouch)
-                return true;
-        }
-        return false;
-    }
+		// Fetch pouch and put a copy of the egg on first empty slot
+		PouchInventory pouch = DataEggPouch.get(player.world).getOrCreatePouch(player);
+		pouch.insertItem(PouchInventory.FAKE_SLOT, itemStack, false);
+
+		// Remove item from the item entity
+		itemStack.setCount(0);
+		itemEntity.setItem(itemStack);
+		event.setResult(Event.Result.ALLOW);
+	}
+
+	private static boolean hasEggPouch(EntityPlayer player) {
+		for (ItemStack itemStack : player.inventory.mainInventory) {
+			if (itemStack.getItem() instanceof ItemEggPouch)
+				return true;
+		}
+		for (ItemStack itemStack : player.inventory.offHandInventory) {
+			if (itemStack.getItem() instanceof ItemEggPouch)
+				return true;
+		}
+		return false;
+	}
 
 }

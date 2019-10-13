@@ -5,13 +5,13 @@ import net.minecraft.item.ItemStack;
 
 public class FilterEndsWith extends SearchFilter {
 
-    public FilterEndsWith() {
-        this.name = "endswith";
-    }
+	public FilterEndsWith() {
+		this.name = "endswith";
+	}
 
-    @Override
-    public boolean compare(String stackName, ItemStack stack, String searchString) {
-        return stackName.toLowerCase().endsWith(searchString.toLowerCase());
-    }
+	@Override
+	public boolean compare(String stackName, ItemStack stack, String searchString) {
+		return stackName.toLowerCase().endsWith(searchString.toLowerCase());
+	}
 
 }

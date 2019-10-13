@@ -16,17 +16,17 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class EventMod {
-	
+
 	public static void onConstruction(FMLConstructionEvent event) {
-		
+
 	}
-	
+
 	public static void onPreInitialization(FMLPreInitializationEvent event) {
 		InitEntity.registerEntities();
-		
-		if(event.getSide() == Side.CLIENT) {
+
+		if (event.getSide() == Side.CLIENT) {
 			InitEntity.registerEntityRenderers();
-		}			
+		}
 	}
 
 	public static void onInitialization(FMLInitializationEvent event) {
@@ -42,5 +42,5 @@ public class EventMod {
 	public static void onServerStart(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandITraders());
 	}
-	
+
 }

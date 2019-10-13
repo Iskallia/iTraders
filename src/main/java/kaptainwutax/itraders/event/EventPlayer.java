@@ -17,12 +17,13 @@ public class EventPlayer {
 	@SubscribeEvent
 	public static void onStartTracking(PlayerEvent.StartTracking event) {
 		Entity target = event.getTarget();
-		if(target == null || !(target instanceof EntityFighter))return;
-		
-		EntityFighter fighter = (EntityFighter)target;
+		if (target == null || !(target instanceof EntityFighter))
+			return;
+
+		EntityFighter fighter = (EntityFighter) target;
 		EntityPlayer player = event.getEntityPlayer();
 
-		InitPacket.PIPELINE.sendTo(new S2CFighterHeight(fighter), (EntityPlayerMP)player);
+		InitPacket.PIPELINE.sendTo(new S2CFighterHeight(fighter), (EntityPlayerMP) player);
 	}
-	
+
 }

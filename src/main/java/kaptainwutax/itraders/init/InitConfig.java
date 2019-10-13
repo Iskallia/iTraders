@@ -7,10 +7,10 @@ public class InitConfig {
 
 	public static ConfigTrader CONFIG_TRADER = null;
 	public static ConfigFighter CONFIG_FIGHTER = null;
-	
+
 	public static void registerConfigs() {
-		CONFIG_TRADER = (ConfigTrader)new ConfigTrader().readConfig();
-		CONFIG_FIGHTER = (ConfigFighter)new ConfigFighter().readConfig();
+		CONFIG_TRADER = (ConfigTrader) new ConfigTrader().readConfig();
+		CONFIG_FIGHTER = (ConfigFighter) new ConfigFighter().readConfig();
 	}
-	
+
 }

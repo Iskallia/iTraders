@@ -11,40 +11,42 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class C2SUpdatePouchSearch implements IMessage {
 
-    String searchQuery;
+	String searchQuery;
 
-    public C2SUpdatePouchSearch() {}
+	public C2SUpdatePouchSearch() {
+	}
 
-    public C2SUpdatePouchSearch(String searchQuery) {
-        this.searchQuery = searchQuery;
-    }
+	public C2SUpdatePouchSearch(String searchQuery) {
+		this.searchQuery = searchQuery;
+	}
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        this.searchQuery = buf.readCharSequence(buf.readInt(), StandardCharsets.UTF_8).toString();
-    }
+	@Override
+	public void fromBytes(ByteBuf buf) {
+		this.searchQuery = buf.readCharSequence(buf.readInt(), StandardCharsets.UTF_8).toString();
+	}
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(this.searchQuery.length());
-        buf.writeCharSequence(this.searchQuery, StandardCharsets.UTF_8);
-    }
+	@Override
+	public void toBytes(ByteBuf buf) {
+		buf.writeInt(this.searchQuery.length());
+		buf.writeCharSequence(this.searchQuery, StandardCharsets.UTF_8);
+	}
 
-    public static class C2SUpdatePouchSearchHandler implements IMessageHandler<C2SUpdatePouchSearch, S2CUpdatePouchSearch> {
+	public static class C2SUpdatePouchSearchHandler
+			implements IMessageHandler<C2SUpdatePouchSearch, S2CUpdatePouchSearch> {
 
-        @Override
-        public S2CUpdatePouchSearch onMessage(C2SUpdatePouchSearch message, MessageContext ctx) {
-            EntityPlayerMP playerMP = ctx.getServerHandler().player;
+		@Override
+		public S2CUpdatePouchSearch onMessage(C2SUpdatePouchSearch message, MessageContext ctx) {
+			EntityPlayerMP playerMP = ctx.getServerHandler().player;
 
-            if (playerMP.openContainer instanceof ContainerEggPouch) {
-                ContainerEggPouch container = (ContainerEggPouch) playerMP.openContainer;
-                container.pouchInventory.setSearchQuery(message.searchQuery);
-                return new S2CUpdatePouchSearch(message.searchQuery);
-            }
+			if (playerMP.openContainer instanceof ContainerEggPouch) {
+				ContainerEggPouch container = (ContainerEggPouch) playerMP.openContainer;
+				container.pouchInventory.setSearchQuery(message.searchQuery);
+				return new S2CUpdatePouchSearch(message.searchQuery);
+			}
 
-            return null;
-        }
+			return null;
+		}
 
-    }
+	}
 
 }

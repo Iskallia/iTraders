@@ -11,12 +11,12 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 @IFMLLoadingPlugin.MCVersion(ForgeVersion.mcVersion)
 public class MixinForgeLoader implements IFMLLoadingPlugin {
 
-    public MixinForgeLoader() {
-    	System.out.println("STARTING MIXINS!=========================");
-        MixinBootstrap.init();
-        Mixins.addConfiguration("mixins.itraders.json");
-    }
-    
+	public MixinForgeLoader() {
+		System.out.println("STARTING MIXINS!=========================");
+		MixinBootstrap.init();
+		Mixins.addConfiguration("mixins.itraders.json");
+	}
+
 	@Override
 	public String[] getASMTransformerClass() {
 		return new String[0];
@@ -33,7 +33,7 @@ public class MixinForgeLoader implements IFMLLoadingPlugin {
 	}
 
 	@Override
-	public void injectData(Map<String, Object> data) {		
+	public void injectData(Map<String, Object> data) {
 	}
 
 	@Override

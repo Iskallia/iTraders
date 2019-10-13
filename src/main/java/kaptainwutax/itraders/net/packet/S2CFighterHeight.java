@@ -14,11 +14,11 @@ public class S2CFighterHeight implements IMessage {
 
 	private int entityId;
 	private float sizeMultiplier;
-	
+
 	public S2CFighterHeight() {
 
 	}
-	
+
 	public S2CFighterHeight(EntityFighter fighter) {
 		this.entityId = fighter.getEntityId();
 		this.sizeMultiplier = fighter.sizeMultiplier;
@@ -29,28 +29,29 @@ public class S2CFighterHeight implements IMessage {
 		this.entityId = buf.readInt();
 		this.sizeMultiplier = buf.readFloat();
 	}
-	
+
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(this.entityId);
 		buf.writeFloat(this.sizeMultiplier);
 	}
-	
+
 	public static class S2CFighterHeightHandler implements IMessageHandler<S2CFighterHeight, IMessage> {
 		@Override
 		public IMessage onMessage(S2CFighterHeight message, MessageContext ctx) {
-			
+
 			Minecraft minecraft = Minecraft.getMinecraft();
-			
+
 			minecraft.addScheduledTask(() -> {
 				EntityPlayerSP player = minecraft.player;
 				World world = player.world;
 				Entity entity = world.getEntityByID(message.entityId);
-				if(entity == null || entity.isDead || !(entity instanceof EntityFighter))return;
-				EntityFighter fighter = (EntityFighter)entity;
-				fighter.changeSize(message.sizeMultiplier);			
+				if (entity == null || entity.isDead || !(entity instanceof EntityFighter))
+					return;
+				EntityFighter fighter = (EntityFighter) entity;
+				fighter.changeSize(message.sizeMultiplier);
 			});
-		
+
 			return null;
 		}
 	}

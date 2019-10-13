@@ -9,22 +9,22 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 public class GuiHandler implements IGuiHandler {
 
 	public static final int POUCH = 0;
-	
+
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		if(id == POUCH) {
+		if (id == POUCH) {
 			return new ContainerEggPouch(world, player);
 		}
-		
+
 		return null;
 	}
 
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		if(id == POUCH) {
+		if (id == POUCH) {
 			return new GuiContainerEggPouch(world, player);
 		}
-		
+
 		return null;
 	}
 

@@ -16,9 +16,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(value = Side.CLIENT)
 public class SkinProfile {
-	
-	private static ExecutorService service = Executors.newFixedThreadPool(5);	
-	
+
+	private static ExecutorService service = Executors.newFixedThreadPool(5);
+
 	public AtomicReference<GameProfile> gameProfile = new AtomicReference<GameProfile>();
 	public AtomicReference<NetworkPlayerInfo> playerInfo = new AtomicReference<NetworkPlayerInfo>();
 
@@ -29,28 +29,28 @@ public class SkinProfile {
 			playerInfo.set(new NetworkPlayerInfo(gameProfile.get()));
 		});
 	}
-	
+
 	@SideOnly(value = Side.CLIENT)
-    public ResourceLocation getLocationSkin() {
-    	if(this.playerInfo == null || this.playerInfo.get() == null) {
-    		return DefaultPlayerSkin.getDefaultSkinLegacy();
-    	}		
-    	
-    	try {
-    		return this.playerInfo.get().getLocationSkin();
-    	} catch(Exception e) {
-    		System.err.println("stupid! how did you even do this?");
-    		e.printStackTrace();
-    	}
-    	
-    	return DefaultPlayerSkin.getDefaultSkinLegacy();
-    }
-	
+	public ResourceLocation getLocationSkin() {
+		if (this.playerInfo == null || this.playerInfo.get() == null) {
+			return DefaultPlayerSkin.getDefaultSkinLegacy();
+		}
+
+		try {
+			return this.playerInfo.get().getLocationSkin();
+		} catch (Exception e) {
+			System.err.println("stupid! how did you even do this?");
+			e.printStackTrace();
+		}
+
+		return DefaultPlayerSkin.getDefaultSkinLegacy();
+	}
+
 	public static void updateGameProfile(GameProfile input, Consumer<GameProfile> consumer) {
 		service.submit(() -> {
-			GameProfile output = TileEntitySkull.updateGameProfile(input); 
+			GameProfile output = TileEntitySkull.updateGameProfile(input);
 			consumer.accept(output);
-		});	
+		});
 	}
-	
+
 }

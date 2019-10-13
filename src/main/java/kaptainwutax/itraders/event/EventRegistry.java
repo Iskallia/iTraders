@@ -11,15 +11,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @EventBusSubscriber(modid = Traders.MOD_ID)
 public class EventRegistry {
-	
-	@SubscribeEvent	   
+
+	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event) {
 		InitItem.registerItems(event.getRegistry());
 	}
-	
-	@SubscribeEvent	   
+
+	@SubscribeEvent
 	public static void onModelRegister(ModelRegistryEvent event) {
 		InitModel.registerModels();
 	}
-	
+
 }

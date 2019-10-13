@@ -18,19 +18,19 @@ import net.minecraftforge.fml.relauncher.Side;
 public class InitPacket {
 
 	public static SimpleNetworkWrapper PIPELINE = null;
-    private static int packetId = 0;
+	private static int packetId = 0;
 
-    private static int nextId() {
-        return packetId++;
-    }
+	private static int nextId() {
+		return packetId++;
+	}
 
-    public static void registerPackets() {
-    	PIPELINE = NetworkRegistry.INSTANCE.newSimpleChannel(Traders.MOD_ID);
-    	PIPELINE.registerMessage(S2CFighterHeightHandler.class, S2CFighterHeight.class, nextId(), Side.CLIENT);
-    	PIPELINE.registerMessage(C2SMovePouchRowHandler.class, C2SMovePouchRow.class, nextId(), Side.SERVER);
-    	PIPELINE.registerMessage(S2CPouchScrollHandler.class, S2CPouchScroll.class, nextId(), Side.CLIENT);
-    	PIPELINE.registerMessage(C2SUpdatePouchSearchHandler.class, C2SUpdatePouchSearch.class, nextId(), Side.SERVER);
-    	PIPELINE.registerMessage(S2CUpdatePouchSearchHandler.class, S2CUpdatePouchSearch.class, nextId(), Side.CLIENT);
-    }
-    
+	public static void registerPackets() {
+		PIPELINE = NetworkRegistry.INSTANCE.newSimpleChannel(Traders.MOD_ID);
+		PIPELINE.registerMessage(S2CFighterHeightHandler.class, S2CFighterHeight.class, nextId(), Side.CLIENT);
+		PIPELINE.registerMessage(C2SMovePouchRowHandler.class, C2SMovePouchRow.class, nextId(), Side.SERVER);
+		PIPELINE.registerMessage(S2CPouchScrollHandler.class, S2CPouchScroll.class, nextId(), Side.CLIENT);
+		PIPELINE.registerMessage(C2SUpdatePouchSearchHandler.class, C2SUpdatePouchSearch.class, nextId(), Side.SERVER);
+		PIPELINE.registerMessage(S2CUpdatePouchSearchHandler.class, S2CUpdatePouchSearch.class, nextId(), Side.CLIENT);
+	}
+
 }

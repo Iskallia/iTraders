@@ -6,5 +6,6 @@ item.bit_1000.name=1000 Bits
 item.bit_5000.name=5000 Bits
 item.bit_10000.name=10000 Bits
 item.spawn_egg_fighter.name=Spawn Fighter
+item.spawn_egg_trader.name=Spawn Trader
 item.egg_pouch.name=Egg Pouch
 itemGroup.itraders=iTraders

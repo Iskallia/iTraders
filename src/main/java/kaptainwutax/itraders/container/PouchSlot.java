@@ -8,5 +8,5 @@ public class PouchSlot extends SlotItemHandler {
 	public PouchSlot(IItemHandler inventory, int index, int xPosition, int yPosition) {
 		super(inventory, index, xPosition, yPosition);
 	}
-	
+
 }
