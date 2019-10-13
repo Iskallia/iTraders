@@ -60,7 +60,7 @@ public class ItemSpawnEggTrader extends ItemSpawnEgg {
 			float amount = subTag.getFloat("Amount");
 			StringBuilder sb = new StringBuilder();
 			sb.append(TextFormatting.GRAY + "Amount: ");
-			sb.append(TextFormatting.YELLOW + String.valueOf(amount) + "$");
+			sb.append(TextFormatting.YELLOW + String.valueOf(amount) + subTag.getString("Currency"));
 			tooltip.add(sb.toString());
 		}
 
