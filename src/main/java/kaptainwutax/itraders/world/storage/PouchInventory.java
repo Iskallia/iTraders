@@ -1,10 +1,6 @@
 package kaptainwutax.itraders.world.storage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import javax.annotation.Nonnull;
 
@@ -298,19 +294,25 @@ public class PouchInventory implements IItemHandler, IItemHandlerModifiable, INB
 		}
 	}
 
-	public ItemStack randomEgg() {
-		if (this.inventoryStacks.size() == 0)
-			return null;
-		int i = new Random().nextInt(this.inventoryStacks.size());
-		ItemStack stack = this.inventoryStacks.get(i).copy();
+	public ItemStack randomFighterEgg() {
+		List<Integer> fighterIndices = new LinkedList<>();
 
-		if (stack.getItem() == InitItem.SPAWN_EGG_FIGHTER) {
-			this.inventoryStacks.remove(i);
-			this.onContentsChanged();
-			return stack;
+		for (int i = 0; i < this.inventoryStacks.size(); i++) {
+			if(this.inventoryStacks.get(i).getItem() == InitItem.SPAWN_EGG_FIGHTER) {
+				fighterIndices.add(i);
+			}
 		}
 
-		return null;
+		if(fighterIndices.size() == 0)
+			return null;
+
+		int index = fighterIndices.get(new Random().nextInt(fighterIndices.size()));
+
+		ItemStack stack = this.inventoryStacks.get(index);
+
+		this.inventoryStacks.remove(index);
+		this.onContentsChanged();
+		return stack;
 	}
 
 }

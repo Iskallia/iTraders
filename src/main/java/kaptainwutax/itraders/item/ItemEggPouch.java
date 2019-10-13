@@ -13,8 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class ItemEggPouch extends Item {
 
@@ -36,7 +34,7 @@ public class ItemEggPouch extends Item {
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
 			float hitX, float hitY, float hitZ) {
 		if (player.isSneaking() && !world.isRemote) {
-			ItemStack itemStack = DataEggPouch.get(world).getOrCreatePouch(player).randomEgg();
+			ItemStack itemStack = DataEggPouch.get(world).getOrCreatePouch(player).randomFighterEgg();
 
 			if (itemStack != null && (itemStack.getItem() instanceof ItemSpawnEggFighter)) {
 				ItemSpawnEggFighter eggItem = (ItemSpawnEggFighter) itemStack.getItem();
@@ -59,7 +57,7 @@ public class ItemEggPouch extends Item {
 							SoundCategory.PLAYERS, 1.0f, 0.0f);
 				}
 
-				eggItem.onItemUse(itemStack, player, world, pos, hand, facing, hitX, hitY, hitZ);
+				return eggItem.onItemUse(itemStack, player, world, pos, hand, facing, hitX, hitY, hitZ);
 			}
 		}
 
