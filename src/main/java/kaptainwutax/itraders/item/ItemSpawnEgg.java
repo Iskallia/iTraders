@@ -40,7 +40,7 @@ public abstract class ItemSpawnEgg extends Item {
 	protected ResourceLocation entityName;
 
 	public ItemSpawnEgg(String name, ResourceLocation entityName) {
-		this.setTranslationKey(name);
+		this.setUnlocalizedName(name);
 		this.setRegistryName(Traders.getResource(name));
 		this.entityName = entityName;
 		this.setCreativeTab(InitItem.ITRADERS_TAB);

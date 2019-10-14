@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class ItemEggPouch extends Item {
 
 	public ItemEggPouch(String name) {
-		this.setTranslationKey(name);
+		this.setUnlocalizedName(name);
 		this.setRegistryName(Traders.getResource(name));
 		this.setCreativeTab(InitItem.ITRADERS_TAB);
 		this.setMaxStackSize(1);

@@ -24,7 +24,7 @@ public class SkinProfile {
 	public void updateSkin(String name) {
 		service.submit(() -> {
 			gameProfile.set(new GameProfile(null, name));
-			gameProfile.set(TileEntitySkull.updateGameProfile(gameProfile.get()));
+			gameProfile.set(TileEntitySkull.updateGameprofile(gameProfile.get()));
 			playerInfo.set(new NetworkPlayerInfo(gameProfile.get()));
 		});
 	}
@@ -47,7 +47,7 @@ public class SkinProfile {
 
 	public static void updateGameProfile(GameProfile input, Consumer<GameProfile> consumer) {
 		service.submit(() -> {
-			GameProfile output = TileEntitySkull.updateGameProfile(input);
+			GameProfile output = TileEntitySkull.updateGameprofile(input);
 			consumer.accept(output);
 		});
 	}

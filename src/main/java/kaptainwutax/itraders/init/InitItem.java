@@ -1,10 +1,7 @@
 package kaptainwutax.itraders.init;
 
 import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.item.ItemBit;
-import kaptainwutax.itraders.item.ItemEggPouch;
-import kaptainwutax.itraders.item.ItemSpawnEggFighter;
-import kaptainwutax.itraders.item.ItemSpawnEggTrader;
+import kaptainwutax.itraders.item.*;
 import kaptainwutax.itraders.tab.CreativeTabsITraders;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
@@ -30,6 +27,7 @@ public class InitItem {
 	public static ItemSpawnEggTrader SPAWN_EGG_TRADER = new ItemSpawnEggTrader("spawn_egg_trader");
 	public static ItemSpawnEggFighter SPAWN_EGG_FIGHTER = new ItemSpawnEggFighter("spawn_egg_fighter");
 	public static ItemEggPouch EGG_POUCH = new ItemEggPouch("egg_pouch");
+	public static ItemBaublesTest BAUBLES_TEST = new ItemBaublesTest();
 
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		registerItem(BIT_100, registry);
@@ -40,13 +38,14 @@ public class InitItem {
 		registerItem(SPAWN_EGG_TRADER, registry);
 		registerItem(SPAWN_EGG_FIGHTER, registry);
 		registerItem(EGG_POUCH, registry);
+		registerItem(BAUBLES_TEST, registry);
 
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(SPAWN_EGG_FIGHTER, new BehaviorDefaultDispenseItem() {
 			public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
 				EnumFacing enumfacing = (EnumFacing) source.getBlockState().getValue(BlockDispenser.FACING);
-				double x = source.getX() + (double) enumfacing.getXOffset();
-				double y = (double) ((float) (source.getBlockPos().getY() + enumfacing.getYOffset()) + 0.2F);
-				double z = source.getZ() + (double) enumfacing.getZOffset();
+				double x = source.getX() + (double) enumfacing.getFrontOffsetX();
+				double y = (double) ((float) (source.getBlockPos().getY() + enumfacing.getFrontOffsetY()) + 0.2F);
+				double z = source.getZ() + (double) enumfacing.getFrontOffsetZ();
 
 				NBTTagCompound stackNBT = stack.getTagCompound();
 
@@ -64,7 +63,7 @@ public class InitItem {
 
 	private static void registerItemBlock(ItemBlock itemBlock, IForgeRegistry<Item> registry) {
 		itemBlock.setRegistryName(itemBlock.getBlock().getRegistryName());
-		itemBlock.setTranslationKey(itemBlock.getBlock().getTranslationKey());
+		itemBlock.setUnlocalizedName(itemBlock.getBlock().getUnlocalizedName());
 		registry.register(itemBlock);
 	}
 
