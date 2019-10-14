@@ -27,7 +27,7 @@ public class InitItem {
 	public static ItemSpawnEggTrader SPAWN_EGG_TRADER = new ItemSpawnEggTrader("spawn_egg_trader");
 	public static ItemSpawnEggFighter SPAWN_EGG_FIGHTER = new ItemSpawnEggFighter("spawn_egg_fighter");
 	public static ItemEggPouch EGG_POUCH = new ItemEggPouch("egg_pouch");
-	public static ItemBaublesTest BAUBLES_TEST = new ItemBaublesTest();
+	public static ItemSkullNeck SKULL_NECKLACE = new ItemSkullNeck("skull_neck");
 
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		registerItem(BIT_100, registry);
@@ -38,7 +38,7 @@ public class InitItem {
 		registerItem(SPAWN_EGG_TRADER, registry);
 		registerItem(SPAWN_EGG_FIGHTER, registry);
 		registerItem(EGG_POUCH, registry);
-		registerItem(BAUBLES_TEST, registry);
+		registerItem(SKULL_NECKLACE, registry);
 
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(SPAWN_EGG_FIGHTER, new BehaviorDefaultDispenseItem() {
 			public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {

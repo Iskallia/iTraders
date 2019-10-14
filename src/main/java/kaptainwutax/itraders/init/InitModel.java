@@ -15,6 +15,7 @@ public class InitModel {
 		registerSimpleItemModel(InitItem.BIT_5000, 0);
 		registerSimpleItemModel(InitItem.BIT_10000, 0);
 		registerSimpleItemModel(InitItem.EGG_POUCH, 0);
+		registerSimpleItemModel(InitItem.SKULL_NECKLACE, 0);
 
 		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_TRADER, new TraderEggMesh(InitItem.SPAWN_EGG_TRADER));
 		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_FIGHTER, new FighterEggMesh(InitItem.SPAWN_EGG_FIGHTER));
