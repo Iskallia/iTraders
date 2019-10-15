@@ -46,8 +46,7 @@ public class EventAnvil {
 		ItemStack right = event.getRight();
 		Item rightItem = right.getItem();
 		
-		if(left.getItem() != InitItem.SPAWN_EGG_TRADER)return;
-		System.out.println(left.getItem());
+		if(left.getItem() != InitItem.SPAWN_EGG_FIGHTER)return;
 		if(!(rightItem instanceof ItemTool))return;
 		if(!((ItemTool)rightItem).getToolClasses(right).contains("pickaxe"))return;
 		
