@@ -3,10 +3,16 @@ package kaptainwutax.itraders.item;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import kaptainwutax.itraders.Traders;
+import kaptainwutax.itraders.entity.EntityMiniPlayer;
+import kaptainwutax.itraders.init.InitEntity;
 import kaptainwutax.itraders.init.InitItem;
+import kaptainwutax.itraders.init.InitPacket;
+import kaptainwutax.itraders.net.packet.S2CMiniPlayerOwner;
 import kaptainwutax.itraders.util.RomanLiterals;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,8 +25,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /*
  * NBT: {
@@ -59,6 +64,8 @@ public class ItemSkullNeck extends Item implements IBauble {
         return potionEffectList;
     }
 
+    public static final Map<UUID, EntityMiniPlayer> MINI_PLAYER_MAP = new HashMap<>();
+
     public ItemSkullNeck(String name) {
         this.setUnlocalizedName(name);
         this.setRegistryName(Traders.getResource(name));
@@ -84,6 +91,16 @@ public class ItemSkullNeck extends Item implements IBauble {
             for (PotionEffect potionEffect : potionEffects) {
                 player.addPotionEffect(potionEffect);
             }
+
+            // Spawn mini player
+            EntityMiniPlayer miniPlayer = ((EntityMiniPlayer) EntityList.createEntityByIDFromName(
+                    Traders.getResource("mini_player"), player.world));
+            miniPlayer.setOwner(player);
+            player.world.spawnEntity(miniPlayer);
+
+            InitPacket.PIPELINE.sendToAll(new S2CMiniPlayerOwner(player, miniPlayer.getEntityId())); // TODO change to sendToAllTracking
+
+            MINI_PLAYER_MAP.put(player.getUniqueID(), miniPlayer);
         }
     }
 
@@ -97,6 +114,9 @@ public class ItemSkullNeck extends Item implements IBauble {
             for (PotionEffect potionEffect : potionEffects) {
                 player.removePotionEffect(potionEffect.getPotion());
             }
+
+            EntityMiniPlayer miniPlayer = MINI_PLAYER_MAP.remove(player.getUniqueID());
+            if(miniPlayer != null) player.world.removeEntity(miniPlayer);
         }
     }
 
