@@ -9,4 +9,5 @@ item.spawn_egg_fighter.name=Spawn Fighter
 item.spawn_egg_trader.name=Spawn Trader
 item.egg_pouch.name=Egg Pouch
 item.skull_neck.name=Skull Necklace
+tile.skull_refiner.name=Skull Refiner
 itemGroup.itraders=iTraders

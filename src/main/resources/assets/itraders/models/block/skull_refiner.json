@@ -1,0 +1,11 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "itraders:items/badge_1",
+    "up": "itraders:items/badge_1",
+    "north": "itraders:items/badge_1",
+    "east": "itraders:items/badge_1",
+    "south": "itraders:items/badge_1",
+    "west": "itraders:items/badge_1"
+  }
+}

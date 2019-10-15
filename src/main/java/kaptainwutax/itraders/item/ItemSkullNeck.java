@@ -3,7 +3,6 @@ package kaptainwutax.itraders.item;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.init.InitItem;
 import kaptainwutax.itraders.util.RomanLiterals;
 import net.minecraft.client.resources.I18n;
@@ -18,10 +17,8 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
-import javax.xml.soap.Text;
 import java.util.LinkedList;
 import java.util.List;
 
