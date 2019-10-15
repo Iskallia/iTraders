@@ -87,10 +87,22 @@ public class EntityMiner extends EntityCreature {
 	}
 
 	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		compound.setInteger("MiningDirection", this.miningDirection.ordinal());
+	}
+	
+	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
+		
+		if(compound.hasKey("MiningDirection")) {
+			this.miningDirection = EnumFacing.VALUES[compound.getInteger("MiningDirection")];
+		}
+		
 		this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, this.getHeldItemMainhand());	
 	}
+	
 	
 	@Override
 	public void addPotionEffect(PotionEffect potioneffect) {
