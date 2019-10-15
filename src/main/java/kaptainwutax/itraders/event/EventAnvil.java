@@ -51,7 +51,8 @@ public class EventAnvil {
 		if(!((ItemTool)rightItem).getToolClasses(right).contains("pickaxe"))return;
 		
 		ItemStack minerEgg = new ItemStack(InitItem.SPAWN_EGG_MINER, 1);
-		minerEgg.setTagCompound(left.getTagCompound());
+		if(left.hasTagCompound())minerEgg.setTagCompound(left.getTagCompound());
+		if(left.hasDisplayName())minerEgg.setStackDisplayName(left.getDisplayName());
 		
 		if(!minerEgg.hasTagCompound())minerEgg.setTagCompound(new NBTTagCompound());
 		NBTTagCompound nbt = minerEgg.getTagCompound();
