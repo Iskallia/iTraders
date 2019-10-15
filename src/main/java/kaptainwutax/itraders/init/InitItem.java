@@ -43,22 +43,6 @@ public class InitItem {
 		registerItem(SPAWN_EGG_FIGHTER, registry);
 		registerItem(SPAWN_EGG_MINER, registry);
 		registerItem(EGG_POUCH, registry);
-
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(SPAWN_EGG_FIGHTER, new BehaviorDefaultDispenseItem() {
-			public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
-				EnumFacing enumfacing = (EnumFacing) source.getBlockState().getValue(BlockDispenser.FACING);
-				double x = source.getX() + (double) enumfacing.getXOffset();
-				double y = (double) ((float) (source.getBlockPos().getY() + enumfacing.getYOffset()) + 0.2F);
-				double z = source.getZ() + (double) enumfacing.getZOffset();
-
-				NBTTagCompound stackNBT = stack.getTagCompound();
-
-				InitItem.SPAWN_EGG_FIGHTER.doSpawning(source.getWorld(), new BlockPos(x, y, z), stack);
-
-				stack.shrink(1);
-				return stack;
-			}
-		});
 	}
 
 	private static void registerItem(Item item, IForgeRegistry<Item> registry) {

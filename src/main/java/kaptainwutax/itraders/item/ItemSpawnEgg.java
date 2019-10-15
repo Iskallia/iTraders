@@ -8,8 +8,11 @@ import javax.annotation.Nullable;
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.init.InitItem;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -35,16 +38,32 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public abstract class ItemSpawnEgg extends Item {
+public abstract class ItemSpawnEgg<T> extends Item {
 
 	protected ResourceLocation entityName;
 
-	public ItemSpawnEgg(String name, ResourceLocation entityName) {
+	public ItemSpawnEgg(String name, ResourceLocation entityName, boolean usesDispenser) {
 		this.setTranslationKey(name);
 		this.setRegistryName(Traders.getResource(name));
 		this.entityName = entityName;
 		this.setCreativeTab(InitItem.ITRADERS_TAB);
 		this.setMaxStackSize(1);
+		
+		if(usesDispenser) {
+			BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new BehaviorDefaultDispenseItem() {
+				public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+					EnumFacing facing = source.getBlockState().getValue(BlockDispenser.FACING);
+					double x = source.getX() + facing.getXOffset();
+					double y = source.getBlockPos().getY() + facing.getYOffset() + 0.2D;
+					double z = source.getZ() + facing.getZOffset();
+					
+					onDispenserSpawn(source.getWorld(), facing, new BlockPos(x, y, z), stack);
+
+					stack.shrink(1);
+					return stack;
+				}
+			});
+		}
 	}
 
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
@@ -53,24 +72,24 @@ public abstract class ItemSpawnEgg extends Item {
 		return this.onItemUse(stack, player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 	}
 
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (worldIn.isRemote) {
+		if (world.isRemote) {
 			return EnumActionResult.SUCCESS;
 		} else if (!player.canPlayerEdit(pos.offset(facing), facing, stack)) {
 			return EnumActionResult.FAIL;
 		} else {
-			IBlockState iblockstate = worldIn.getBlockState(pos);
+			IBlockState iblockstate = world.getBlockState(pos);
 			Block block = iblockstate.getBlock();
 
 			if (block == Blocks.MOB_SPAWNER) {
-				TileEntity tileentity = worldIn.getTileEntity(pos);
+				TileEntity tileentity = world.getTileEntity(pos);
 
 				if (tileentity instanceof TileEntityMobSpawner) {
 					MobSpawnerBaseLogic mobspawnerbaselogic = ((TileEntityMobSpawner) tileentity).getSpawnerBaseLogic();
 					mobspawnerbaselogic.setEntityId(getNamedIdFrom(stack));
 					tileentity.markDirty();
-					worldIn.notifyBlockUpdate(pos, iblockstate, iblockstate, 3);
+					world.notifyBlockUpdate(pos, iblockstate, iblockstate, 3);
 
 					if (!player.capabilities.isCreativeMode) {
 						stack.shrink(1);
@@ -81,9 +100,9 @@ public abstract class ItemSpawnEgg extends Item {
 			}
 
 			BlockPos blockpos = pos.offset(facing);
-			double d0 = this.getYOffset(worldIn, blockpos);
+			double d0 = this.getYOffset(world, blockpos);
 
-			this.doSpawning(worldIn, blockpos, stack);
+			this.onPlayerSpawn(world, player, blockpos, stack);
 
 			if (!player.capabilities.isCreativeMode) {
 				stack.shrink(1);
@@ -111,29 +130,29 @@ public abstract class ItemSpawnEgg extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		ItemStack stack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
 
-		if (worldIn.isRemote) {
+		if (world.isRemote) {
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 		}
 
-		RayTraceResult raytraceresult = this.rayTrace(worldIn, playerIn, true);
+		RayTraceResult raytraceresult = this.rayTrace(world, player, true);
 
 		if (raytraceresult != null && raytraceresult.typeOfHit == RayTraceResult.Type.BLOCK) {
 			BlockPos blockpos = raytraceresult.getBlockPos();
 
-			if (!(worldIn.getBlockState(blockpos).getBlock() instanceof BlockLiquid)) {
+			if (!(world.getBlockState(blockpos).getBlock() instanceof BlockLiquid)) {
 				return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
-			} else if (worldIn.isBlockModifiable(playerIn, blockpos)
-					&& playerIn.canPlayerEdit(blockpos, raytraceresult.sideHit, stack)) {
-				this.doSpawning(worldIn, blockpos, stack);
+			} else if (world.isBlockModifiable(player, blockpos)
+					&& player.canPlayerEdit(blockpos, raytraceresult.sideHit, stack)) {
+				this.onPlayerSpawn(world, player, blockpos, stack);
 
-				if (!playerIn.capabilities.isCreativeMode) {
+				if (!player.capabilities.isCreativeMode) {
 					stack.shrink(1);
 				}
 
-				playerIn.addStat(StatList.getObjectUseStats(this));
+				player.addStat(StatList.getObjectUseStats(this));
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 			} else {
 				return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
@@ -143,15 +162,16 @@ public abstract class ItemSpawnEgg extends Item {
 		}
 	}
 
-	protected abstract void doSpawning(World worldIn, BlockPos blockpos, ItemStack stack);
-
+	protected abstract T onPlayerSpawn(World world, EntityPlayer player, BlockPos pos, ItemStack stack);
+	protected abstract T onDispenserSpawn(World world, EnumFacing facing, BlockPos pos, ItemStack stack);
+	
 	@Nullable
 	public ResourceLocation getNamedIdFrom(ItemStack stack) {
 		return this.entityName;
 	}
 
 	@Nullable
-	public static Entity spawnCreature(World worldIn, @Nullable ResourceLocation entityID, double x, double y,
+	public T spawnCreature(World worldIn, @Nullable ResourceLocation entityID, double x, double y,
 			double z) {
 		if (entityID != null) {
 			Entity entity = null;
@@ -168,7 +188,7 @@ public abstract class ItemSpawnEgg extends Item {
 				entityliving.playLivingSound();
 			}
 
-			return entity;
+			return (T)entity;
 		} else {
 			return null;
 		}

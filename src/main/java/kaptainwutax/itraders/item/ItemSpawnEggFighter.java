@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import kaptainwutax.itraders.Traders;
+import kaptainwutax.itraders.entity.EntityFighter;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -18,6 +19,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
@@ -25,29 +27,34 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemSpawnEggFighter extends ItemSpawnEgg {
+public class ItemSpawnEggFighter extends ItemSpawnEgg<EntityFighter> {
 
 	public ItemSpawnEggFighter(String name) {
-		super(name, Traders.getResource("fighter"));
+		super(name, Traders.getResource("fighter"), true);
 	}
 
 	@Override
-	public void doSpawning(World world, BlockPos pos, ItemStack stack) {
+	public EntityFighter onPlayerSpawn(World world, EntityPlayer player, BlockPos pos, ItemStack stack) {
 		if (stack.hasDisplayName() && !shouldSpawnEntity(stack.getTagCompound())) {
 			ItemStack headDrop = new ItemStack(Items.SKULL, 1, 3);
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("SkullOwner", stack.getDisplayName());
 			headDrop.setTagCompound(nbt);
-			EntityItem itemItem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
-					headDrop);
+			EntityItem itemItem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, headDrop);
 			world.spawnEntity(itemItem);
 		} else {
-			Entity entity = spawnCreature(world, getNamedIdFrom(stack), pos.getX() + 0.5D, pos.getY() + 0.5D,
-					pos.getZ() + 0.5D);
-			if (stack.hasDisplayName())
-				entity.setCustomNameTag(stack.getDisplayName());
-			ItemMonsterPlacer.applyItemEntityDataToEntity(world, (EntityPlayer) null, stack, entity);
+			EntityFighter fighter = this.spawnCreature(world, getNamedIdFrom(stack), pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+			if (stack.hasDisplayName())fighter.setCustomNameTag(stack.getDisplayName());
+			ItemMonsterPlacer.applyItemEntityDataToEntity(world, (EntityPlayer) null, stack, fighter);
+			return fighter;
 		}
+		
+		return null;
+	}
+	
+	@Override
+	protected EntityFighter onDispenserSpawn(World world, EnumFacing facing, BlockPos pos, ItemStack stack) {
+		return this.onPlayerSpawn(world, null, pos, stack);
 	}
 
 	public static boolean shouldSpawnEntity(NBTTagCompound compound) {

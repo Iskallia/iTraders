@@ -21,8 +21,8 @@ public class EntityMiner extends EntityCreature {
 	public final SkinProfile skin = new SkinProfile();	
 	public FakeDigManager digManager;
 	private String lastName = "Miner";
-	private EnumFacing currentDirection;
-	private int walkTime;
+	
+	private EnumFacing miningDirection;
 	
 	public EntityMiner(World world) {
 		super(world);
@@ -59,31 +59,33 @@ public class EntityMiner extends EntityCreature {
 		}
 		
 		if(!world.isRemote) {    
-			if(this.currentDirection == null) {
-				this.currentDirection = EnumFacing.Plane.HORIZONTAL.random(this.rand);
-			}
-			
-			boolean mining = false;
-			
-			for(int i = 1; i >= 0; i--) {
-				BlockPos pos = this.getPosition().up(i).offset(this.currentDirection);
-				
-				if(!this.world.isAirBlock(pos)) {
-					this.digManager.onPlayerDamageBlock(pos, EnumFacing.NORTH);
-					mining = true;
-					break;
-				}
-			}	
-			
-			if(!mining) {
-				this.navigator.setPath(this.navigator.getPathToPos(this.getPosition().offset(this.currentDirection)), 0.5f);
-			}	
-			
-			this.walkTime++;
+			this.handleMining();
 		}	
 				
 	}
 	
+	private void handleMining() {
+		if(this.miningDirection == null) {
+			this.miningDirection = EnumFacing.Plane.HORIZONTAL.random(this.rand);
+		}
+		
+		boolean mining = false;
+		
+		for(int i = 1; i >= 0; i--) {
+			BlockPos pos = this.getPosition().up(i).offset(this.miningDirection);
+			
+			if(!this.world.isAirBlock(pos)) {
+				this.digManager.onPlayerDamageBlock(pos, EnumFacing.NORTH);
+				mining = true;
+				break;
+			}
+		}	
+		
+		if(!mining) {
+			this.navigator.setPath(this.navigator.getPathToPos(this.getPosition().offset(this.miningDirection)), 0.5f);
+		}			
+	}
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
@@ -94,6 +96,10 @@ public class EntityMiner extends EntityCreature {
 	public void addPotionEffect(PotionEffect potioneffect) {
 		super.addPotionEffect(potioneffect);
 		this.fakePlayer.addPotionEffect(potioneffect);
+	}
+
+	public void setMiningDirection(EnumFacing facing) {
+		this.miningDirection = facing;	
 	}
 
 }
