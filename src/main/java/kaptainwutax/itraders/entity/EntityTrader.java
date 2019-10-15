@@ -16,23 +16,15 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityTrader extends EntityVillager {
 
-	public final SkinProfile skin = new SkinProfile();
-	
+	public final SkinProfile skin = new SkinProfile();	
 	private String lastName = "Trader";
 
 	public EntityTrader(World world) {
 		super(world);
-		this.setCustomNameTag(lastName);
-	}
-
-	@Override
-	protected void updateAITasks() {
-
+		this.setCustomNameTag(this.lastName);
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.item.ItemBit;
 import kaptainwutax.itraders.item.ItemEggPouch;
 import kaptainwutax.itraders.item.ItemSpawnEggFighter;
+import kaptainwutax.itraders.item.ItemSpawnEggMiner;
 import kaptainwutax.itraders.item.ItemSpawnEggTrader;
 import kaptainwutax.itraders.tab.CreativeTabsITraders;
 import net.minecraft.block.BlockDispenser;
@@ -29,6 +30,7 @@ public class InitItem {
 
 	public static ItemSpawnEggTrader SPAWN_EGG_TRADER = new ItemSpawnEggTrader("spawn_egg_trader");
 	public static ItemSpawnEggFighter SPAWN_EGG_FIGHTER = new ItemSpawnEggFighter("spawn_egg_fighter");
+	public static ItemSpawnEggMiner SPAWN_EGG_MINER = new ItemSpawnEggMiner("spawn_egg_miner");
 	public static ItemEggPouch EGG_POUCH = new ItemEggPouch("egg_pouch");
 
 	public static void registerItems(IForgeRegistry<Item> registry) {
@@ -39,6 +41,7 @@ public class InitItem {
 		registerItem(BIT_10000, registry);
 		registerItem(SPAWN_EGG_TRADER, registry);
 		registerItem(SPAWN_EGG_FIGHTER, registry);
+		registerItem(SPAWN_EGG_MINER, registry);
 		registerItem(EGG_POUCH, registry);
 
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(SPAWN_EGG_FIGHTER, new BehaviorDefaultDispenseItem() {

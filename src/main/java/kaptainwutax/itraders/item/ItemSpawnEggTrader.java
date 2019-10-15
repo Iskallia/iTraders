@@ -1,7 +1,11 @@
 package kaptainwutax.itraders.item;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 
 import javax.annotation.Nullable;
 
@@ -38,10 +42,8 @@ public class ItemSpawnEggTrader extends ItemSpawnEgg {
 
 	@Override
 	protected void doSpawning(World world, BlockPos pos, ItemStack stack) {
-		Entity entity = spawnCreature(world, getNamedIdFrom(stack), pos.getX() + 0.5D, pos.getY() + 0.5D,
-				pos.getZ() + 0.5D);
-		if (stack.hasDisplayName())
-			entity.setCustomNameTag(stack.getDisplayName());
+		Entity entity = spawnCreature(world, getNamedIdFrom(stack), pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+		if(stack.hasDisplayName())entity.setCustomNameTag(stack.getDisplayName());
 		ItemMonsterPlacer.applyItemEntityDataToEntity(world, (EntityPlayer) null, stack, entity);
 	}
 	

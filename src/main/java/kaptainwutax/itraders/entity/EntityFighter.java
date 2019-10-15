@@ -24,13 +24,10 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityFighter extends EntityZombie {
 
-	public final SkinProfile skin = new SkinProfile();
-	
+	public final SkinProfile skin = new SkinProfile();	
 	public String lastName = "Fighter";
 
 	public float sizeMultiplier = this.rand.nextFloat() * 2.0f + 0.8f;
@@ -38,7 +35,7 @@ public class EntityFighter extends EntityZombie {
 
 	public EntityFighter(World world) {
 		super(world);
-		this.setCustomNameTag(lastName);
+		this.setCustomNameTag(this.lastName);
 
 		if (!this.world.isRemote) {
 			this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED)
@@ -111,14 +108,15 @@ public class EntityFighter extends EntityZombie {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		if (compound.hasKey("SizeMultiplier"))
+		
+		if(compound.hasKey("SizeMultiplier")) {
 			this.changeSize(compound.getFloat("SizeMultiplier"));
-
+		}
+		
 		boolean needsGear = true;
 
 		for (EntityEquipmentSlot s : EntityEquipmentSlot.values()) {
-			if (s == EntityEquipmentSlot.HEAD)
-				continue;
+			if(s == EntityEquipmentSlot.HEAD)continue;
 			ItemStack stack = this.getItemStackFromSlot(s);
 			needsGear &= stack.getCount() == 0;
 		}

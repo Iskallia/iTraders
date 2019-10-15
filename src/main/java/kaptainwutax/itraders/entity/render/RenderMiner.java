@@ -1,6 +1,6 @@
 package kaptainwutax.itraders.entity.render;
 
-import kaptainwutax.itraders.entity.EntityTrader;
+import kaptainwutax.itraders.entity.EntityMiner;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -23,16 +23,16 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-public class RenderTrader extends RenderLivingBase<EntityTrader> {
+public class RenderMiner extends RenderLivingBase<EntityMiner> {
 
 	protected static IRenderFactory renderFactory = new Factory();
 	private final boolean smallArms;
 
-	public RenderTrader(RenderManager renderManager) {
+	public RenderMiner(RenderManager renderManager) {
 		this(renderManager, false);
 	}
 
-	public RenderTrader(RenderManager renderManager, boolean useSmallArms) {
+	public RenderMiner(RenderManager renderManager, boolean useSmallArms) {
 		super(renderManager, new ModelPlayer(0.0F, useSmallArms), 0.6F);
 		this.addLayer(new LayerBipedArmor(this));
 		this.addLayer(new LayerHeldItem(this));
@@ -46,7 +46,7 @@ public class RenderTrader extends RenderLivingBase<EntityTrader> {
 		return (ModelPlayer) super.getMainModel();
 	}
 
-	public void doRender(EntityTrader entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(EntityMiner entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		double d0 = y;
 
 		if (entity.isSneaking()) {
@@ -59,7 +59,7 @@ public class RenderTrader extends RenderLivingBase<EntityTrader> {
 		GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 	}
 
-	private void setModelVisibilities(EntityTrader clientPlayer) {
+	private void setModelVisibilities(EntityMiner clientPlayer) {
 		ModelPlayer modelplayer = this.getMainModel();
 
 		ItemStack itemstack = clientPlayer.getHeldItemMainhand();
@@ -106,7 +106,7 @@ public class RenderTrader extends RenderLivingBase<EntityTrader> {
 		}
 	}
 
-	public ResourceLocation getEntityTexture(EntityTrader entity) {
+	public ResourceLocation getEntityTexture(EntityMiner entity) {
 		return entity.skin.getLocationSkin();
 	}
 
@@ -114,12 +114,12 @@ public class RenderTrader extends RenderLivingBase<EntityTrader> {
 		GlStateManager.translate(0.0F, 0.1875F, 0.0F);
 	}
 
-	protected void preRenderCallback(EntityTrader entitylivingbaseIn, float partialTickTime) {
+	protected void preRenderCallback(EntityMiner entitylivingbaseIn, float partialTickTime) {
 		float f = 0.9375F;
 		GlStateManager.scale(f, f, f);
 	}
 
-	protected void renderEntityName(EntityTrader entityIn, double x, double y, double z, String name,
+	protected void renderEntityName(EntityMiner entityIn, double x, double y, double z, String name,
 			double distanceSq) {
 		if (distanceSq < 100.0D) {
 			Scoreboard scoreboard = entityIn.world.getScoreboard();
@@ -136,7 +136,7 @@ public class RenderTrader extends RenderLivingBase<EntityTrader> {
 		super.renderEntityName(entityIn, x, y, z, name, distanceSq);
 	}
 
-	public void renderRightArm(EntityTrader clientPlayer) {
+	public void renderRightArm(EntityMiner clientPlayer) {
 		float f = 1.0F;
 		GlStateManager.color(1.0F, 1.0F, 1.0F);
 		float f1 = 0.0625F;
@@ -153,7 +153,7 @@ public class RenderTrader extends RenderLivingBase<EntityTrader> {
 		GlStateManager.disableBlend();
 	}
 
-	public void renderLeftArm(EntityTrader clientPlayer) {
+	public void renderLeftArm(EntityMiner clientPlayer) {
 		float f = 1.0F;
 		GlStateManager.color(1.0F, 1.0F, 1.0F);
 		float f1 = 0.0625F;
@@ -170,7 +170,7 @@ public class RenderTrader extends RenderLivingBase<EntityTrader> {
 		GlStateManager.disableBlend();
 	}
 
-	protected void renderLivingAt(EntityTrader entityLivingBaseIn, double x, double y, double z) {
+	protected void renderLivingAt(EntityMiner entityLivingBaseIn, double x, double y, double z) {
 		if (entityLivingBaseIn.isEntityAlive() && entityLivingBaseIn.isPlayerSleeping()) {
 			super.renderLivingAt(entityLivingBaseIn, x, y, z);
 		} else {
@@ -178,7 +178,7 @@ public class RenderTrader extends RenderLivingBase<EntityTrader> {
 		}
 	}
 
-	protected void applyRotations(EntityTrader entityLiving, float p_77043_2_, float rotationYaw, float partialTicks) {
+	protected void applyRotations(EntityMiner entityLiving, float p_77043_2_, float rotationYaw, float partialTicks) {
 		if (entityLiving.isElytraFlying()) {
 			super.applyRotations(entityLiving, p_77043_2_, rotationYaw, partialTicks);
 			float f = (float) entityLiving.getTicksElytraFlying() + partialTicks;
@@ -201,13 +201,13 @@ public class RenderTrader extends RenderLivingBase<EntityTrader> {
 	}
 
 	public static IRenderFactory getRenderFactory() {
-		return RenderTrader.renderFactory;
+		return RenderMiner.renderFactory;
 	}
 
-	public static class Factory implements IRenderFactory<EntityTrader> {
+	public static class Factory implements IRenderFactory<EntityMiner> {
 		@Override
-		public Render<EntityTrader> createRenderFor(RenderManager manager) {
-			return new RenderTrader(manager);
+		public Render<EntityMiner> createRenderFor(RenderManager manager) {
+			return new RenderMiner(manager);
 		}
 	}
 

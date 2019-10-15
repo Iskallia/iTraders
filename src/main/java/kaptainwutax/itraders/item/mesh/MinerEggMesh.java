@@ -1,15 +1,15 @@
 package kaptainwutax.itraders.item.mesh;
 
-import kaptainwutax.itraders.item.ItemSpawnEggTrader;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class TraderEggMesh extends ItemMesh {
+public class MinerEggMesh extends ItemMesh {
 
-	public TraderEggMesh(ItemSpawnEggTrader item) {
+	public MinerEggMesh(Item item) {
 		super(item);
-
-		this.addMesh(this.createMesh("trader_coin_1"));
+		
+		this.addMesh(this.createMesh("miner_coin_1"));
 		this.bakeMeshes();
 	}
 
@@ -17,5 +17,6 @@ public class TraderEggMesh extends ItemMesh {
 	public ModelResourceLocation getModelLocation(ItemStack stack) {
 		return this.meshes[0];
 	}
+
 
 }

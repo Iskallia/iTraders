@@ -2,8 +2,10 @@ package kaptainwutax.itraders.init;
 
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.entity.EntityFighter;
+import kaptainwutax.itraders.entity.EntityMiner;
 import kaptainwutax.itraders.entity.EntityTrader;
 import kaptainwutax.itraders.entity.render.RenderFighter;
+import kaptainwutax.itraders.entity.render.RenderMiner;
 import kaptainwutax.itraders.entity.render.RenderTrader;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -17,11 +19,13 @@ public class InitEntity {
 	public static void registerEntities() {
 		registerEntityAndEgg("trader", EntityTrader.class, 0xF5F5DC, 0x8B4513);
 		registerEntity("fighter", EntityFighter.class);
+		registerEntity("miner", EntityMiner.class);
 	}
 
 	public static void registerEntityRenderers() {
 		registerEntityRenderer(EntityTrader.class, RenderTrader.getRenderFactory());
 		registerEntityRenderer(EntityFighter.class, RenderFighter.getRenderFactory());
+		registerEntityRenderer(EntityMiner.class, RenderMiner.getRenderFactory());
 	}
 
 	private static void registerEntity(String name, Class<? extends Entity> entityClass) {
