@@ -2,6 +2,7 @@ package kaptainwutax.itraders.block;
 
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.init.InitItem;
+import kaptainwutax.itraders.item.ItemSkullNeck;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -28,15 +29,21 @@ public class BlockSkullRefiner extends Block {
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack heldStack = playerIn.getHeldItem(hand);
 
-        // Anything else than skull put on top
-        if (facing == EnumFacing.UP && heldStack.getItem() != Items.SKULL)
-            return true;
+        if (facing != EnumFacing.UP)
+            return false;
 
         System.out.printf("ACTIVATION with %s @ %s\n",
                 heldStack.getItem().getClass().getSimpleName(),
                 facing);
 
         worldIn.destroyBlock(pos.west(), false);
+        worldIn.destroyBlock(pos.north(), false);
+        worldIn.destroyBlock(pos.east(), false);
+        worldIn.destroyBlock(pos.south(), false);
+        worldIn.destroyBlock(pos.up(), false);
+
+        ItemStack necklaceStack = ItemSkullNeck.generateRandom("iGoodie"); // TODO fetch name from skull
+        playerIn.dropItem(necklaceStack, false, false);
 
         return false;
     }

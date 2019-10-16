@@ -3,8 +3,12 @@ package kaptainwutax.itraders.item;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import kaptainwutax.itraders.Traders;
+import kaptainwutax.itraders.config.ConfigSkullNecklace;
+import kaptainwutax.itraders.config.definition.PotionEffectDefinition;
 import kaptainwutax.itraders.entity.EntityMiniGhost;
+import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.init.InitItem;
+import kaptainwutax.itraders.util.Randomizer;
 import kaptainwutax.itraders.util.RomanLiterals;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -33,6 +37,40 @@ import java.util.*;
  * }
  */
 public class ItemSkullNeck extends Item implements IBauble {
+
+    public static ItemStack generateRandom(String headOwner) {
+        ItemStack stack = new ItemStack(InitItem.SKULL_NECKLACE, 1, 0);
+        NBTTagCompound stackNBT = new NBTTagCompound();
+
+        stackNBT.setString("HeadOwner", headOwner);
+
+        int numPositiveEffects = Randomizer.randomInt(1, 3);
+        int numNegativeEffects = Randomizer.randomInt(0, 1);
+
+        NBTTagList potionEffects = new NBTTagList();
+
+        for (PotionEffectDefinition positiveEffect : InitConfig.CONFIG_SKULL_NECKLACE.getRandomPositive(numPositiveEffects)) {
+            NBTTagCompound effect = new NBTTagCompound();
+            effect.setString("name", positiveEffect.getName());
+            effect.setInteger("amplifier", Randomizer.randomInt(
+                    positiveEffect.getMinAmplifier(),
+                    positiveEffect.getMaxAmplifier()));
+            potionEffects.appendTag(effect);
+        }
+
+        for (PotionEffectDefinition negativeEffect : InitConfig.CONFIG_SKULL_NECKLACE.getRandomNegative(numNegativeEffects)) {
+            NBTTagCompound effect = new NBTTagCompound();
+            effect.setString("name", negativeEffect.getName());
+            effect.setInteger("amplifier", Randomizer.randomInt(
+                    negativeEffect.getMinAmplifier(),
+                    negativeEffect.getMaxAmplifier()));
+            potionEffects.appendTag(effect);
+        }
+
+        stackNBT.setTag("PotionEffects", potionEffects);
+        stack.setTagCompound(stackNBT);
+        return stack;
+    }
 
     public static List<PotionEffect> getPotionEffects(ItemStack stack) {
         NBTTagCompound stackNBT = stack.getTagCompound();
@@ -164,7 +202,7 @@ public class ItemSkullNeck extends Item implements IBauble {
                         : TextFormatting.GREEN;
 
                 String effectName = I18n.format(effectTranslationKey);
-                String amplifier = RomanLiterals.translate(potionEffect.getAmplifier());
+                String amplifier = RomanLiterals.translate(potionEffect.getAmplifier() + 1);
 
                 tooltip.add(color + effectName + " " + amplifier);
             }
