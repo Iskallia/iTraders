@@ -1,6 +1,6 @@
 package kaptainwutax.itraders.entity.render;
 
-import kaptainwutax.itraders.entity.EntityMiniPlayer;
+import kaptainwutax.itraders.entity.EntityMiniGhost;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -8,12 +8,13 @@ import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import javax.annotation.Nullable;
 
-public class RenderMiniPlayer extends RenderLivingBase<EntityMiniPlayer> {
+public class RenderMiniPlayer extends RenderLivingBase<EntityMiniGhost> {
 
     protected static IRenderFactory renderFactory = new Factory();
 
@@ -25,7 +26,7 @@ public class RenderMiniPlayer extends RenderLivingBase<EntityMiniPlayer> {
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(EntityMiniPlayer entity) {
+    protected ResourceLocation getEntityTexture(EntityMiniGhost entity) {
         return entity.skin.getLocationSkin();
     }
 
@@ -35,34 +36,33 @@ public class RenderMiniPlayer extends RenderLivingBase<EntityMiniPlayer> {
     }
 
     @Override
-    protected void renderEntityName(EntityMiniPlayer entityIn, double x, double y, double z, String name, double distanceSq) {
+    protected void renderEntityName(EntityMiniGhost entityIn, double x, double y, double z, String name, double distanceSq) {
 //        super.renderEntityName(entityIn, x, y, z, name, distanceSq);
     }
 
     @Override
-    protected void preRenderCallback(EntityMiniPlayer entitylivingbaseIn, float partialTickTime) {
+    protected void preRenderCallback(EntityMiniGhost entitylivingbaseIn, float partialTickTime) {
         float size = 0.25f;
         GlStateManager.scale(size, size, size);
     }
 
     @Override
-    public void doRender(EntityMiniPlayer miniPlayer, double x, double y, double z, float entityYaw, float partialTicks) {
-        EntityLivingBase owner = miniPlayer.owner;
+    public void doRender(EntityMiniGhost miniPlayer, double x, double y, double z, float entityYaw, float partialTicks) {
+        EntityPlayer parent = miniPlayer.getParent();
 
-        if (owner == null) return;
+        if (parent == null) return;
 
         float oneVoxel = 1 / 16f;
 
-//        this.setModelVisibilities(miniPlayer);
         GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
         GlStateManager.enableAlpha();
         GlStateManager.pushMatrix();
 
-        GlStateManager.color(1f, 1f, 1f, 0.75f);
-        GlStateManager.rotate(-owner.rotationYaw, 0f, 1f, 0f);
+        GlStateManager.color(.9f, .9f, .9f, 0.50f);
+        GlStateManager.rotate(-parent.rotationYaw, 0f, 1f, 0f);
         GlStateManager.translate(
                 x + 7 * oneVoxel,
-                y + Math.sin(totalTicks / Math.PI) / 100f,
+                y + Math.sin(totalTicks / (2 * Math.PI)) / 20f,
                 z - 2 * oneVoxel
         );
 
@@ -77,21 +77,14 @@ public class RenderMiniPlayer extends RenderLivingBase<EntityMiniPlayer> {
         totalTicks += partialTicks;
     }
 
-    private void setModelVisibilities(EntityMiniPlayer clientPlayer) {
-        ModelPlayer modelplayer = (ModelPlayer) this.getMainModel();
-
-        modelplayer.setVisible(true);
-//        modelplayer.isSneak = clientPlayer.isSneaking();
-    }
-
     public static IRenderFactory getRenderFactory() {
         return renderFactory;
     }
 
-    public static class Factory implements IRenderFactory<EntityMiniPlayer> {
+    public static class Factory implements IRenderFactory<EntityMiniGhost> {
 
         @Override
-        public Render<? super EntityMiniPlayer> createRenderFor(RenderManager manager) {
+        public Render<? super EntityMiniGhost> createRenderFor(RenderManager manager) {
             return new RenderMiniPlayer(manager);
         }
 

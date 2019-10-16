@@ -2,7 +2,7 @@ package kaptainwutax.itraders.init;
 
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.entity.EntityFighter;
-import kaptainwutax.itraders.entity.EntityMiniPlayer;
+import kaptainwutax.itraders.entity.EntityMiniGhost;
 import kaptainwutax.itraders.entity.EntityTrader;
 import kaptainwutax.itraders.entity.render.RenderFighter;
 import kaptainwutax.itraders.entity.render.RenderMiniPlayer;
@@ -19,13 +19,13 @@ public class InitEntity {
 	public static void registerEntities() {
 		registerEntityAndEgg("trader", EntityTrader.class, 0xF5F5DC, 0x8B4513);
 		registerEntity("fighter", EntityFighter.class);
-		registerEntity("mini_player", EntityMiniPlayer.class);
+		registerEntity("mini_player", EntityMiniGhost.class);
 	}
 
 	public static void registerEntityRenderers() {
 		registerEntityRenderer(EntityTrader.class, RenderTrader.getRenderFactory());
 		registerEntityRenderer(EntityFighter.class, RenderFighter.getRenderFactory());
-		registerEntityRenderer(EntityMiniPlayer.class, RenderMiniPlayer.getRenderFactory());
+		registerEntityRenderer(EntityMiniGhost.class, RenderMiniPlayer.getRenderFactory());
 	}
 
 	private static void registerEntity(String name, Class<? extends Entity> entityClass) {

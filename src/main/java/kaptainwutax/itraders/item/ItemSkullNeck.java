@@ -3,15 +3,11 @@ package kaptainwutax.itraders.item;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.entity.EntityMiniPlayer;
-import kaptainwutax.itraders.init.InitEntity;
+import kaptainwutax.itraders.entity.EntityMiniGhost;
 import kaptainwutax.itraders.init.InitItem;
-import kaptainwutax.itraders.init.InitPacket;
-import kaptainwutax.itraders.net.packet.S2CMiniPlayerOwner;
 import kaptainwutax.itraders.util.RomanLiterals;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -64,7 +60,30 @@ public class ItemSkullNeck extends Item implements IBauble {
         return potionEffectList;
     }
 
-    public static final Map<UUID, EntityMiniPlayer> MINI_PLAYER_MAP = new HashMap<>();
+    public static final Map<UUID, EntityMiniGhost> GHOST_MAP = new HashMap<>();
+
+    public static EntityMiniGhost createMiniGhostFor(EntityLivingBase player) {
+        EntityMiniGhost ghost = ((EntityMiniGhost) EntityList.createEntityByIDFromName(
+                Traders.getResource("mini_player"), player.world));
+
+        assert ghost != null;
+
+        ghost.setParentUUID(player.getUniqueID());
+        ghost.setCustomNameTag(player.getName()); // TODO fetch from necklace
+        ghost.setPosition(player.posX, player.posY, player.posZ);
+        player.world.spawnEntity(ghost);
+
+        // Remove and overwrite old ghost
+        EntityMiniGhost oldGhost = GHOST_MAP.put(player.getUniqueID(), ghost);
+        if (oldGhost != null) oldGhost.world.removeEntity(oldGhost);
+
+        return ghost;
+    }
+
+    public static void removeMiniGhostOf(EntityLivingBase player) {
+        EntityMiniGhost ghost = GHOST_MAP.remove(player.getUniqueID());
+        if (ghost != null) ghost.world.removeEntity(ghost);
+    }
 
     public ItemSkullNeck(String name) {
         this.setUnlocalizedName(name);
@@ -79,7 +98,19 @@ public class ItemSkullNeck extends Item implements IBauble {
     }
 
     @Override
-    public void onWornTick(ItemStack itemstack, EntityLivingBase player) { }
+    public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
+        if (player.world.isRemote) return;
+
+        EntityMiniGhost ghost = GHOST_MAP.get(player.getUniqueID());
+
+        ghost.setPositionAndRotation(
+                player.posX,
+                player.posY + 1.60f,
+                player.posZ,
+                ghost.rotationYaw,
+                player.rotationPitch
+        );
+    }
 
     @Override
     public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
@@ -93,14 +124,7 @@ public class ItemSkullNeck extends Item implements IBauble {
             }
 
             // Spawn mini player
-            EntityMiniPlayer miniPlayer = ((EntityMiniPlayer) EntityList.createEntityByIDFromName(
-                    Traders.getResource("mini_player"), player.world));
-            miniPlayer.setOwner(player);
-            player.world.spawnEntity(miniPlayer);
-
-            InitPacket.PIPELINE.sendToAll(new S2CMiniPlayerOwner(player, miniPlayer.getEntityId())); // TODO change to sendToAllTracking
-
-            MINI_PLAYER_MAP.put(player.getUniqueID(), miniPlayer);
+            createMiniGhostFor(player);
         }
     }
 
@@ -115,8 +139,7 @@ public class ItemSkullNeck extends Item implements IBauble {
                 player.removePotionEffect(potionEffect.getPotion());
             }
 
-            EntityMiniPlayer miniPlayer = MINI_PLAYER_MAP.remove(player.getUniqueID());
-            if(miniPlayer != null) player.world.removeEntity(miniPlayer);
+            removeMiniGhostOf(player);
         }
     }
 

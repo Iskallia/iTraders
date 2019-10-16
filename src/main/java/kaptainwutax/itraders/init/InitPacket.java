@@ -7,7 +7,6 @@ import kaptainwutax.itraders.net.packet.C2SUpdatePouchSearch.C2SUpdatePouchSearc
 import kaptainwutax.itraders.net.packet.S2CFighterHeight.S2CFighterHeightHandler;
 import kaptainwutax.itraders.net.packet.S2CPouchScroll.S2CPouchScrollHandler;
 import kaptainwutax.itraders.net.packet.S2CUpdatePouchSearch.S2CUpdatePouchSearchHandler;
-import kaptainwutax.itraders.net.packet.S2CMiniPlayerOwner.S2CMiniPlayerOwnerHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,7 +27,6 @@ public class InitPacket {
 		PIPELINE.registerMessage(S2CPouchScrollHandler.class, S2CPouchScroll.class, nextId(), Side.CLIENT);
 		PIPELINE.registerMessage(C2SUpdatePouchSearchHandler.class, C2SUpdatePouchSearch.class, nextId(), Side.SERVER);
 		PIPELINE.registerMessage(S2CUpdatePouchSearchHandler.class, S2CUpdatePouchSearch.class, nextId(), Side.CLIENT);
-		PIPELINE.registerMessage(S2CMiniPlayerOwnerHandler.class, S2CMiniPlayerOwner.class, nextId(), Side.CLIENT);
 	}
 
 }
