@@ -103,7 +103,6 @@ public class EntityMiniGhost extends EntityLivingBase {
         EntityPlayer parent = getParent();
 
         if (parent == null || !parent.isEntityAlive()) {
-            System.out.println("DED");
             setDead();
             return;
         }

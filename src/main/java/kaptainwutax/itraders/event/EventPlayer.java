@@ -34,33 +34,4 @@ public class EventPlayer {
         InitPacket.PIPELINE.sendTo(new S2CFighterHeight(fighter), (EntityPlayerMP) player);
     }
 
-    @SubscribeEvent
-    public static void onLogin(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
-        ItemStack necklaceBauble = BaublesApi.getBaublesHandler(event.player).getStackInSlot(0);
-
-        if (necklaceBauble.getItem() instanceof ItemSkullNeck) {
-            ItemSkullNeck.createMiniGhostFor(event.player, necklaceBauble);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onLogout(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent event) {
-        ItemStack necklaceBauble = BaublesApi.getBaublesHandler(event.player).getStackInSlot(0);
-
-        if (necklaceBauble.getItem() instanceof ItemSkullNeck) {
-            ItemSkullNeck.removeMiniGhostOf(event.player);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onDimensionChange(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent event) {
-        ItemStack necklaceBauble = BaublesApi.getBaublesHandler(event.player).getStackInSlot(0);
-
-        if (necklaceBauble.getItem() instanceof ItemSkullNeck) {
-            ItemSkullNeck.removeMiniGhostOf(event.player);
-            ItemSkullNeck.createMiniGhostFor(event.player, necklaceBauble);
-        }
-
-    }
-
 }
