@@ -25,6 +25,7 @@ import java.util.*;
 
 /*
  * NBT: {
+ *     HeadOwner: "iGoodie",
  *     PotionEffects: [
  *          { name:"mining_fatigue", amplifier:5 },
  *          { name:"haste", amplifier:1 }
@@ -62,14 +63,14 @@ public class ItemSkullNeck extends Item implements IBauble {
 
     public static final Map<UUID, EntityMiniGhost> GHOST_MAP = new HashMap<>();
 
-    public static EntityMiniGhost createMiniGhostFor(EntityLivingBase player) {
+    public static EntityMiniGhost createMiniGhostFor(EntityLivingBase player, ItemStack stack) {
         EntityMiniGhost ghost = ((EntityMiniGhost) EntityList.createEntityByIDFromName(
                 Traders.getResource("mini_player"), player.world));
 
         assert ghost != null;
 
         ghost.setParentUUID(player.getUniqueID());
-        ghost.setCustomNameTag(player.getName()); // TODO fetch from necklace
+        ghost.setCustomNameTag(stack.getTagCompound().getString("HeadOwner"));
         ghost.setPosition(player.posX, player.posY, player.posZ);
         player.world.spawnEntity(ghost);
 
@@ -103,6 +104,8 @@ public class ItemSkullNeck extends Item implements IBauble {
 
         EntityMiniGhost ghost = GHOST_MAP.get(player.getUniqueID());
 
+        if (ghost == null) return;
+
         ghost.setPositionAndRotation(
                 player.posX,
                 player.posY + 1.60f,
@@ -117,14 +120,13 @@ public class ItemSkullNeck extends Item implements IBauble {
         if (!player.world.isRemote) {
             List<PotionEffect> potionEffects = getPotionEffects(itemstack);
 
-            if (potionEffects == null) return;
-
-            for (PotionEffect potionEffect : potionEffects) {
-                player.addPotionEffect(potionEffect);
+            if (potionEffects != null) {
+                for (PotionEffect potionEffect : potionEffects) {
+                    player.addPotionEffect(potionEffect);
+                }
             }
 
-            // Spawn mini player
-            createMiniGhostFor(player);
+            createMiniGhostFor(player, itemstack);
         }
     }
 
@@ -133,10 +135,10 @@ public class ItemSkullNeck extends Item implements IBauble {
         if (!player.world.isRemote) {
             List<PotionEffect> potionEffects = getPotionEffects(itemstack);
 
-            if (potionEffects == null) return;
-
-            for (PotionEffect potionEffect : potionEffects) {
-                player.removePotionEffect(potionEffect.getPotion());
+            if (potionEffects != null) {
+                for (PotionEffect potionEffect : potionEffects) {
+                    player.removePotionEffect(potionEffect.getPotion());
+                }
             }
 
             removeMiniGhostOf(player);
@@ -145,21 +147,27 @@ public class ItemSkullNeck extends Item implements IBauble {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        NBTTagCompound stackNBT = stack.getTagCompound();
+
+        if (stackNBT != null && stackNBT.hasKey("HeadOwner")) {
+            tooltip.add("Ghost: " + stackNBT.getString("HeadOwner"));
+        }
+
         List<PotionEffect> potionEffects = getPotionEffects(stack);
 
-        if (potionEffects == null) return;
+        if (potionEffects != null) {
+            for (PotionEffect potionEffect : potionEffects) {
+                String effectTranslationKey = potionEffect.getEffectName();
 
-        for (PotionEffect potionEffect : potionEffects) {
-            String effectTranslationKey = potionEffect.getEffectName();
+                TextFormatting color = potionEffect.getPotion().isBadEffect()
+                        ? TextFormatting.RED
+                        : TextFormatting.GREEN;
 
-            TextFormatting color = potionEffect.getPotion().isBadEffect()
-                    ? TextFormatting.RED
-                    : TextFormatting.GREEN;
+                String effectName = I18n.format(effectTranslationKey);
+                String amplifier = RomanLiterals.translate(potionEffect.getAmplifier());
 
-            String effectName = I18n.format(effectTranslationKey);
-            String amplifier = RomanLiterals.translate(potionEffect.getAmplifier());
-
-            tooltip.add(color + effectName + " " + amplifier);
+                tooltip.add(color + effectName + " " + amplifier);
+            }
         }
 
         super.addInformation(stack, worldIn, tooltip, flagIn);

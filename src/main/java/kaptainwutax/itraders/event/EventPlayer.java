@@ -36,31 +36,29 @@ public class EventPlayer {
 
     @SubscribeEvent
     public static void onLogin(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
-        Item necklaceBauble = BaublesApi.getBaublesHandler(event.player).getStackInSlot(0).getItem();
+        ItemStack necklaceBauble = BaublesApi.getBaublesHandler(event.player).getStackInSlot(0);
 
-        if (necklaceBauble instanceof ItemSkullNeck) {
-            EntityMiniGhost ghost = ItemSkullNeck.createMiniGhostFor(event.player);
+        if (necklaceBauble.getItem() instanceof ItemSkullNeck) {
+            ItemSkullNeck.createMiniGhostFor(event.player, necklaceBauble);
         }
     }
 
     @SubscribeEvent
     public static void onLogout(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent event) {
-        Item necklaceBauble = BaublesApi.getBaublesHandler(event.player).getStackInSlot(0).getItem();
+        ItemStack necklaceBauble = BaublesApi.getBaublesHandler(event.player).getStackInSlot(0);
 
-        if (necklaceBauble instanceof ItemSkullNeck) {
+        if (necklaceBauble.getItem() instanceof ItemSkullNeck) {
             ItemSkullNeck.removeMiniGhostOf(event.player);
         }
     }
 
     @SubscribeEvent
     public static void onDimensionChange(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent event) {
-        Item necklaceBauble = BaublesApi.getBaublesHandler(event.player).getStackInSlot(0).getItem();
+        ItemStack necklaceBauble = BaublesApi.getBaublesHandler(event.player).getStackInSlot(0);
 
-        System.out.println("FROM " + event.fromDim + " TO " + event.toDim);
-
-        if (necklaceBauble instanceof ItemSkullNeck) {
+        if (necklaceBauble.getItem() instanceof ItemSkullNeck) {
             ItemSkullNeck.removeMiniGhostOf(event.player);
-            ItemSkullNeck.createMiniGhostFor(event.player);
+            ItemSkullNeck.createMiniGhostFor(event.player, necklaceBauble);
         }
 
     }
