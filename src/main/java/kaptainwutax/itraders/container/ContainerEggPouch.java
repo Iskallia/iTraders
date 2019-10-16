@@ -1,5 +1,7 @@
 package kaptainwutax.itraders.container;
 
+import kaptainwutax.itraders.container.slot.FakeSlot;
+import kaptainwutax.itraders.container.slot.PouchSlot;
 import kaptainwutax.itraders.init.InitPacket;
 import kaptainwutax.itraders.net.packet.S2CPouchScroll;
 import kaptainwutax.itraders.world.data.DataEggPouch;

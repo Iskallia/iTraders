@@ -1,4 +1,4 @@
-package kaptainwutax.itraders.container;
+package kaptainwutax.itraders.container.slot;
 
 import javax.annotation.Nonnull;
 

@@ -1,4 +1,4 @@
-package kaptainwutax.itraders.container;
+package kaptainwutax.itraders.container.slot;
 
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
