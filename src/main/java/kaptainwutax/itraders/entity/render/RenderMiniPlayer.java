@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -59,11 +58,12 @@ public class RenderMiniPlayer extends RenderLivingBase<EntityMiniGhost> {
         GlStateManager.pushMatrix();
 
         GlStateManager.color(.9f, .9f, .9f, 0.50f);
+        GlStateManager.translate(x, y, z);
         GlStateManager.rotate(-parent.rotationYaw, 0f, 1f, 0f);
         GlStateManager.translate(
-                x + 7 * oneVoxel,
-                y + Math.sin(totalTicks / (2 * Math.PI)) / 20f,
-                z - 2 * oneVoxel
+                7 * oneVoxel,
+                Math.sin(totalTicks / (2 * Math.PI)) / 20f,
+                -2 * oneVoxel
         );
 
         super.doRender(miniPlayer, 0, 0, 0,
