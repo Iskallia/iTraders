@@ -153,8 +153,6 @@ public class EntityMiner extends EntityCreature {
 		this.startMiningPosition = BlockPos.fromLong(compound.getLong("StartMiningPosition"));
 		this.miningDistance = compound.getInteger("MiningDistance");
 		
-		if(this.miningDistance == 0)this.setMiningDistance(compound.getCompoundTag("SubData").getInteger("Months"));
-		
 		this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, this.getHeldItemMainhand());	
 	}
 	
@@ -179,9 +177,9 @@ public class EntityMiner extends EntityCreature {
 				TileEntityChest chestTileEntity = (TileEntityChest)tileEntity;
 				IItemHandler itemHandler = chestTileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
 				
-				int lastIndex = 0;
+				int lastIndex = -1;
 				
-				for(int i =  0; i < this.minerInventory.getSlots(); i++) {
+				for(int i = 0; i < this.minerInventory.getSlots(); i++) {
 					ItemStack stackInSlot = this.minerInventory.getStackInSlot(i);		
 					if(stackInSlot.isEmpty())break;
 					itemHandler.insertItem(i, stackInSlot, false);

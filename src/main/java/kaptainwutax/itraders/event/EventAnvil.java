@@ -62,6 +62,7 @@ public class EventAnvil {
 		NBTTagList handItems = entityTag.getTagList("HandItems", 10);
 		NBTTagCompound minerEggNbt = right.writeToNBT(new NBTTagCompound());
 		handItems.appendTag(minerEggNbt);
+		handItems.appendTag(new NBTTagCompound());
 		entityTag.setTag("HandItems", handItems);
 		
 		event.setCost(1);
