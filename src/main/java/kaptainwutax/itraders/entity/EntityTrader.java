@@ -38,9 +38,9 @@ public class EntityTrader extends EntityVillager {
 				this.skin.updateSkin(name);
 				this.lastName = name;
 			}
-		} else {
+			
 			this.skin = new SkinProfile();
-		}
+		} 
 	}
 
 	@Override

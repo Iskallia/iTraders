@@ -103,7 +103,7 @@ public class EntityMiner extends EntityCreature {
 		double distanceSq = this.getPosition().distanceSq(this.startMiningPosition);
 		
 		if(distanceSq > this.miningDistance * this.miningDistance) {
-			this.onKillCommand();
+			this.attackEntityFrom(DamageSource.FLY_INTO_WALL, Float.MAX_VALUE);
 		}
 		
 		if(this.dead)return;
