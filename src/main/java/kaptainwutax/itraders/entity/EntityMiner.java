@@ -28,7 +28,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class EntityMiner extends EntityCreature {
 
-	public final SkinProfile skin = new SkinProfile();	
+	public SkinProfile skin;	
 	private String lastName = "Miner";
 	
 	public FakeUser fakePlayer;
@@ -47,6 +47,8 @@ public class EntityMiner extends EntityCreature {
 		if(!this.world.isRemote) {
 			this.fakePlayer = new FakeUser((WorldServer)this.world, new GameProfile(null, this.lastName));		
 			this.digManager = new FakeDigManager(this.fakePlayer);
+		} else {
+			this.skin = new SkinProfile();
 		}
 	}
 	

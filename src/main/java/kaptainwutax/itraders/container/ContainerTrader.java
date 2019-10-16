@@ -84,7 +84,10 @@ public class ContainerTrader extends ContainerMerchant {
         MerchantRecipe recipe = this.merchant.getRecipes(null).get(index);  
 
         this.cramStack(0, recipe.getItemToBuy().copy(), currentRecipeIndex >>> 31 == 1);
-        if(recipe.hasSecondItemToBuy())this.cramStack(1, recipe.getSecondItemToBuy().copy(), currentRecipeIndex >>> 31 == 1);
+        
+        if(recipe.hasSecondItemToBuy()) {
+        	this.cramStack(1, recipe.getSecondItemToBuy().copy(), currentRecipeIndex >>> 31 == 1);
+        }
     }
   
 }

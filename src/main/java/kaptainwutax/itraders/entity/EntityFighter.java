@@ -27,7 +27,7 @@ import net.minecraft.world.WorldServer;
 
 public class EntityFighter extends EntityZombie {
 
-	public final SkinProfile skin = new SkinProfile();	
+	public SkinProfile skin;	
 	public String lastName = "Fighter";
 
 	public float sizeMultiplier = this.rand.nextFloat() * 2.0f + 0.8f;
@@ -46,6 +46,7 @@ public class EntityFighter extends EntityZombie {
 			this.loot = this.getFromSize(this.sizeMultiplier);
 		} else {
 			this.sizeMultiplier = 0.0f;
+			this.skin = new SkinProfile();
 		}
 	}
 

@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 
 public class EntityTrader extends EntityVillager {
 
-	public final SkinProfile skin = new SkinProfile();	
+	public SkinProfile skin;	
 	private String lastName = "Trader";
 
 	public EntityTrader(World world) {
@@ -31,13 +31,15 @@ public class EntityTrader extends EntityVillager {
 	public void onUpdate() {
 		super.onUpdate();
 
-		if (this.world.isRemote) {
+		if(this.world.isRemote) {
 			String name = this.getCustomNameTag();
 
-			if (!lastName.equals(name)) {
+			if(!lastName.equals(name)) {
 				this.skin.updateSkin(name);
 				this.lastName = name;
 			}
+		} else {
+			this.skin = new SkinProfile();
 		}
 	}
 
