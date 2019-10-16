@@ -81,7 +81,7 @@ public abstract class ItemSpawnEgg<T> extends Item {
 		} else {
 			IBlockState iblockstate = world.getBlockState(pos);
 			Block block = iblockstate.getBlock();
-
+			/*
 			if (block == Blocks.MOB_SPAWNER) {
 				TileEntity tileentity = world.getTileEntity(pos);
 
@@ -98,7 +98,7 @@ public abstract class ItemSpawnEgg<T> extends Item {
 					return EnumActionResult.SUCCESS;
 				}
 			}
-
+			*/
 			BlockPos blockpos = pos.offset(facing);
 			double d0 = this.getYOffset(world, blockpos);
 
