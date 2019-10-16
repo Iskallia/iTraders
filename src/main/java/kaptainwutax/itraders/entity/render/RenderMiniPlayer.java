@@ -17,7 +17,7 @@ public class RenderMiniPlayer extends RenderLivingBase<EntityMiniGhost> {
 
     protected static IRenderFactory renderFactory = new Factory();
 
-    private float totalTicks = 0;
+    private float animationTicks = (float) Math.random();
 
     public RenderMiniPlayer(RenderManager renderManager) {
         super(renderManager, new ModelPlayer(0.1f, false), 0.25f);
@@ -62,7 +62,7 @@ public class RenderMiniPlayer extends RenderLivingBase<EntityMiniGhost> {
         GlStateManager.rotate(-parent.rotationYaw, 0f, 1f, 0f);
         GlStateManager.translate(
                 7 * oneVoxel,
-                Math.sin(totalTicks / (2 * Math.PI)) / 20f,
+                Math.sin(animationTicks / (2 * Math.PI) + miniPlayer.getEntityId()) / 20f,
                 -2 * oneVoxel
         );
 
@@ -74,7 +74,7 @@ public class RenderMiniPlayer extends RenderLivingBase<EntityMiniGhost> {
         GlStateManager.disableAlpha();
         GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 
-        totalTicks += partialTicks;
+        animationTicks += Math.max(partialTicks, 0.1f);
     }
 
     public static IRenderFactory getRenderFactory() {
