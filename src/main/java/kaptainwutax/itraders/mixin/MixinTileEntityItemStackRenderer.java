@@ -39,15 +39,15 @@ import net.minecraft.util.EnumFacing;
 public abstract class MixinTileEntityItemStackRenderer {
 
 	@Shadow
-	private static TileEntityShulkerBox[] SHULKER_BOXES = new TileEntityShulkerBox[16];
+	private static TileEntityShulkerBox[] SHULKER_BOXES;
 	@Shadow
-	private TileEntityChest chestBasic = new TileEntityChest(BlockChest.Type.BASIC);
+	private TileEntityChest chestBasic;
 	@Shadow
-	private TileEntityChest chestTrap = new TileEntityChest(BlockChest.Type.TRAP);
+	private TileEntityChest chestTrap;
 	@Shadow
-	private TileEntityEnderChest enderChest = new TileEntityEnderChest();
+	private TileEntityEnderChest enderChest;
 	@Shadow
-	private TileEntitySkull skull = new TileEntitySkull();
+	private TileEntitySkull skull;
 	@Shadow
 	@Final
 	private TileEntityBanner banner;
@@ -55,7 +55,7 @@ public abstract class MixinTileEntityItemStackRenderer {
 	@Final
 	private TileEntityBed bed;
 	@Shadow
-	private ModelShield modelShield = new ModelShield();
+	private ModelShield modelShield;
 
 	@Overwrite
 	public void renderByItem(ItemStack stack, float partialTicks) {
