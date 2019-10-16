@@ -22,8 +22,7 @@ import net.minecraft.world.World;
 public class GuiContainerEggPouch extends GuiContainer {
 
 	private static Minecraft MINECRAFT = Minecraft.getMinecraft();
-	private static final ResourceLocation INVENTORY_TEXTURE = new ResourceLocation(Traders.MOD_ID,
-			"textures/gui/container/pouch_gui.png");
+	private static final ResourceLocation INVENTORY_TEXTURE = Traders.getResource("textures/gui/container/pouch_gui.png");
 
 	public GuiScrollbar scrollbar;
 	public GuiTextField searchField;
