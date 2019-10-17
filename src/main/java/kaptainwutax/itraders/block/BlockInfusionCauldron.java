@@ -29,7 +29,7 @@ import net.minecraftforge.common.util.Constants;
 
 public class BlockInfusionCauldron extends BlockCauldron {
 
-    public static final double NECKLACE_CREATION_RATE = 0.10d;
+    public static final double NECKLACE_CREATION_RATE = 0.01d;
 
     public BlockInfusionCauldron(String name) {
         super();
