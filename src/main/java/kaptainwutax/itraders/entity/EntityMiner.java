@@ -1,13 +1,18 @@
 package kaptainwutax.itraders.entity;
 
+import java.util.List;
+
 import com.mojang.authlib.GameProfile;
 
 import kaptainwutax.itraders.SkinProfile;
+import kaptainwutax.itraders.init.InitBlock;
 import kaptainwutax.itraders.net.FakeDigManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,7 +40,7 @@ public class EntityMiner extends EntityCreature {
 	public FakeDigManager digManager;
 	private EnumFacing miningDirection;
 	
-	private ItemStackHandler minerInventory = new ItemStackHandler(3 * 9 - 1);
+	private ItemStackHandler minerInventory = new ItemStackHandler(3 * 9 - 2);
 	private BlockPos startMiningPosition;
 	private int miningDistance;
 	
@@ -79,6 +84,26 @@ public class EntityMiner extends EntityCreature {
 	}
 	
 	@Override
+	protected void collideWithEntity(Entity entity) {
+		entity.onCollideWithPlayer(this.fakePlayer);
+	}
+	
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		
+        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox());
+
+        for(int i = 0; i < list.size(); ++i) {
+            Entity entity = list.get(i);
+
+            if(!entity.isDead) {
+                this.collideWithEntity(entity);
+            }
+        }
+	}
+	
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		
@@ -94,6 +119,7 @@ public class EntityMiner extends EntityCreature {
 		
 		if(!world.isRemote) {    
 			this.handleMining();
+			this.fakePlayer.onUpdateEntity();
 		}	
 		
 		this.updateArmSwingProgress();
@@ -106,7 +132,16 @@ public class EntityMiner extends EntityCreature {
 			this.attackEntityFrom(DamageSource.FLY_INTO_WALL, Float.MAX_VALUE);
 		}
 		
+		if(this.ticksExisted >= 20 * 60 * 10) {
+			this.attackEntityFrom(DamageSource.STARVE, Float.MAX_VALUE);
+		}
+		
 		if(this.dead)return;
+		
+		this.rotationYaw = this.miningDirection.getHorizontalAngle();
+		this.rotationYawHead = this.miningDirection.getHorizontalAngle();		
+		this.fakePlayer.rotationYaw = this.miningDirection.getHorizontalAngle();
+		this.fakePlayer.rotationYawHead = this.miningDirection.getHorizontalAngle();
 		
 		if(this.miningDirection == null) {
 			this.miningDirection = EnumFacing.Plane.HORIZONTAL.random(this.rand);
@@ -141,6 +176,7 @@ public class EntityMiner extends EntityCreature {
 		compound.setTag("MinerInventory", this.minerInventory.serializeNBT());		
 		compound.setLong("StartMiningPosition", this.startMiningPosition.toLong());
 		compound.setInteger("MiningDistance", this.miningDistance);
+		compound.setInteger("TicksExisted", this.ticksExisted);
 	}
 	
 	@Override
@@ -154,6 +190,7 @@ public class EntityMiner extends EntityCreature {
 		this.minerInventory.deserializeNBT(compound.getCompoundTag("MinerInventory"));
 		this.startMiningPosition = BlockPos.fromLong(compound.getLong("StartMiningPosition"));
 		this.miningDistance = compound.getInteger("MiningDistance");
+		this.ticksExisted = compound.getInteger("TicksExisted");
 		
 		this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, this.getHeldItemMainhand());	
 	}
@@ -172,7 +209,11 @@ public class EntityMiner extends EntityCreature {
 	@Override
 	public void onDeath(DamageSource cause) {	
 		if(!this.world.isRemote) {
-			this.world.setBlockState(this.getPosition(), Blocks.CHEST.getDefaultState());
+			this.digManager.clickBlock(BlockPos.ORIGIN, EnumFacing.DOWN);
+			
+			this.world.setBlockState(this.getPosition(), Blocks.CHEST.getDefaultState().withProperty(Blocks.CHEST.FACING, this.miningDirection.getOpposite()));
+			this.world.setBlockState(this.getPosition().up(), InitBlock.GRAVE_STONE.getDefaultState().withProperty(InitBlock.GRAVE_STONE.FACING, this.miningDirection.getOpposite()));
+			
 			TileEntity tileEntity = world.getTileEntity(this.getPosition());
 			
 			if(tileEntity instanceof TileEntityChest) {
@@ -192,6 +233,17 @@ public class EntityMiner extends EntityCreature {
 				
 				if(!pickaxe.isEmpty() && itemHandler.getSlots() > lastIndex + 1) {
 					itemHandler.insertItem(lastIndex + 1, pickaxe, false);
+				}
+				
+				if(this.getCustomNameTag() != this.lastName) {
+					ItemStack headDrop = new ItemStack(Items.SKULL, 1, 3);
+					NBTTagCompound nbt = new NBTTagCompound();
+					nbt.setString("SkullOwner", this.getCustomNameTag());
+					headDrop.setTagCompound(nbt);
+					
+					if(!headDrop.isEmpty() && itemHandler.getSlots() > lastIndex + 2) {
+						itemHandler.insertItem(lastIndex + 2, headDrop, false);
+					}
 				}
 			}		
 		}
