@@ -33,6 +33,8 @@ public class InitItem {
 	public static ItemSpawnEggMiner SPAWN_EGG_MINER = new ItemSpawnEggMiner("spawn_egg_miner");
 	public static ItemEggPouch EGG_POUCH = new ItemEggPouch("egg_pouch");
 
+	public static ItemBlock ITEM_GRAVE_STONE = new ItemBlock(InitBlock.GRAVE_STONE);
+	
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		registerItem(BIT_100, registry);
 		registerItem(BIT_500, registry);
@@ -43,6 +45,11 @@ public class InitItem {
 		registerItem(SPAWN_EGG_FIGHTER, registry);
 		registerItem(SPAWN_EGG_MINER, registry);
 		registerItem(EGG_POUCH, registry);
+		
+		//Wtf? If I remove this it NPEs. 
+		ITEM_GRAVE_STONE = new ItemBlock(InitBlock.GRAVE_STONE);
+		
+		registerItemBlock(ITEM_GRAVE_STONE, registry);
 	}
 
 	private static void registerItem(Item item, IForgeRegistry<Item> registry) {

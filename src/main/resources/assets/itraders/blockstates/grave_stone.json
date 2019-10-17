@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": {"model": "itraders:grave_stone"},
+        "facing=south": {"model": "itraders:grave_stone", "y": 180},
+        "facing=west": {"model": "itraders:grave_stone", "y": 270},
+        "facing=east": {"model": "itraders:grave_stone", "y": 90}
+    }
+}

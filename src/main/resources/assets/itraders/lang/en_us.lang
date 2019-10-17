@@ -9,4 +9,5 @@ item.spawn_egg_fighter.name=Spawn Fighter
 item.spawn_egg_trader.name=Spawn Trader
 item.spawn_egg_miner.name=Spawn Miner
 item.egg_pouch.name=Egg Pouch
+tile.grave_stone.name=Grave Stone
 itemGroup.itraders=iTraders
