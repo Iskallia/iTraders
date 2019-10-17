@@ -20,8 +20,7 @@ public class UserNameChecker {
     private static ConcurrentSet<String> CurrentLookup=new ConcurrentSet<>();
 
     private static Executor service=Executors.newFixedThreadPool(5);
-    public static String GetTextFormatting(String name)
-    {
+    public static String getTextFormatting(String name) {
         String finalName=name.toLowerCase();
         if(CurrentLookup.contains(finalName))//if name is already being requested return yellow
             return TextFormatting.YELLOW.toString();
@@ -54,8 +53,7 @@ public class UserNameChecker {
         return (ValidNames.contains(finalName)?"":TextFormatting.RED.toString());
     }
 
-    public static String GetTextFormattingFromItem(ItemStack item)
-    {
+    public static String getTextFormattingFromItem(ItemStack item)  {
         if(!item.hasTagCompound())
             return "";
         NBTTagCompound display=item.getTagCompound().getCompoundTag("display");
@@ -63,7 +61,7 @@ public class UserNameChecker {
             return "";
         if(!display.hasKey("Name"))
             return "";
-        return UserNameChecker.GetTextFormatting(display.getString("Name"));
+        return UserNameChecker.getTextFormatting(display.getString("Name"));
     }
 
 }
