@@ -20,8 +20,6 @@ public class UserNameChecker {
     private static ConcurrentSet<String> invalidNames = new ConcurrentSet<>();
     private static ConcurrentSet<String> currentLookup = new ConcurrentSet<>();
 
-    private static Executor service = Executors.newFixedThreadPool(5);
-
     public static String getTextFormatting(String name) {
         String finalName = name.toLowerCase();
         if (currentLookup.contains(finalName))//if name is already being requested return yellow
@@ -47,7 +45,8 @@ public class UserNameChecker {
                     currentLookup.remove(finalName);
                 }
             };
-            service.execute(() -> {repo.findProfilesByNames(new String[]{name}, Agent.MINECRAFT, callback);});
+            
+            SkinProfile.service.execute(() -> {repo.findProfilesByNames(new String[]{name}, Agent.MINECRAFT, callback);});
 
             return TextFormatting.YELLOW.toString();
         }
@@ -60,7 +59,7 @@ public class UserNameChecker {
 
         NBTTagCompound display = item.getTagCompound().getCompoundTag("display");
 
-        if (display == null && !display.hasKey("Name"))
+        if (display != null && !display.hasKey("Name"))
             return "";
 
         return UserNameChecker.getTextFormatting(display.getString("Name"));

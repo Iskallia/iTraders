@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class SkinProfile {
 
-	private static ExecutorService service = Executors.newFixedThreadPool(5);
+	public static final ExecutorService service = Executors.newFixedThreadPool(5);
 
 	public AtomicReference<GameProfile> gameProfile = new AtomicReference<GameProfile>();
 	public AtomicReference<NetworkPlayerInfo> playerInfo = new AtomicReference<NetworkPlayerInfo>();
