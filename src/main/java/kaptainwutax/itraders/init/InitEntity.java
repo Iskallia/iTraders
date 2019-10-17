@@ -6,6 +6,10 @@ import kaptainwutax.itraders.entity.EntityMiner;
 import kaptainwutax.itraders.entity.EntityTrader;
 import kaptainwutax.itraders.entity.render.RenderFighter;
 import kaptainwutax.itraders.entity.render.RenderMiner;
+import kaptainwutax.itraders.entity.EntityMiniGhost;
+import kaptainwutax.itraders.entity.EntityTrader;
+import kaptainwutax.itraders.entity.render.RenderFighter;
+import kaptainwutax.itraders.entity.render.RenderMiniPlayer;
 import kaptainwutax.itraders.entity.render.RenderTrader;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -20,6 +24,7 @@ public class InitEntity {
 		registerEntityAndEgg("trader", EntityTrader.class, 0xF5F5DC, 0x8B4513);
 		registerEntity("fighter", EntityFighter.class);
 		registerEntity("miner", EntityMiner.class);
+		registerEntity("mini_ghost", EntityMiniGhost.class);
 	}
 
 	public static void registerEntityRenderers() {

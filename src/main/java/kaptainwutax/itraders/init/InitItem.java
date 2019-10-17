@@ -1,21 +1,10 @@
 package kaptainwutax.itraders.init;
 
 import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.item.ItemBit;
-import kaptainwutax.itraders.item.ItemEggPouch;
-import kaptainwutax.itraders.item.ItemSpawnEggFighter;
-import kaptainwutax.itraders.item.ItemSpawnEggMiner;
-import kaptainwutax.itraders.item.ItemSpawnEggTrader;
+import kaptainwutax.itraders.item.*;
 import kaptainwutax.itraders.tab.CreativeTabsITraders;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
-import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class InitItem {
@@ -32,6 +21,7 @@ public class InitItem {
 	public static ItemSpawnEggFighter SPAWN_EGG_FIGHTER = new ItemSpawnEggFighter("spawn_egg_fighter");
 	public static ItemSpawnEggMiner SPAWN_EGG_MINER = new ItemSpawnEggMiner("spawn_egg_miner");
 	public static ItemEggPouch EGG_POUCH = new ItemEggPouch("egg_pouch");
+	public static ItemSkullNeck SKULL_NECKLACE = new ItemSkullNeck("skull_neck");
 
 	public static ItemBlock ITEM_GRAVE_STONE = new ItemBlock(InitBlock.GRAVE_STONE);
 	
@@ -50,6 +40,7 @@ public class InitItem {
 		ITEM_GRAVE_STONE = new ItemBlock(InitBlock.GRAVE_STONE);
 		
 		registerItemBlock(ITEM_GRAVE_STONE, registry);
+		registerItem(SKULL_NECKLACE, registry);
 	}
 
 	private static void registerItem(Item item, IForgeRegistry<Item> registry) {
@@ -58,7 +49,7 @@ public class InitItem {
 
 	private static void registerItemBlock(ItemBlock itemBlock, IForgeRegistry<Item> registry) {
 		itemBlock.setRegistryName(itemBlock.getBlock().getRegistryName());
-		itemBlock.setTranslationKey(itemBlock.getBlock().getTranslationKey());
+		itemBlock.setUnlocalizedName(itemBlock.getBlock().getUnlocalizedName());
 		registry.register(itemBlock);
 	}
 

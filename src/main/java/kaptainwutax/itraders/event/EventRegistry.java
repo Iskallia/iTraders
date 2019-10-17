@@ -22,6 +22,7 @@ public class EventRegistry {
 	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event) {
 		InitItem.registerItems(event.getRegistry());
+		InitBlock.registerItemBlocks(event.getRegistry());
 	}
 
 	@SubscribeEvent
