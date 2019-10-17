@@ -198,8 +198,7 @@ public abstract class ItemSpawnEgg<T> extends Item {
 		}
 	}
 
-	public static void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack,
-			@Nullable Entity targetEntity) {
+	public static void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack, @Nullable Entity targetEntity) {
 		MinecraftServer minecraftserver = entityWorld.getMinecraftServer();
 
 		if (minecraftserver != null && targetEntity != null) {
@@ -219,14 +218,15 @@ public abstract class ItemSpawnEgg<T> extends Item {
 			}
 		}
 	}
+
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag isAdvanced) {
-		tooltip.set(0, UserNameChecker.getTextFormattingFromItem(stack)+tooltip.get(0));
+		tooltip.set(0, UserNameChecker.getTextFormattingFromItem(stack) + tooltip.get(0));
 	}
+
 	@Override
-	public String getHighlightTip( ItemStack item, String displayName )
-	{
-		return UserNameChecker.getTextFormattingFromItem(item)+displayName;
+	public String getHighlightTip(ItemStack item, String displayName) {
+		return UserNameChecker.getTextFormattingFromItem(item) + displayName;
 	}
 
 }
