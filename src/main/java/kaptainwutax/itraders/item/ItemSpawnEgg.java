@@ -6,11 +6,13 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import kaptainwutax.itraders.Traders;
+import kaptainwutax.itraders.UserNameChecker;
 import kaptainwutax.itraders.init.InitItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
@@ -37,6 +39,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class ItemSpawnEgg<T> extends Item {
 
@@ -194,8 +198,7 @@ public abstract class ItemSpawnEgg<T> extends Item {
 		}
 	}
 
-	public static void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack,
-			@Nullable Entity targetEntity) {
+	public static void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack, @Nullable Entity targetEntity) {
 		MinecraftServer minecraftserver = entityWorld.getMinecraftServer();
 
 		if (minecraftserver != null && targetEntity != null) {
@@ -214,6 +217,16 @@ public abstract class ItemSpawnEgg<T> extends Item {
 				targetEntity.readFromNBT(nbttagcompound1);
 			}
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag isAdvanced) {
+		tooltip.set(0, UserNameChecker.getTextFormattingFromItem(stack) + tooltip.get(0));
+	}
+
+	@Override
+	public String getHighlightTip(ItemStack item, String displayName) {
+		return UserNameChecker.getTextFormattingFromItem(item) + displayName;
 	}
 
 }

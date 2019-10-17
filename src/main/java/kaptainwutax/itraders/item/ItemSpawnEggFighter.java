@@ -75,6 +75,7 @@ public class ItemSpawnEggFighter extends ItemSpawnEgg<EntityFighter> {
 
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag isAdvanced) {
+		super.addInformation(stack,world,tooltip,isAdvanced);
 		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			tooltip.add("Press shift for more...");
 			return;
