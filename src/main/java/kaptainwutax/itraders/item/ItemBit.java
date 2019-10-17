@@ -9,7 +9,7 @@ public class ItemBit extends Item {
 	public final int value;
 
 	public ItemBit(String name, int value) {
-		this.setTranslationKey(name);
+		this.setUnlocalizedName(name);
 		this.setRegistryName(Traders.getResource(name));
 		this.setCreativeTab(InitItem.ITRADERS_TAB);
 

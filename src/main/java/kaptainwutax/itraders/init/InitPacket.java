@@ -1,15 +1,11 @@
 package kaptainwutax.itraders.init;
 
 import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.net.packet.C2SMovePouchRow;
+import kaptainwutax.itraders.net.packet.*;
 import kaptainwutax.itraders.net.packet.C2SMovePouchRow.C2SMovePouchRowHandler;
-import kaptainwutax.itraders.net.packet.C2SUpdatePouchSearch;
 import kaptainwutax.itraders.net.packet.C2SUpdatePouchSearch.C2SUpdatePouchSearchHandler;
-import kaptainwutax.itraders.net.packet.S2CFighterHeight;
 import kaptainwutax.itraders.net.packet.S2CFighterHeight.S2CFighterHeightHandler;
-import kaptainwutax.itraders.net.packet.S2CPouchScroll;
 import kaptainwutax.itraders.net.packet.S2CPouchScroll.S2CPouchScrollHandler;
-import kaptainwutax.itraders.net.packet.S2CUpdatePouchSearch;
 import kaptainwutax.itraders.net.packet.S2CUpdatePouchSearch.S2CUpdatePouchSearchHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;

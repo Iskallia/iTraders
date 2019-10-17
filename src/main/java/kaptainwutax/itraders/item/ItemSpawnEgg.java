@@ -46,8 +46,8 @@ public abstract class ItemSpawnEgg<T> extends Item {
 
 	protected ResourceLocation entityName;
 
-	public ItemSpawnEgg(String name, ResourceLocation entityName, boolean usesDispenser) {
-		this.setTranslationKey(name);
+	public ItemSpawnEgg(String name, ResourceLocation entityName) {
+		this.setUnlocalizedName(name);
 		this.setRegistryName(Traders.getResource(name));
 		this.entityName = entityName;
 		this.setCreativeTab(InitItem.ITRADERS_TAB);
@@ -57,9 +57,9 @@ public abstract class ItemSpawnEgg<T> extends Item {
 			BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new BehaviorDefaultDispenseItem() {
 				public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
 					EnumFacing facing = source.getBlockState().getValue(BlockDispenser.FACING);
-					double x = source.getX() + facing.getXOffset();
-					double y = source.getBlockPos().getY() + facing.getYOffset() + 0.2D;
-					double z = source.getZ() + facing.getZOffset();
+					double x = source.getX() + facing.getFrontOffsetX();
+					double y = source.getBlockPos().getY() + facing.getFrontOffsetY() + 0.2D;
+					double z = source.getZ() + facing.getFrontOffsetZ();
 					
 					onDispenserSpawn(source.getWorld(), facing, new BlockPos(x, y, z), stack);
 
