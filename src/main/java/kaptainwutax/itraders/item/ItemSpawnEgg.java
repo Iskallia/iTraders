@@ -221,12 +221,12 @@ public abstract class ItemSpawnEgg<T> extends Item {
 	}
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag isAdvanced) {
-		tooltip.set(0,UserNameChecker.GetTextFormattingFromItem(stack)+tooltip.get(0));
+		tooltip.set(0, UserNameChecker.getTextFormattingFromItem(stack)+tooltip.get(0));
 	}
 	@Override
 	public String getHighlightTip( ItemStack item, String displayName )
 	{
-		return UserNameChecker.GetTextFormattingFromItem(item)+displayName;
+		return UserNameChecker.getTextFormattingFromItem(item)+displayName;
 	}
 
 }
