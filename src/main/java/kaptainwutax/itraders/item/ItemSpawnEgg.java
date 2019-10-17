@@ -224,8 +224,7 @@ public abstract class ItemSpawnEgg<T> extends Item {
 		tooltip.set(0, UserNameChecker.getTextFormattingFromItem(stack)+tooltip.get(0));
 	}
 	@Override
-	public String getHighlightTip( ItemStack item, String displayName )
-	{
+	public String getHighlightTip( ItemStack item, String displayName ) {
 		return UserNameChecker.getTextFormattingFromItem(item)+displayName;
 	}
 
