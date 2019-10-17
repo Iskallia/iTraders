@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -92,12 +93,15 @@ public class EntityMiner extends EntityCreature {
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		
-        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox());
+        List<Entity> xpOrbs = this.world.getEntitiesInAABBexcluding(
+        		this, this.getEntityBoundingBox().grow(0.0f, 0.0f, 0.0f), 
+        		entity -> {return entity instanceof EntityXPOrb;}
+        	);
 
-        for(int i = 0; i < list.size(); ++i) {
-            Entity entity = list.get(i);
+        for(int i = 0; i < xpOrbs.size(); ++i) {
+            Entity entity = xpOrbs.get(i);
 
-            if(!entity.isDead) {
+            if(!entity.isDead && entity instanceof EntityXPOrb) {
                 this.collideWithEntity(entity);
             }
         }
@@ -119,7 +123,6 @@ public class EntityMiner extends EntityCreature {
 		
 		if(!world.isRemote) {    
 			this.handleMining();
-			this.fakePlayer.onUpdateEntity();
 		}	
 		
 		this.updateArmSwingProgress();
@@ -139,9 +142,12 @@ public class EntityMiner extends EntityCreature {
 		if(this.dead)return;
 		
 		this.rotationYaw = this.miningDirection.getHorizontalAngle();
-		this.rotationYawHead = this.miningDirection.getHorizontalAngle();		
+		this.rotationYawHead = this.miningDirection.getHorizontalAngle();	
 		this.fakePlayer.rotationYaw = this.miningDirection.getHorizontalAngle();
-		this.fakePlayer.rotationYawHead = this.miningDirection.getHorizontalAngle();
+		this.fakePlayer.rotationYawHead = this.miningDirection.getHorizontalAngle();	
+		this.fakePlayer.posX = this.posX;
+		this.fakePlayer.posY = this.posY;
+		this.fakePlayer.posZ = this.posZ;
 		
 		if(this.miningDirection == null) {
 			this.miningDirection = EnumFacing.Plane.HORIZONTAL.random(this.rand);
