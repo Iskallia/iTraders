@@ -71,7 +71,6 @@ public class RenderMiniPlayer extends RenderLivingBase<EntityMiniGhost> {
                 partialTicks);
 
         GlStateManager.popMatrix();
-        GlStateManager.disableAlpha();
         GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 
         animationTicks += Math.max(partialTicks, 0.1f);

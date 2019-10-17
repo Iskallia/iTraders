@@ -20,8 +20,8 @@ public class InitModel {
 		registerSimpleItemModel(InitItem.EGG_POUCH, 0);
 		registerSimpleItemModel(InitItem.SKULL_NECKLACE, 0);
 
-		registerBlockModel(InitBlock.SKULL_REFINER, 0);
-		registerItemBlockModel(InitBlock.SKULL_REFINER_ITEM_BLOCK, 0);
+		registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
+		registerItemBlockModel(InitBlock.INFUSION_CAULDRON_ITEM, 0);
 
 		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_TRADER, new TraderEggMesh(InitItem.SPAWN_EGG_TRADER));
 		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_FIGHTER, new FighterEggMesh(InitItem.SPAWN_EGG_FIGHTER));
