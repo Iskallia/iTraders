@@ -16,42 +16,42 @@ import java.util.concurrent.Executors;
 public class UserNameChecker {
 
     public static GameProfileRepository repo;
-    private static ConcurrentSet<String> ValidNames = new ConcurrentSet<>();
-    private static ConcurrentSet<String> InvalidNames = new ConcurrentSet<>();
-    private static ConcurrentSet<String> CurrentLookup = new ConcurrentSet<>();
+    private static ConcurrentSet<String> validNames = new ConcurrentSet<>();
+    private static ConcurrentSet<String> invalidNames = new ConcurrentSet<>();
+    private static ConcurrentSet<String> currentLookup = new ConcurrentSet<>();
 
     private static Executor service = Executors.newFixedThreadPool(5);
 
     public static String getTextFormatting(String name) {
         String finalName = name.toLowerCase();
-        if (CurrentLookup.contains(finalName))//if name is already being requested return yellow
+        if (currentLookup.contains(finalName))//if name is already being requested return yellow
             return TextFormatting.YELLOW.toString();
 
 
         //Create a new lookup request for name if it hasn't been checked
-        if (!(ValidNames.contains(finalName) || InvalidNames.contains(finalName))) {
-            CurrentLookup.add(finalName);
+        if (!(validNames.contains(finalName) || invalidNames.contains(finalName))) {
+            currentLookup.add(finalName);
             ProfileLookupCallback callback = new ProfileLookupCallback() {
                 @Override
                 public void onProfileLookupSucceeded(GameProfile profile) {
-                    ValidNames.add(finalName);
-                    CurrentLookup.remove(finalName);
+                    validNames.add(finalName);
+                    currentLookup.remove(finalName);
                 }
 
                 @Override
                 public void onProfileLookupFailed(GameProfile profile, Exception exception) {
                     if (exception instanceof ProfileNotFoundException)//No profile was found for that person
                     {
-                        InvalidNames.add(finalName);
+                        invalidNames.add(finalName);
                     }
-                    CurrentLookup.remove(finalName);
+                    currentLookup.remove(finalName);
                 }
             };
             service.execute(() -> {repo.findProfilesByNames(new String[]{name}, Agent.MINECRAFT, callback);});
 
             return TextFormatting.YELLOW.toString();
         }
-        return (ValidNames.contains(finalName) ? "" : TextFormatting.RED.toString());
+        return (validNames.contains(finalName) ? "" : TextFormatting.RED.toString());
     }
 
     public static String getTextFormattingFromItem(ItemStack item) {
