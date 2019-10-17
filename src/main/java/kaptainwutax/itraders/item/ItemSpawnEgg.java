@@ -46,7 +46,7 @@ public abstract class ItemSpawnEgg<T> extends Item {
 
 	protected ResourceLocation entityName;
 
-	public ItemSpawnEgg(String name, ResourceLocation entityName) {
+	public ItemSpawnEgg(String name, ResourceLocation entityName, boolean usesDispenser) {
 		this.setUnlocalizedName(name);
 		this.setRegistryName(Traders.getResource(name));
 		this.entityName = entityName;

@@ -24,7 +24,7 @@ public class BlockGraveStone extends Block {
 	public BlockGraveStone(String name, Material material) {
 		super(material);
 		this.setRegistryName(Traders.getResource(name));
-		this.setTranslationKey(name);
+		this.setUnlocalizedName(name);
 		this.setCreativeTab(InitItem.ITRADERS_TAB);
 		
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
@@ -83,7 +83,7 @@ public class BlockGraveStone extends Block {
     }
     
     public IBlockState getStateFromMeta(int meta) {
-        EnumFacing facing = EnumFacing.byIndex(meta);
+        EnumFacing facing = EnumFacing.getFront(meta);
 
         if(facing.getAxis() == EnumFacing.Axis.Y) {
             facing = EnumFacing.NORTH;
