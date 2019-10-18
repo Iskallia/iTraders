@@ -124,8 +124,7 @@ public class ItemSkullNeck extends Item implements IBauble {
         this.setRegistryName(Traders.getResource(name));
         this.setCreativeTab(InitItem.ITRADERS_TAB);
         this.setMaxStackSize(1);
-//        this.setMaxDamage(36000);
-        this.setMaxDamage(10 * 20);
+        this.setMaxDamage(36000);
     }
 
     @Override
