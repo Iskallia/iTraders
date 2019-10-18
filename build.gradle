@@ -132,3 +132,9 @@ processResources {
         exclude 'mcmod.info'
     }
 }
+
+sourceSets {
+    main {
+        output.resourcesDir = output.classesDir
+    }
+}
