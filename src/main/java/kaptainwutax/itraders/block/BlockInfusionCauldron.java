@@ -7,12 +7,14 @@ import kaptainwutax.itraders.tileentity.TileEntityInfusionCauldron;
 import kaptainwutax.itraders.util.Randomizer;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBucket;
+import net.minecraft.item.ItemSkull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -54,23 +56,36 @@ public class BlockInfusionCauldron extends BlockCauldron {
 			return true;
 		}
 
+		if(handleSkull(world, pos, heldStack)) {
+			heldStack.shrink(1);
+		}
+
+		return true;
+	}
+
+	private boolean handleSkull(World world, BlockPos pos, ItemStack stack) {
+
+		TileEntityInfusionCauldron te = (TileEntityInfusionCauldron) world.getTileEntity(pos);
+		if (te == null)
+			return false;
+
 		int currentWaterLevel = te.getTank().getFluidAmount();
 
 		if (currentWaterLevel <= 0)
-			return true;
+			return false;
 
-		if (heldStack.getItem() != Items.SKULL)
-			return true;
+		if (stack.getItem() != Items.SKULL)
+			return false;
 
-		NBTTagCompound stackNBT = heldStack.getTagCompound();
+		NBTTagCompound stackNBT = stack.getTagCompound();
 
 		if (stackNBT == null || !stackNBT.hasKey("SkullOwner", Constants.NBT.TAG_COMPOUND))
-			return true;
+			return false;
 
 		NBTTagCompound skullOwnerNBT = stackNBT.getCompoundTag("SkullOwner");
 
 		if (!skullOwnerNBT.hasKey("Name", Constants.NBT.TAG_STRING))
-			return true;
+			return false;
 
 		if (Math.random() <= NECKLACE_CREATION_RATE) {
 			String ghostName = skullOwnerNBT.getString("Name");
@@ -81,10 +96,21 @@ public class BlockInfusionCauldron extends BlockCauldron {
 		}
 
 		int toDrain = currentWaterLevel - 333 < 300 ? te.getTank().getFluidAmount() : 333;
-		
-		te.getTank().drain(toDrain, true);
+		te.getTank().drain(toDrain, true);	
 
 		return true;
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+		if(world.isRemote) return; 
+		if (entity instanceof EntityItem) {
+			EntityItem item = (EntityItem) entity;
+			ItemStack stack = item.getItem();
+			if (handleSkull(world, pos, stack)) {
+				entity.setDead();
+			}
+		}
 	}
 
 	public void spawnNecklace(WorldServer world, BlockPos pos, ItemStack necklaceStack) {
