@@ -1,6 +1,7 @@
 package kaptainwutax.itraders.block;
 
 import kaptainwutax.itraders.Traders;
+import kaptainwutax.itraders.init.InitBlock;
 import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.init.InitItem;
 import kaptainwutax.itraders.item.ItemSkullNeck;
@@ -28,10 +29,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
 
+import java.util.Random;
+
 public class BlockInfusionCauldron extends BlockCauldron {
 
     public BlockInfusionCauldron(String name) {
         super();
+        this.setHardness(2f);
 
         this.setUnlocalizedName(name);
         this.setRegistryName(Traders.getResource(name));
@@ -113,6 +117,11 @@ public class BlockInfusionCauldron extends BlockCauldron {
                 0, 0, 0,
                 Math.PI);
         world.spawnEntity(itemEntity);
+    }
+
+    @Override
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        return InitBlock.INFUSION_CAULDRON_ITEM;
     }
 
 }
