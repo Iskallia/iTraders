@@ -1,14 +1,8 @@
 package kaptainwutax.itraders.init;
 
 import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.entity.EntityFighter;
-import kaptainwutax.itraders.entity.EntityItemMagicOreDust;
-import kaptainwutax.itraders.entity.EntityMiner;
-import kaptainwutax.itraders.entity.EntityTrader;
-import kaptainwutax.itraders.entity.render.RenderFighter;
-import kaptainwutax.itraders.entity.render.RenderItemMagicOreDust;
-import kaptainwutax.itraders.entity.render.RenderMiner;
-import kaptainwutax.itraders.entity.render.RenderTrader;
+import kaptainwutax.itraders.entity.*;
+import kaptainwutax.itraders.entity.render.*;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -22,6 +16,7 @@ public class InitEntity {
 		registerEntityAndEgg("trader", EntityTrader.class, 0xF5F5DC, 0x8B4513);
 		registerEntity("fighter", EntityFighter.class);
 		registerEntity("miner", EntityMiner.class);
+		registerEntity("mini_ghost", EntityMiniGhost.class);
 		registerEntity("item_magic_ore_dust", EntityItemMagicOreDust.class);
 	}
 
@@ -29,6 +24,7 @@ public class InitEntity {
 		registerEntityRenderer(EntityTrader.class, RenderTrader.getRenderFactory());
 		registerEntityRenderer(EntityFighter.class, RenderFighter.getRenderFactory());
 		registerEntityRenderer(EntityMiner.class, RenderMiner.getRenderFactory());
+		registerEntityRenderer(EntityMiniGhost.class, RenderMiniGhost.getRenderFactory());
 		registerEntityRenderer(EntityItemMagicOreDust.class, RenderItemMagicOreDust.getRenderFactory());
 	}
 
