@@ -17,6 +17,7 @@ public class EventRegistry {
 	@SubscribeEvent
 	public static void onBlockRegister(RegistryEvent.Register<Block> event) {
 		InitBlock.registerBlocks(event.getRegistry());
+		InitBlock.registerTileEntities();
 	}
 	
 	@SubscribeEvent

@@ -5,10 +5,12 @@ import kaptainwutax.itraders.init.InitBlock;
 import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.init.InitItem;
 import kaptainwutax.itraders.item.ItemSkullNeck;
+import kaptainwutax.itraders.tile.TileInfusionCauldron;
 import kaptainwutax.itraders.util.Randomizer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAnvil;
 import net.minecraft.block.BlockCauldron;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandParticle;
@@ -20,6 +22,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -29,9 +32,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockInfusionCauldron extends BlockCauldron {
+public class BlockInfusionCauldron extends BlockCauldron implements ITileEntityProvider {
 
     public BlockInfusionCauldron(String name) {
         super();
@@ -122,6 +126,26 @@ public class BlockInfusionCauldron extends BlockCauldron {
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return InitBlock.INFUSION_CAULDRON_ITEM;
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        super.breakBlock(worldIn, pos, state);
+        worldIn.removeTileEntity(pos);
+    }
+
+    @Override
+    public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
+        super.eventReceived(state, worldIn, pos, id, param);
+
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+        return tileentity != null && tileentity.receiveClientEvent(id, param);
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileInfusionCauldron();
     }
 
 }
