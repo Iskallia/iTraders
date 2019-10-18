@@ -1,9 +1,9 @@
 package kaptainwutax.itraders.block;
 
 import kaptainwutax.itraders.Traders;
+import kaptainwutax.itraders.block.entity.TileEntityInfusionCauldron;
 import kaptainwutax.itraders.init.InitItem;
 import kaptainwutax.itraders.item.ItemSkullNeck;
-import kaptainwutax.itraders.tileentity.TileEntityInfusionCauldron;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;

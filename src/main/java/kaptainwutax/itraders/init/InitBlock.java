@@ -3,10 +3,11 @@ package kaptainwutax.itraders.init;
 
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.block.BlockGraveStone;
-import kaptainwutax.itraders.block.BlockInfusionCauldron;
-import kaptainwutax.itraders.tileentity.TileEntityInfusionCauldron;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import kaptainwutax.itraders.block.BlockInfusionCauldron;
+import kaptainwutax.itraders.block.entity.TileEntityGraveStone;
+import kaptainwutax.itraders.block.entity.TileEntityInfusionCauldron;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -25,9 +26,10 @@ public class InitBlock {
 		registerBlock(INFUSION_CAULDRON, registry);
 	}
 
-	public static void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileEntityInfusionCauldron.class, Traders.getResource("infusion_cauldron"));
-	}
+    public static void registerTileEntities() {
+        GameRegistry.registerTileEntity(TileEntityInfusionCauldron.class, Traders.getResource("infusion_cauldron"));
+        GameRegistry.registerTileEntity(TileEntityGraveStone.class, Traders.getResource("grave_stone"));
+    }
 
 	public static void registerItemBlocks(IForgeRegistry<Item> registry) {
 		registry.register(ITEM_INFUSION_CAULDRON);

@@ -1,6 +1,8 @@
 package kaptainwutax.itraders.block;
 
 import kaptainwutax.itraders.Traders;
+import kaptainwutax.itraders.block.entity.TileEntityGraveStone;
+import kaptainwutax.itraders.init.InitBlock;
 import kaptainwutax.itraders.init.InitItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
@@ -10,12 +12,17 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 public class BlockGraveStone extends Block {
 
@@ -38,6 +45,16 @@ public class BlockGraveStone extends Block {
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
+	}
+	
+	@Override
+	public boolean hasTileEntity(IBlockState state) {
+		return true;
+	}
+	
+	@Override
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		return new TileEntityGraveStone();
 	}
 	
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
@@ -70,12 +87,61 @@ public class BlockGraveStone extends Block {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
     
+    @Override
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+    	drops.clear();
+    }
+    
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 
-        if(stack.hasDisplayName()) {
-        	//TODO: Pass on data to the tile entity.
-        }
+    	TileEntity tileEntity = world.getTileEntity(pos);
+    	
+    	if(tileEntity != null && tileEntity instanceof TileEntityGraveStone) {
+    		TileEntityGraveStone graveStoneTE = (TileEntityGraveStone)tileEntity;
+    		NBTTagCompound nbt = stack.getTagCompound();
+    		
+            if(stack.hasDisplayName()) {
+            	graveStoneTE.setName(stack.getDisplayName());
+            }
+            
+            if(nbt != null && nbt.hasKey("Months", Constants.NBT.TAG_INT)) {
+            	graveStoneTE.setMonths(nbt.getInteger("Months"));
+            } 
+            
+            if(nbt != null && nbt.hasKey("Time", Constants.NBT.TAG_LONG)) {
+            	graveStoneTE.setTime(nbt.getLong("Time"));
+            } 
+    	}
+    }
+    
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {    	
+    	TileEntity tileEntity = world.getTileEntity(pos);
+    	
+    	if(tileEntity != null && tileEntity instanceof TileEntityGraveStone) {
+    		TileEntityGraveStone graveStoneTE = (TileEntityGraveStone)tileEntity;
+        	
+        	ItemStack dropStack = new ItemStack(InitBlock.ITEM_GRAVE_STONE, 1);
+        	NBTTagCompound nbt = new NBTTagCompound();
+        	
+        	if(graveStoneTE.getName() != null) {
+            	dropStack.setStackDisplayName(graveStoneTE.getName());
+        	}
+        	
+        	if(graveStoneTE.getMonths() != -1) {
+        		nbt.setInteger("Months", graveStoneTE.getMonths());
+        	}
+        	
+        	if(graveStoneTE.getTime() != -1) {
+        		nbt.setLong("Time", graveStoneTE.getTime());
+        	}
+              	
+        	dropStack.setTagCompound(nbt);       	
+    		Block.spawnAsEntity(world, pos, dropStack);
+    	} 	
+
+    	super.breakBlock(world, pos, state);
     }
     
     protected BlockStateContainer createBlockState() {
