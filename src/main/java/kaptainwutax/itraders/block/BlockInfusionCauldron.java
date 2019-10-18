@@ -4,17 +4,14 @@ import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.init.InitItem;
 import kaptainwutax.itraders.item.ItemSkullNeck;
 import kaptainwutax.itraders.tileentity.TileEntityInfusionCauldron;
-import kaptainwutax.itraders.util.Randomizer;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBucket;
-import net.minecraft.item.ItemSkull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -56,8 +53,9 @@ public class BlockInfusionCauldron extends BlockCauldron {
 			return true;
 		}
 
-		if(handleSkull(world, pos, heldStack)) {
-			heldStack.shrink(1);
+		if (handleSkull(world, pos, heldStack)) {
+			if (!player.isCreative())
+				heldStack.shrink(1);
 		}
 
 		return true;
@@ -92,7 +90,7 @@ public class BlockInfusionCauldron extends BlockCauldron {
 			ItemStack necklaceStack = ItemSkullNeck.generateRandom(ghostName);
 			this.spawnNecklace((WorldServer) world, pos, necklaceStack);
 		} else {
-			this.spawnXP((WorldServer) world, pos);
+			this.spawnFailParticles((WorldServer) world, pos);
 		}
 
 		int toDrain = currentWaterLevel - 333 < 300 ? te.getTank().getFluidAmount() : 333;
@@ -132,13 +130,7 @@ public class BlockInfusionCauldron extends BlockCauldron {
 		world.spawnEntity(itemEntity);
 	}
 
-	public void spawnXP(WorldServer world, BlockPos pos) {
-		double xpEntityX = pos.getX() + 0.5d;
-		double xpEntityY = pos.getY() + 1.0d;
-		double xpEntityZ = pos.getZ() + 0.5d;
-
-		EntityXPOrb entityXPOrb = new EntityXPOrb(world, xpEntityX, xpEntityY, xpEntityZ, Randomizer.randomInt(10, 200));
-
+	public void spawnFailParticles(WorldServer world, BlockPos pos) {
 		int particleCount = 300;
 
 		world.playSound(null, 
@@ -148,7 +140,6 @@ public class BlockInfusionCauldron extends BlockCauldron {
 		world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, false, 
 				pos.getX() + .5d, pos.getY() + .5d, pos.getZ() + .5d, 
 				particleCount, 0, 0, 0, 0.1d);
-		world.spawnEntity(entityXPOrb);
 	}
 
 	@Override
