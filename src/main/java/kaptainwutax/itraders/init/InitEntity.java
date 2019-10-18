@@ -7,9 +7,7 @@ import kaptainwutax.itraders.entity.EntityTrader;
 import kaptainwutax.itraders.entity.render.RenderFighter;
 import kaptainwutax.itraders.entity.render.RenderMiner;
 import kaptainwutax.itraders.entity.EntityMiniGhost;
-import kaptainwutax.itraders.entity.EntityTrader;
-import kaptainwutax.itraders.entity.render.RenderFighter;
-import kaptainwutax.itraders.entity.render.RenderMiniPlayer;
+import kaptainwutax.itraders.entity.render.RenderMiniGhost;
 import kaptainwutax.itraders.entity.render.RenderTrader;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -31,6 +29,7 @@ public class InitEntity {
 		registerEntityRenderer(EntityTrader.class, RenderTrader.getRenderFactory());
 		registerEntityRenderer(EntityFighter.class, RenderFighter.getRenderFactory());
 		registerEntityRenderer(EntityMiner.class, RenderMiner.getRenderFactory());
+		registerEntityRenderer(EntityMiniGhost.class, RenderMiniGhost.getRenderFactory());
 	}
 
 	private static void registerEntity(String name, Class<? extends Entity> entityClass) {

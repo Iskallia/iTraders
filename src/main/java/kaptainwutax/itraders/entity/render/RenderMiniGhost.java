@@ -13,13 +13,13 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import javax.annotation.Nullable;
 
-public class RenderMiniPlayer extends RenderLivingBase<EntityMiniGhost> {
+public class RenderMiniGhost extends RenderLivingBase<EntityMiniGhost> {
 
     protected static IRenderFactory renderFactory = new Factory();
 
-    private float animationTicks = (float) Math.random();
+    private long animationStart = System.currentTimeMillis();
 
-    public RenderMiniPlayer(RenderManager renderManager) {
+    public RenderMiniGhost(RenderManager renderManager) {
         super(renderManager, new ModelPlayer(0.1f, false), 0.25f);
     }
 
@@ -46,12 +46,13 @@ public class RenderMiniPlayer extends RenderLivingBase<EntityMiniGhost> {
     }
 
     @Override
-    public void doRender(EntityMiniGhost miniPlayer, double x, double y, double z, float entityYaw, float partialTicks) {
-        EntityPlayer parent = miniPlayer.getParent();
+    public void doRender(EntityMiniGhost miniGhost, double x, double y, double z, float entityYaw, float partialTicks) {
+        EntityPlayer parent = miniGhost.getParent();
 
         if (parent == null) return;
 
         float oneVoxel = 1 / 16f;
+        float dt = (System.currentTimeMillis() - animationStart) / 1000f;
 
         GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
         GlStateManager.enableAlpha();
@@ -62,18 +63,16 @@ public class RenderMiniPlayer extends RenderLivingBase<EntityMiniGhost> {
         GlStateManager.rotate(-parent.rotationYaw, 0f, 1f, 0f);
         GlStateManager.translate(
                 7 * oneVoxel,
-                Math.sin(animationTicks / (2 * Math.PI) + miniPlayer.getEntityId()) / 20f,
+                Math.sin(dt + miniGhost.getEntityId()) / 20f,
                 -2 * oneVoxel
         );
 
-        super.doRender(miniPlayer, 0, 0, 0,
+        super.doRender(miniGhost, 0, 0, 0,
                 entityYaw,
                 partialTicks);
 
         GlStateManager.popMatrix();
         GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
-
-        animationTicks += Math.max(partialTicks, 0.1f);
     }
 
     public static IRenderFactory getRenderFactory() {
@@ -84,7 +83,7 @@ public class RenderMiniPlayer extends RenderLivingBase<EntityMiniGhost> {
 
         @Override
         public Render<? super EntityMiniGhost> createRenderFor(RenderManager manager) {
-            return new RenderMiniPlayer(manager);
+            return new RenderMiniGhost(manager);
         }
 
     }
