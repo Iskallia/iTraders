@@ -1,6 +1,7 @@
 package kaptainwutax.itraders.entity.render;
 
 import kaptainwutax.itraders.entity.EntityMiniGhost;
+import kaptainwutax.itraders.init.InitConfig;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -52,13 +53,14 @@ public class RenderMiniGhost extends RenderLivingBase<EntityMiniGhost> {
         if (parent == null) return;
 
         float oneVoxel = 1 / 16f;
+        float alpha = InitConfig.CONFIG_SKULL_NECKLACE.GHOST_RENDER_OPACITY;
         float dt = (System.currentTimeMillis() - animationStart) / 1000f;
 
         GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
         GlStateManager.enableAlpha();
         GlStateManager.pushMatrix();
 
-        GlStateManager.color(.9f, .9f, .9f, 0.50f);
+        GlStateManager.color(.9f, .9f, .9f, alpha);
         GlStateManager.translate(x, y, z);
         GlStateManager.rotate(-parent.rotationYaw, 0f, 1f, 0f);
         GlStateManager.translate(

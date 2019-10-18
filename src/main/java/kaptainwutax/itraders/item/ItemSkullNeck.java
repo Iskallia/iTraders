@@ -44,27 +44,20 @@ public class ItemSkullNeck extends Item implements IBauble {
 
         stackNBT.setString("HeadOwner", headOwner);
 
-        int numPositiveEffects = Randomizer.randomInt(1, 3);
-        int numNegativeEffects = Randomizer.randomInt(0, 1);
+        int numEffects = Randomizer.randomInt(
+                InitConfig.CONFIG_SKULL_NECKLACE.NECKLACE_EFFECT_COUNT.getMin(),
+                InitConfig.CONFIG_SKULL_NECKLACE.NECKLACE_EFFECT_COUNT.getMax()
+        );
 
         NBTTagList potionEffects = new NBTTagList();
 
-        for (PotionEffectDefinition positiveEffect : InitConfig.CONFIG_SKULL_NECKLACE.getRandomPositive(numPositiveEffects)) {
-            NBTTagCompound effect = new NBTTagCompound();
-            effect.setString("name", positiveEffect.getName());
-            effect.setInteger("amplifier", Randomizer.randomInt(
-                    positiveEffect.getMinAmplifier(),
-                    positiveEffect.getMaxAmplifier()));
-            potionEffects.appendTag(effect);
-        }
-
-        for (PotionEffectDefinition negativeEffect : InitConfig.CONFIG_SKULL_NECKLACE.getRandomNegative(numNegativeEffects)) {
-            NBTTagCompound effect = new NBTTagCompound();
-            effect.setString("name", negativeEffect.getName());
-            effect.setInteger("amplifier", Randomizer.randomInt(
-                    negativeEffect.getMinAmplifier(),
-                    negativeEffect.getMaxAmplifier()));
-            potionEffects.appendTag(effect);
+        for (PotionEffectDefinition effect : InitConfig.CONFIG_SKULL_NECKLACE.getRandomEffect(numEffects)) {
+            NBTTagCompound effectNBT = new NBTTagCompound();
+            effectNBT.setString("name", effect.getName());
+            effectNBT.setInteger("amplifier", Randomizer.randomInt(
+                    effect.getAmplifier().getMin(),
+                    effect.getAmplifier().getMax()));
+            potionEffects.appendTag(effectNBT);
         }
 
         stackNBT.setTag("PotionEffects", potionEffects);

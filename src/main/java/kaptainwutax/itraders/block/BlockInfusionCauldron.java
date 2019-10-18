@@ -1,6 +1,7 @@
 package kaptainwutax.itraders.block;
 
 import kaptainwutax.itraders.Traders;
+import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.init.InitItem;
 import kaptainwutax.itraders.item.ItemSkullNeck;
 import kaptainwutax.itraders.util.Randomizer;
@@ -28,8 +29,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
 
 public class BlockInfusionCauldron extends BlockCauldron {
-
-    public static final double NECKLACE_CREATION_RATE = 0.01d;
 
     public BlockInfusionCauldron(String name) {
         super();
@@ -66,13 +65,24 @@ public class BlockInfusionCauldron extends BlockCauldron {
         if (!skullOwnerNBT.hasKey("Name", Constants.NBT.TAG_STRING))
             return true;
 
-        if (Math.random() <= NECKLACE_CREATION_RATE) {
+        if (Math.random() <= InitConfig.CONFIG_SKULL_NECKLACE.NECKLACE_CREATION_RATE) {
             String ghostName = skullOwnerNBT.getString("Name");
             ItemStack necklaceStack = ItemSkullNeck.generateRandom(ghostName);
             this.spawnNecklace((WorldServer) world, pos, necklaceStack);
 
         } else {
-            this.spawnXP((WorldServer) world, pos);
+            int particleCount = 300;
+
+            world.playSound(null,
+                    pos.getX(), pos.getY(), pos.getZ(),
+                    SoundEvents.ENTITY_ITEM_BREAK,
+                    SoundCategory.MASTER,
+                    1.0f, (float) Math.random());
+            ((WorldServer) world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, false,
+                    pos.getX() + .5d, pos.getY() + .5d, pos.getZ() + .5d,
+                    particleCount,
+                    0, 0, 0,
+                    0.1d);
         }
 
         setWaterLevel(world, pos, state, currentWaterLevel - 1);
@@ -95,33 +105,11 @@ public class BlockInfusionCauldron extends BlockCauldron {
                 SoundCategory.MASTER,
                 1.0f, (float) Math.random());
         world.spawnParticle(EnumParticleTypes.SPELL_WITCH, false,
-                pos.getX() + .5d, pos.getY() + .5d, pos.getZ() +.5d,
+                pos.getX() + .5d, pos.getY() + .5d, pos.getZ() + .5d,
                 particleCount,
                 0, 0, 0,
                 Math.PI);
         world.spawnEntity(itemEntity);
-    }
-
-    public void spawnXP(WorldServer world, BlockPos pos) {
-        double xpEntityX = pos.getX() + 0.5d;
-        double xpEntityY = pos.getY() + 1.0d;
-        double xpEntityZ = pos.getZ() + 0.5d;
-
-        EntityXPOrb entityXPOrb = new EntityXPOrb(world, xpEntityX, xpEntityY, xpEntityZ, Randomizer.randomInt(10, 200));
-
-        int particleCount = 300;
-
-        world.playSound(null,
-                pos.getX(), pos.getY(), pos.getZ(),
-                SoundEvents.ENTITY_ITEM_BREAK,
-                SoundCategory.MASTER,
-                1.0f, (float) Math.random());
-        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, false,
-                pos.getX() + .5d, pos.getY() + .5d, pos.getZ() +.5d,
-                particleCount,
-                0, 0, 0,
-                0.1d);
-        world.spawnEntity(entityXPOrb);
     }
 
 }
