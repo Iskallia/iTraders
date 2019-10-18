@@ -1,5 +1,8 @@
+itemGroup.itraders=iTraders
+
 entity.trader.name=Trader
 entity.fighter.name=Fighter
+
 item.bit_100.name=100 Bits
 item.bit_500.name=500 Bits
 item.bit_1000.name=1000 Bits
@@ -9,8 +12,23 @@ item.spawn_egg_fighter.name=Spawn Fighter
 item.spawn_egg_trader.name=Spawn Trader
 item.spawn_egg_miner.name=Spawn Miner
 item.egg_pouch.name=Egg Pouch
-tile.grave_stone.name=Grave Stone
+item.sub_card.name=[WIP] SubCard
 item.skull_neck.name=Skull Necklace
-tile.infusion_cauldron.name=Infusion Cauldron
 item.magic_ore_dust.name=Magic Ore Dust
-itemGroup.itraders=iTraders
+
+tile.infusion_cauldron.name=Infusion Cauldron
+tile.grave_stone.name=Grave Stone
+
+itraders.card.rarity.common.name=
+itraders.card.rarity.rare.name=Rare
+itraders.card.rarity.legendary.name=Legendary
+
+itraders.card.attribute.format=%s: %s
+itraders.card.attribute.health.name=Health
+itraders.card.attribute.armor.name=Armor
+itraders.card.attribute.movespeed.name=Movement
+itraders.card.attribute.movespeed.type.name= Tiles
+
+itraders.card.damage.format=%s%s: %s - %s
+itraders.card.damage=Damage
+itraders.card.damage.untyped.name=
