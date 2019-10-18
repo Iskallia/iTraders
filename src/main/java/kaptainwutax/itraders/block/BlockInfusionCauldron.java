@@ -1,19 +1,20 @@
 package kaptainwutax.itraders.block;
 
 import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.init.InitBlock;
-import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.init.InitItem;
 import kaptainwutax.itraders.item.ItemSkullNeck;
-import kaptainwutax.itraders.tile.TileInfusionCauldron;
+import kaptainwutax.itraders.tileentity.TileEntityInfusionCauldron;
+import kaptainwutax.itraders.util.Randomizer;
 import net.minecraft.block.BlockCauldron;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemBucket;
+import net.minecraft.item.ItemSkull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -25,121 +26,139 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fluids.FluidUtil;
 
-import javax.annotation.Nullable;
-import java.util.Random;
+public class BlockInfusionCauldron extends BlockCauldron {
 
-public class BlockInfusionCauldron extends BlockCauldron implements ITileEntityProvider {
+	public static final double NECKLACE_CREATION_RATE = 0.01d;
 
-    public BlockInfusionCauldron(String name) {
-        super();
-        this.setHardness(2f);
+	public BlockInfusionCauldron(String name) {
+		super();
 
-        this.setUnlocalizedName(name);
-        this.setRegistryName(Traders.getResource(name));
+		this.setUnlocalizedName(name);
+		this.setRegistryName(Traders.getResource(name));
 
-        this.setCreativeTab(InitItem.ITRADERS_TAB);
-    }
+		this.setCreativeTab(InitItem.ITRADERS_TAB);
+	}
 
-    @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ))
-            return true; // TODO handle only WATER_BUCKET and BUCKET cases
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (world.isRemote)
+			return true;
 
-        if (world.isRemote) return true;
+		TileEntityInfusionCauldron te = (TileEntityInfusionCauldron) world.getTileEntity(pos);
+		if (te == null)
+			return true;
 
-        ItemStack heldStack = player.getHeldItem(hand);
-        int currentWaterLevel = state.getValue(LEVEL);
+		ItemStack heldStack = player.getHeldItem(hand);
+		if (heldStack.getItem() instanceof ItemBucket) {
+			FluidUtil.interactWithFluidHandler(player, hand, world, pos, facing);
+			return true;
+		}
 
-        if (currentWaterLevel <= 0)
-            return true;
+		if(handleSkull(world, pos, heldStack)) {
+			heldStack.shrink(1);
+		}
 
-        if (heldStack.getItem() != Items.SKULL)
-            return true;
+		return true;
+	}
 
-        NBTTagCompound stackNBT = heldStack.getTagCompound();
+	private boolean handleSkull(World world, BlockPos pos, ItemStack stack) {
 
-        if (stackNBT == null || !stackNBT.hasKey("SkullOwner", Constants.NBT.TAG_COMPOUND))
-            return true;
+		TileEntityInfusionCauldron te = (TileEntityInfusionCauldron) world.getTileEntity(pos);
+		if (te == null)
+			return false;
 
-        NBTTagCompound skullOwnerNBT = stackNBT.getCompoundTag("SkullOwner");
+		int currentWaterLevel = te.getTank().getFluidAmount();
 
-        if (!skullOwnerNBT.hasKey("Name", Constants.NBT.TAG_STRING))
-            return true;
+		if (currentWaterLevel <= 0)
+			return false;
 
-        if (!player.isCreative())
-            heldStack.shrink(1);
+		if (stack.getItem() != Items.SKULL)
+			return false;
 
-        if (Math.random() <= InitConfig.CONFIG_SKULL_NECKLACE.NECKLACE_CREATION_RATE) {
-            String ghostName = skullOwnerNBT.getString("Name");
-            ItemStack necklaceStack = ItemSkullNeck.generateRandom(ghostName);
-            this.spawnNecklace((WorldServer) world, pos, necklaceStack);
+		NBTTagCompound stackNBT = stack.getTagCompound();
 
-        } else {
-            int particleCount = 300;
+		if (stackNBT == null || !stackNBT.hasKey("SkullOwner", Constants.NBT.TAG_COMPOUND))
+			return false;
 
-            world.playSound(null,
-                    pos.getX(), pos.getY(), pos.getZ(),
-                    SoundEvents.ENTITY_ITEM_BREAK,
-                    SoundCategory.MASTER,
-                    1.0f, (float) Math.random());
-            ((WorldServer) world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, false,
-                    pos.getX() + .5d, pos.getY() + .5d, pos.getZ() + .5d,
-                    particleCount,
-                    0, 0, 0,
-                    0.1d);
-        }
+		NBTTagCompound skullOwnerNBT = stackNBT.getCompoundTag("SkullOwner");
 
-        setWaterLevel(world, pos, state, currentWaterLevel - 1);
+		if (!skullOwnerNBT.hasKey("Name", Constants.NBT.TAG_STRING))
+			return false;
 
-        return true;
-    }
+		if (Math.random() <= NECKLACE_CREATION_RATE) {
+			String ghostName = skullOwnerNBT.getString("Name");
+			ItemStack necklaceStack = ItemSkullNeck.generateRandom(ghostName);
+			this.spawnNecklace((WorldServer) world, pos, necklaceStack);
+		} else {
+			this.spawnXP((WorldServer) world, pos);
+		}
 
-    public void spawnNecklace(WorldServer world, BlockPos pos, ItemStack necklaceStack) {
-        double itemEntityX = pos.getX() + 0.5d;
-        double itemEntityY = pos.getY() + 1.0d;
-        double itemEntityZ = pos.getZ() + 0.5d;
+		int toDrain = currentWaterLevel - 333 < 300 ? te.getTank().getFluidAmount() : 333;
+		te.getTank().drain(toDrain, true);	
 
-        EntityItem itemEntity = new EntityItem(world, itemEntityX, itemEntityY, itemEntityZ, necklaceStack);
+		return true;
+	}
 
-        int particleCount = 100;
+	@Override
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+		if(world.isRemote) return; 
+		if (entity instanceof EntityItem) {
+			EntityItem item = (EntityItem) entity;
+			ItemStack stack = item.getItem();
+			if (handleSkull(world, pos, stack)) {
+				entity.setDead();
+			}
+		}
+	}
 
-        world.playSound(null,
-                pos.getX(), pos.getY(), pos.getZ(),
-                SoundEvents.ENTITY_PLAYER_LEVELUP,
-                SoundCategory.MASTER,
-                1.0f, (float) Math.random());
-        world.spawnParticle(EnumParticleTypes.SPELL_WITCH, false,
-                pos.getX() + .5d, pos.getY() + .5d, pos.getZ() + .5d,
-                particleCount,
-                0, 0, 0,
-                Math.PI);
-        world.spawnEntity(itemEntity);
-    }
+	public void spawnNecklace(WorldServer world, BlockPos pos, ItemStack necklaceStack) {
+		double itemEntityX = pos.getX() + 0.5d;
+		double itemEntityY = pos.getY() + 1.0d;
+		double itemEntityZ = pos.getZ() + 0.5d;
 
-    @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return InitBlock.ITEM_INFUSION_CAULDRON;
-    }
+		EntityItem itemEntity = new EntityItem(world, itemEntityX, itemEntityY, itemEntityZ, necklaceStack);
 
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        super.breakBlock(worldIn, pos, state);
-        worldIn.removeTileEntity(pos);
-    }
+		int particleCount = 100;
 
-    @Override
-    public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
-        super.eventReceived(state, worldIn, pos, id, param);
+		world.playSound(null, 
+				pos.getX(), pos.getY(), pos.getZ(), 
+				SoundEvents.ENTITY_PLAYER_LEVELUP, 
+				SoundCategory.MASTER, 1.0f, (float) Math.random());
+		world.spawnParticle(EnumParticleTypes.SPELL_WITCH, false, 
+				pos.getX() + .5d, pos.getY() + .5d, pos.getZ() + .5d, 
+				particleCount, 0, 0, 0, Math.PI);
+		world.spawnEntity(itemEntity);
+	}
 
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-        return tileentity != null && tileentity.receiveClientEvent(id, param);
-    }
+	public void spawnXP(WorldServer world, BlockPos pos) {
+		double xpEntityX = pos.getX() + 0.5d;
+		double xpEntityY = pos.getY() + 1.0d;
+		double xpEntityZ = pos.getZ() + 0.5d;
 
-    @Nullable
-    @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileInfusionCauldron();
-    }
+		EntityXPOrb entityXPOrb = new EntityXPOrb(world, xpEntityX, xpEntityY, xpEntityZ, Randomizer.randomInt(10, 200));
+
+		int particleCount = 300;
+
+		world.playSound(null, 
+				pos.getX(), pos.getY(), pos.getZ(), 
+				SoundEvents.ENTITY_ITEM_BREAK, 
+				SoundCategory.MASTER, 1.0f, (float) Math.random());
+		world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, false, 
+				pos.getX() + .5d, pos.getY() + .5d, pos.getZ() + .5d, 
+				particleCount, 0, 0, 0, 0.1d);
+		world.spawnEntity(entityXPOrb);
+	}
+
+	@Override
+	public boolean hasTileEntity(IBlockState state) {
+		return true;
+	}
+
+	@Override
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		return new TileEntityInfusionCauldron();
+	}
 
 }

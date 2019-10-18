@@ -1,3 +1,4 @@
+
 package kaptainwutax.itraders.init;
 
 import kaptainwutax.itraders.Traders;
