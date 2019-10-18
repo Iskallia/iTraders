@@ -14,6 +14,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -21,6 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -44,27 +46,20 @@ public class ItemSkullNeck extends Item implements IBauble {
 
         stackNBT.setString("HeadOwner", headOwner);
 
-        int numPositiveEffects = Randomizer.randomInt(1, 3);
-        int numNegativeEffects = Randomizer.randomInt(0, 1);
+        int numEffects = Randomizer.randomInt(
+                InitConfig.CONFIG_SKULL_NECKLACE.NECKLACE_EFFECT_COUNT.getMin(),
+                InitConfig.CONFIG_SKULL_NECKLACE.NECKLACE_EFFECT_COUNT.getMax()
+        );
 
         NBTTagList potionEffects = new NBTTagList();
 
-        for (PotionEffectDefinition positiveEffect : InitConfig.CONFIG_SKULL_NECKLACE.getRandomPositive(numPositiveEffects)) {
-            NBTTagCompound effect = new NBTTagCompound();
-            effect.setString("name", positiveEffect.getName());
-            effect.setInteger("amplifier", Randomizer.randomInt(
-                    positiveEffect.getMinAmplifier(),
-                    positiveEffect.getMaxAmplifier()));
-            potionEffects.appendTag(effect);
-        }
-
-        for (PotionEffectDefinition negativeEffect : InitConfig.CONFIG_SKULL_NECKLACE.getRandomNegative(numNegativeEffects)) {
-            NBTTagCompound effect = new NBTTagCompound();
-            effect.setString("name", negativeEffect.getName());
-            effect.setInteger("amplifier", Randomizer.randomInt(
-                    negativeEffect.getMinAmplifier(),
-                    negativeEffect.getMaxAmplifier()));
-            potionEffects.appendTag(effect);
+        for (PotionEffectDefinition effect : InitConfig.CONFIG_SKULL_NECKLACE.getRandomEffect(numEffects)) {
+            NBTTagCompound effectNBT = new NBTTagCompound();
+            effectNBT.setString("name", effect.getName());
+            effectNBT.setInteger("amplifier", Randomizer.randomInt(
+                    effect.getAmplifier().getMin(),
+                    effect.getAmplifier().getMax()));
+            potionEffects.appendTag(effectNBT);
         }
 
         stackNBT.setTag("PotionEffects", potionEffects);
@@ -129,6 +124,7 @@ public class ItemSkullNeck extends Item implements IBauble {
         this.setRegistryName(Traders.getResource(name));
         this.setCreativeTab(InitItem.ITRADERS_TAB);
         this.setMaxStackSize(1);
+        this.setMaxDamage(36000);
     }
 
     @Override
@@ -142,15 +138,31 @@ public class ItemSkullNeck extends Item implements IBauble {
 
         EntityMiniGhost ghost = GHOST_MAP.get(player.getUniqueID());
 
-        if (ghost == null) return;
+        if (ghost != null) {
+            ghost.setPositionAndRotation(
+                    player.posX,
+                    player.posY + 1.60f,
+                    player.posZ,
+                    ghost.rotationYaw,
+                    player.rotationPitch
+            );
+        }
 
-        ghost.setPositionAndRotation(
-                player.posX,
-                player.posY + 1.60f,
-                player.posZ,
-                ghost.rotationYaw,
-                player.rotationPitch
-        );
+        int remainingDamage = itemstack.getMaxDamage() - itemstack.getItemDamage();
+
+        if (remainingDamage != 1) {
+            if (remainingDamage == 2) {
+                List<PotionEffect> potionEffects = getPotionEffects(itemstack);
+                if (potionEffects != null) removeEffectsFrom(player, potionEffects);
+                player.world.playSound(null,
+                        player.posX, player.posY, player.posZ,
+                        SoundEvents.ENTITY_ITEM_BREAK,
+                        SoundCategory.MASTER,
+                        1.0f, (float) Math.random());
+            }
+
+            itemstack.damageItem(1, player);
+        }
     }
 
     @Override
@@ -158,10 +170,10 @@ public class ItemSkullNeck extends Item implements IBauble {
         if (!player.world.isRemote) {
             List<PotionEffect> potionEffects = getPotionEffects(itemstack);
 
-            if (potionEffects != null) {
-                for (PotionEffect potionEffect : potionEffects) {
-                    player.addPotionEffect(potionEffect);
-                }
+            int remainingDamage = itemstack.getMaxDamage() - itemstack.getItemDamage();
+
+            if (potionEffects != null && remainingDamage != 1) {
+                addEffectsTo(player, potionEffects);
             }
 
             createMiniGhostFor(player, itemstack);
@@ -174,12 +186,22 @@ public class ItemSkullNeck extends Item implements IBauble {
             List<PotionEffect> potionEffects = getPotionEffects(itemstack);
 
             if (potionEffects != null) {
-                for (PotionEffect potionEffect : potionEffects) {
-                    player.removePotionEffect(potionEffect.getPotion());
-                }
+                removeEffectsFrom(player, potionEffects);
             }
 
             removeMiniGhostOf(player);
+        }
+    }
+
+    public void addEffectsTo(EntityLivingBase player, List<PotionEffect> potionEffects) {
+        for (PotionEffect potionEffect : potionEffects) {
+            player.addPotionEffect(potionEffect);
+        }
+    }
+
+    public void removeEffectsFrom(EntityLivingBase player, List<PotionEffect> potionEffects) {
+        for (PotionEffect potionEffect : potionEffects) {
+            player.removePotionEffect(potionEffect.getPotion());
         }
     }
 
@@ -208,6 +230,14 @@ public class ItemSkullNeck extends Item implements IBauble {
             }
         }
 
+        int remainingDamage = stack.getMaxDamage() - stack.getItemDamage();
+
+        tooltip.add("");
+        tooltip.add(remainingDamage == 1
+                ? TextFormatting.RED + "Magic powers drained"
+                : TextFormatting.BLUE + "Magic power: " + remainingDamage + " ticks");
+
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
+
 }

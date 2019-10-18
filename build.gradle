@@ -17,7 +17,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = '0.3.2'
+version = '0.3.6'
 group = 'kaptainwutax' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'itraders'
 
@@ -54,7 +54,8 @@ jar.manifest.attributes(
 repositories {
     mavenCentral()
     maven { url = 'https://repo.spongepowered.org/maven' }
-    maven { url 'https://jitpack.io' }
+    maven { url 'https://maven.thiakil.com' }
+    maven { url 'https://maven.hellfiredev.net/' }
 }
 
 dependencies {
@@ -78,7 +79,8 @@ dependencies {
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    implementation 'com.github.Azanor:Baubles:master-SNAPSHOT'
+    implementation 'com.azanor.baubles:Baubles:1.12-1.5.2'
+    implementation 'hellfirepvp.astralsorcery:astralsorcery:1.12.2-1.10.20-v152'
 
     compile('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
         exclude module: 'asm-commons'

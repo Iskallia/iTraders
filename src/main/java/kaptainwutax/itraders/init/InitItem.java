@@ -4,7 +4,6 @@ import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.item.*;
 import kaptainwutax.itraders.tab.CreativeTabsITraders;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class InitItem {
@@ -22,8 +21,7 @@ public class InitItem {
 	public static ItemSpawnEggMiner SPAWN_EGG_MINER = new ItemSpawnEggMiner("spawn_egg_miner");
 	public static ItemEggPouch EGG_POUCH = new ItemEggPouch("egg_pouch");
 	public static ItemSkullNeck SKULL_NECKLACE = new ItemSkullNeck("skull_neck");
-
-	public static ItemBlock ITEM_GRAVE_STONE = new ItemBlock(InitBlock.GRAVE_STONE);
+	public static ItemMagicOreDust MAGIC_ORE_DUST = new ItemMagicOreDust("magic_ore_dust");
 	
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		registerItem(BIT_100, registry);
@@ -35,22 +33,12 @@ public class InitItem {
 		registerItem(SPAWN_EGG_FIGHTER, registry);
 		registerItem(SPAWN_EGG_MINER, registry);
 		registerItem(EGG_POUCH, registry);
-		
-		//Wtf? If I remove this it NPEs. 
-		ITEM_GRAVE_STONE = new ItemBlock(InitBlock.GRAVE_STONE);
-		
-		registerItemBlock(ITEM_GRAVE_STONE, registry);
 		registerItem(SKULL_NECKLACE, registry);
+		registerItem(MAGIC_ORE_DUST, registry);
 	}
 
 	private static void registerItem(Item item, IForgeRegistry<Item> registry) {
 		registry.register(item);
-	}
-
-	private static void registerItemBlock(ItemBlock itemBlock, IForgeRegistry<Item> registry) {
-		itemBlock.setRegistryName(itemBlock.getBlock().getRegistryName());
-		itemBlock.setUnlocalizedName(itemBlock.getBlock().getUnlocalizedName());
-		registry.register(itemBlock);
 	}
 
 }
