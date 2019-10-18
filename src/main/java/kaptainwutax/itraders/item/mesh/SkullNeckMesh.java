@@ -16,8 +16,8 @@ public class SkullNeckMesh extends ItemMesh {
 
     @Override
     public ModelResourceLocation getModelLocation(ItemStack stack) {
-        int remainingDamage = stack.getMaxDamage() - stack.getItemDamage();
-        return remainingDamage > 1 ? meshes[0] : meshes[1];
+        return ((ItemSkullNeck) item).getMagicPower(stack) == 0
+                ? meshes[1] : meshes[0];
     }
 
 }

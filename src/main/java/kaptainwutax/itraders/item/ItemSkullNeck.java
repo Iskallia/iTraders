@@ -3,7 +3,6 @@ package kaptainwutax.itraders.item;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.config.ConfigSkullNecklace;
 import kaptainwutax.itraders.config.definition.PotionEffectDefinition;
 import kaptainwutax.itraders.entity.EntityMiniGhost;
 import kaptainwutax.itraders.init.InitConfig;
@@ -25,6 +24,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -32,6 +32,7 @@ import java.util.*;
 /*
  * NBT: {
  *     HeadOwner: "iGoodie",
+ *     MagicPower: 1234 (integer),
  *     PotionEffects: [
  *          { name:"mining_fatigue", amplifier:5 },
  *          { name:"haste", amplifier:1 }
@@ -124,7 +125,7 @@ public class ItemSkullNeck extends Item implements IBauble {
         this.setRegistryName(Traders.getResource(name));
         this.setCreativeTab(InitItem.ITRADERS_TAB);
         this.setMaxStackSize(1);
-        this.setMaxDamage(36000);
+        this.setMaxDamage(100); // Will act like the percentage value
     }
 
     @Override
@@ -148,21 +149,11 @@ public class ItemSkullNeck extends Item implements IBauble {
             );
         }
 
-        int remainingDamage = itemstack.getMaxDamage() - itemstack.getItemDamage();
+        boolean drained = consumeMagicPower(itemstack, 1);
+        if (drained) onMagicPowerDrained(itemstack, player);
 
-        if (remainingDamage != 1) {
-            if (remainingDamage == 2) {
-                List<PotionEffect> potionEffects = getPotionEffects(itemstack);
-                if (potionEffects != null) removeEffectsFrom(player, potionEffects);
-                player.world.playSound(null,
-                        player.posX, player.posY, player.posZ,
-                        SoundEvents.ENTITY_ITEM_BREAK,
-                        SoundCategory.MASTER,
-                        1.0f, (float) Math.random());
-            }
-
-            itemstack.damageItem(1, player);
-        }
+        int damagePercent = 100 - (int) (100 * (getMagicPower(itemstack) / 36_000f));
+        itemstack.setItemDamage(damagePercent);
     }
 
     @Override
@@ -170,9 +161,7 @@ public class ItemSkullNeck extends Item implements IBauble {
         if (!player.world.isRemote) {
             List<PotionEffect> potionEffects = getPotionEffects(itemstack);
 
-            int remainingDamage = itemstack.getMaxDamage() - itemstack.getItemDamage();
-
-            if (potionEffects != null && remainingDamage != 1) {
+            if (potionEffects != null && getMagicPower(itemstack) != 0) {
                 addEffectsTo(player, potionEffects);
             }
 
@@ -191,6 +180,16 @@ public class ItemSkullNeck extends Item implements IBauble {
 
             removeMiniGhostOf(player);
         }
+    }
+
+    public void onMagicPowerDrained(ItemStack stack, EntityLivingBase player) {
+        List<PotionEffect> potionEffects = getPotionEffects(stack);
+        if (potionEffects != null) removeEffectsFrom(player, potionEffects);
+        player.world.playSound(null,
+                player.posX, player.posY, player.posZ,
+                SoundEvents.ENTITY_ITEM_BREAK,
+                SoundCategory.MASTER,
+                1.0f, (float) Math.random());
     }
 
     public void addEffectsTo(EntityLivingBase player, List<PotionEffect> potionEffects) {
@@ -230,14 +229,40 @@ public class ItemSkullNeck extends Item implements IBauble {
             }
         }
 
-        int remainingDamage = stack.getMaxDamage() - stack.getItemDamage();
+        int magicPower = getMagicPower(stack);
 
         tooltip.add("");
-        tooltip.add(remainingDamage == 1
+        tooltip.add(magicPower == 0
                 ? TextFormatting.RED + "Magic powers drained"
-                : TextFormatting.BLUE + "Magic power: " + remainingDamage + " ticks");
+                : TextFormatting.BLUE + "Magic power: " + magicPower + " ticks");
 
         super.addInformation(stack, worldIn, tooltip, flagIn);
+    }
+
+    public int getMagicPower(ItemStack stack) {
+        NBTTagCompound stackNBT = stack.getTagCompound();
+
+        if (stackNBT == null || !stackNBT.hasKey("MagicPower", Constants.NBT.TAG_INT))
+            return -1;
+
+        return stackNBT.getInteger("MagicPower");
+    }
+
+    public boolean consumeMagicPower(ItemStack stack, int amount) {
+        NBTTagCompound stackNBT = stack.getTagCompound();
+        int magicPower = getMagicPower(stack);
+
+        if (stackNBT == null || magicPower == -1) {
+            stack.setTagCompound(new NBTTagCompound());
+            stackNBT = stack.getTagCompound();
+        }
+
+        int remainingMagicPower = Math.max(0, magicPower - amount);
+
+        stackNBT.setInteger("MagicPower", remainingMagicPower);
+
+        // Changed to 0 from a non-0
+        return magicPower != 0 && remainingMagicPower == 0;
     }
 
 }
