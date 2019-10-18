@@ -103,7 +103,7 @@ public class ItemSkullNeck extends Item implements IBauble {
 
     public static EntityMiniGhost createMiniGhostFor(EntityLivingBase player, ItemStack stack) {
         EntityMiniGhost ghost = ((EntityMiniGhost) EntityList.createEntityByIDFromName(
-                Traders.getResource("mini_player"), player.world));
+                Traders.getResource("mini_ghost"), player.world));
 
         assert ghost != null;
 

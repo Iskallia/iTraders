@@ -17,7 +17,7 @@ public class Traders {
 
 	public static final String MOD_ID = "itraders";
 	public static final String MOD_NAME = "iTraders";
-	public static final String MOD_VERSION = "0.3.0";
+	public static final String MOD_VERSION = "0.3.1";
 
 	public static Traders getInstance() {
 		return INSTANCE;
