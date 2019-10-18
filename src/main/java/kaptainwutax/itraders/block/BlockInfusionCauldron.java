@@ -65,6 +65,9 @@ public class BlockInfusionCauldron extends BlockCauldron {
         if (!skullOwnerNBT.hasKey("Name", Constants.NBT.TAG_STRING))
             return true;
 
+        if (!player.isCreative())
+            heldStack.shrink(1);
+
         if (Math.random() <= InitConfig.CONFIG_SKULL_NECKLACE.NECKLACE_CREATION_RATE) {
             String ghostName = skullOwnerNBT.getString("Name");
             ItemStack necklaceStack = ItemSkullNeck.generateRandom(ghostName);
