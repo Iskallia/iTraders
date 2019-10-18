@@ -13,8 +13,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.awt.*;
 
 /**
- * This class is part of the Astral Sorcery Mod
- * The complete source code for this mod can be found on github.
  * Class: EntityItemMagicOreDust
  * Created by HellFirePvP
  * Date: 18.10.2019 / 20:59
