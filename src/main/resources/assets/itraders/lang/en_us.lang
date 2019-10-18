@@ -12,4 +12,5 @@ item.egg_pouch.name=Egg Pouch
 tile.grave_stone.name=Grave Stone
 item.skull_neck.name=Skull Necklace
 tile.infusion_cauldron.name=Infusion Cauldron
+item.magic_ore_dust.name=Magic Ore Dust
 itemGroup.itraders=iTraders

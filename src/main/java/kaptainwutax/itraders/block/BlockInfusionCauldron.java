@@ -6,16 +6,10 @@ import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.init.InitItem;
 import kaptainwutax.itraders.item.ItemSkullNeck;
 import kaptainwutax.itraders.tile.TileInfusionCauldron;
-import kaptainwutax.itraders.util.Randomizer;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockAnvil;
 import net.minecraft.block.BlockCauldron;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.command.CommandParticle;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -125,7 +119,7 @@ public class BlockInfusionCauldron extends BlockCauldron implements ITileEntityP
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return InitBlock.INFUSION_CAULDRON_ITEM;
+        return InitBlock.ITEM_INFUSION_CAULDRON;
     }
 
     @Override

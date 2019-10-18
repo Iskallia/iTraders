@@ -19,11 +19,12 @@ public class InitModel {
 		registerSimpleItemModel(InitItem.BIT_5000, 0);
 		registerSimpleItemModel(InitItem.BIT_10000, 0);
 		registerSimpleItemModel(InitItem.EGG_POUCH, 0);
-		registerSimpleItemModel(InitItem.ITEM_GRAVE_STONE, 0);	
 		registerSimpleItemModel(InitItem.SKULL_NECKLACE, 0);
+		registerSimpleItemModel(InitItem.MAGIC_ORE_DUST, 0);
+		registerSimpleItemModel(InitBlock.ITEM_GRAVE_STONE, 0);
+		registerSimpleItemModel(InitBlock.ITEM_INFUSION_CAULDRON, 0);
 
 		registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
-		registerItemBlockModel(InitBlock.INFUSION_CAULDRON_ITEM, 0);
 
 		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_TRADER, new TraderEggMesh(InitItem.SPAWN_EGG_TRADER));
 		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_FIGHTER, new FighterEggMesh(InitItem.SPAWN_EGG_FIGHTER));
@@ -38,11 +39,6 @@ public class InitModel {
 	private static void registerBlockModel(Block block, int metadata) {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), metadata,
 				new ModelResourceLocation(Traders.getResource(block.getUnlocalizedName().substring(5)), "inventory"));
-	}
-
-	private static void registerItemBlockModel(ItemBlock itemBlock, int metadata) {
-		ModelLoader.setCustomModelResourceLocation(itemBlock, metadata,
-				new ModelResourceLocation(itemBlock.getRegistryName(), "inventory"));
 	}
 
 }
