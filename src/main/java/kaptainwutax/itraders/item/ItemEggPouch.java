@@ -55,11 +55,11 @@ public class ItemEggPouch extends Item {
 						sb.append(TextFormatting.GRAY + "(" + months + "), I choose you!");
 
 					player.sendStatusMessage(new TextComponentString(sb.toString()), true);
-
-					world.playSound(null, player.getPosition(),
-							SoundEvents.BLOCK_ANVIL_LAND,
-							SoundCategory.PLAYERS, 1.0f, 0.0f);
 				}
+				
+				world.playSound(null, player.getPosition(),
+						SoundEvents.BLOCK_NOTE_BELL,
+						SoundCategory.PLAYERS, 1.0f, 0.2f * (this.itemRand.nextFloat() - this.itemRand.nextFloat()) + 0.6f);
 
 				return eggItem.onItemUse(itemStack, player, world, pos, hand, facing, hitX, hitY, hitZ);
 			}
