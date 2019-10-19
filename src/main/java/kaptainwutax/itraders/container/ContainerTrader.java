@@ -49,14 +49,18 @@ public class ContainerTrader extends ContainerMerchant {
     private void cramStack(int slotId, ItemStack wantedStack, boolean shift) {
         InventoryPlayer playerInventory = this.player.inventory;
         ItemStack currentStack = this.inventorySlots.get(slotId).getStack();
-
+        int currentCount = ItemHandlerHelper.canItemStacksStackRelaxed(currentStack, wantedStack) 
+        		? currentStack.getCount() : 0;
+        
         //If the current slot already has items in it, put them back in the player's inventory.
         if(!currentStack.isEmpty()) {
         	//If there's no space in the player's inventory, stop and do nothing.
         	if(!playerInventory.addItemStackToInventory(currentStack))return;
         }
         
-        if(shift) {
+        wantedStack.setCount(wantedStack.getCount() + currentCount);
+        
+        if(shift || wantedStack.getCount() > wantedStack.getMaxStackSize()) {
         	wantedStack.setCount(wantedStack.getMaxStackSize());
         }
         
