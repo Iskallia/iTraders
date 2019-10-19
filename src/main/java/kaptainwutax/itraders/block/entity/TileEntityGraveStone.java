@@ -1,7 +1,8 @@
 package kaptainwutax.itraders.block.entity;
 
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 
@@ -9,7 +10,7 @@ public class TileEntityGraveStone extends TileEntity {
 
 	private String name = null;
 	private int months = -1;
-	private long time = -1;
+	private int blocksMined = -1;
 	
 	public TileEntityGraveStone() {
 		
@@ -17,9 +18,18 @@ public class TileEntityGraveStone extends TileEntity {
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setString("Name", this.name);
-		compound.setInteger("Months", this.months);
-		compound.setLong("Time", this.time);
+		if(this.name != null) {
+			compound.setString("Name", this.name);
+		}
+		
+		if(this.months != -1) {
+			compound.setInteger("Months", this.months);
+		}
+		
+		if(this.blocksMined != -1) {
+			compound.setInteger("BlocksMined", this.blocksMined);
+		}
+		
 		return super.writeToNBT(compound);
 	}
 	
@@ -33,8 +43,8 @@ public class TileEntityGraveStone extends TileEntity {
 			this.months = compound.getInteger("Months");
 		}
 		
-		if(compound.hasKey("Time", Constants.NBT.TAG_LONG)) {
-			this.time = compound.getLong("Time");
+		if(compound.hasKey("BlocksMined", Constants.NBT.TAG_INT)) {
+			this.blocksMined = compound.getInteger("BlocksMined");
 		}
 		
 		super.readFromNBT(compound);
@@ -43,12 +53,47 @@ public class TileEntityGraveStone extends TileEntity {
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound nbt = super.getUpdateTag();
+		
+		if(this.name != null) {
+			nbt.setString("Name", this.name);
+		}
+		
+		if(this.months != -1) {
+			nbt.setInteger("Months", this.months);
+		}
+		
+		if(this.blocksMined != -1) {
+			nbt.setInteger("BlocksMined", this.blocksMined);
+		}
+		
 		return nbt;
 	}
 	
 	@Override
 	public void handleUpdateTag(NBTTagCompound tag) {
 		super.handleUpdateTag(tag);
+		
+		if(tag.hasKey("Name", Constants.NBT.TAG_STRING)) {
+			this.name = tag.getString("Name");
+		}
+		
+		if(tag.hasKey("Months", Constants.NBT.TAG_INT)) {
+			this.months = tag.getInteger("Months");
+		}
+		
+		if(tag.hasKey("BlocksMined", Constants.NBT.TAG_INT)) {
+			this.blocksMined = tag.getInteger("BlocksMined");
+		}
+	}
+	
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket(){	    
+	    return new SPacketUpdateTileEntity(getPos(), 1, this.getUpdateTag());
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
+	    this.handleUpdateTag(pkt.getNbtCompound());
 	}
 	
 	public String getName() {
@@ -59,8 +104,8 @@ public class TileEntityGraveStone extends TileEntity {
 		return this.months;
 	}
 	
-	public long getTime() {
-		return this.time;
+	public int getBlocksMined() {
+		return this.blocksMined;
 	}
 	
 	public void setName(String name) {
@@ -73,18 +118,9 @@ public class TileEntityGraveStone extends TileEntity {
 		this.markDirty();
 	}
 	
-	public void setTime(long time) {
-		this.time = time;
+	public void setBlocksMined(int blockMined) {
+		this.blocksMined = blockMined;
 		this.markDirty();
-	}
-	
-	public static class Renderer extends TileEntitySpecialRenderer<TileEntityGraveStone> {
-		
-		@Override
-		public void render(TileEntityGraveStone te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-			super.render(te, x, y, z, partialTicks, destroyStage, alpha);
-		}
-		
 	}
 	
 }

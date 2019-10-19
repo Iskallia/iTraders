@@ -109,8 +109,8 @@ public class BlockGraveStone extends Block {
             	graveStoneTE.setMonths(nbt.getInteger("Months"));
             } 
             
-            if(nbt != null && nbt.hasKey("Time", Constants.NBT.TAG_LONG)) {
-            	graveStoneTE.setTime(nbt.getLong("Time"));
+            if(nbt != null && nbt.hasKey("BlocksMined", Constants.NBT.TAG_INT)) {
+            	graveStoneTE.setBlocksMined(nbt.getInteger("BlocksMined"));
             } 
     	}
     }
@@ -125,19 +125,20 @@ public class BlockGraveStone extends Block {
         	ItemStack dropStack = new ItemStack(InitBlock.ITEM_GRAVE_STONE, 1);
         	NBTTagCompound nbt = new NBTTagCompound();
         	
-        	if(graveStoneTE.getName() != null) {
-            	dropStack.setStackDisplayName(graveStoneTE.getName());
-        	}
-        	
         	if(graveStoneTE.getMonths() != -1) {
         		nbt.setInteger("Months", graveStoneTE.getMonths());
         	}
         	
-        	if(graveStoneTE.getTime() != -1) {
-        		nbt.setLong("Time", graveStoneTE.getTime());
+        	if(graveStoneTE.getBlocksMined() != -1) {
+        		nbt.setInteger("BlocksMined", graveStoneTE.getBlocksMined());
         	}
-              	
-        	dropStack.setTagCompound(nbt);       	
+        	
+        	dropStack.setTagCompound(nbt);     	
+        	
+        	if(graveStoneTE.getName() != null) {
+            	dropStack.setStackDisplayName(graveStoneTE.getName());
+        	}
+        	
     		Block.spawnAsEntity(world, pos, dropStack);
     	} 	
 

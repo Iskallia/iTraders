@@ -3,6 +3,7 @@ package kaptainwutax.itraders.event;
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.command.CommandITraders;
 import kaptainwutax.itraders.gui.GuiHandler;
+import kaptainwutax.itraders.init.InitBlock;
 import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.init.InitEntity;
 import kaptainwutax.itraders.init.InitPacket;
@@ -26,6 +27,7 @@ public class EventMod {
 
 		if (event.getSide() == Side.CLIENT) {
 			InitEntity.registerEntityRenderers();
+			InitBlock.registerTileEntityRenderers();
 		}
 	}
 
