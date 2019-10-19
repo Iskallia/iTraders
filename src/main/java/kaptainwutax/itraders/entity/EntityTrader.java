@@ -10,8 +10,11 @@ import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.util.Trade;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
@@ -27,6 +30,11 @@ public class EntityTrader extends EntityVillager {
 		this.setCustomNameTag(this.lastName);
 	}
 
+	//Stops traders from restocking.
+    protected void updateAITasks() {
+    	return;
+    }
+	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -72,7 +80,7 @@ public class EntityTrader extends EntityVillager {
 			recipeList.add(new MerchantRecipe(trade.getBuy() == null ? ItemStack.EMPTY : trade.getBuy().toStack(),
 					trade.getExtra() == null ? ItemStack.EMPTY : trade.getExtra().toStack(),
 					trade.getSell() == null ? ItemStack.EMPTY : trade.getSell().toStack(), 0,
-					this.rand.nextInt(13) + 3));
+					this.rand.nextInt(38) + 3));
 		}
 
 		Field tradesField = EntityVillager.class.getDeclaredFields()[7];
