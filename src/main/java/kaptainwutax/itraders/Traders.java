@@ -21,10 +21,14 @@ public class Traders {
 
 	public static final String MOD_ID = "itraders";
 	public static final String MOD_NAME = "iTraders";
-	public static final String MOD_VERSION = "0.3.6";
+	public static final String MOD_VERSION = "0.3.7";
 
 	public static Traders getInstance() {
 		return INSTANCE;
+	}	
+
+	public static ResourceLocation getResource(String name) {
+		return new ResourceLocation(Traders.MOD_ID, name);
 	}
 
 	@Mod.EventHandler
@@ -50,10 +54,6 @@ public class Traders {
 	@Mod.EventHandler
 	public void onServerStart(FMLServerStartingEvent event) {
 		EventMod.onServerStart(event);
-	}
-
-	public static ResourceLocation getResource(String name) {
-		return new ResourceLocation(Traders.MOD_ID, name);
 	}
 
 }
