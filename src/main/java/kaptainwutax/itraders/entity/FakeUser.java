@@ -12,10 +12,5 @@ public class FakeUser extends FakePlayer {
 		super(world, name);
 		this.connection = new FakeServerHandler(this);
 	}
-	
-	@Override
-	public void resetCooldown() {
-		this.ticksSinceLastSwing = 20000;
-	}
 
 }
