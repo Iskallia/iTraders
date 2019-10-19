@@ -168,7 +168,9 @@ public class EntityMiner extends EntityCreature {
 			BlockPos pos = this.getPosition().up(i).offset(this.miningDirection);
 			
 			if(!this.inAirOrLiquid(pos)) {
-				this.digManager.onPlayerDamageBlock(pos, EnumFacing.NORTH, () -> {this.blocksMined++;});			
+				this.digManager.onPlayerDamageBlock(pos, EnumFacing.NORTH, () -> {
+					this.blocksMined++;
+				});			
 				this.swingArm(EnumHand.MAIN_HAND);
 				mining = true;
 				break;
@@ -229,7 +231,7 @@ public class EntityMiner extends EntityCreature {
 		compound.setLong("StartMiningPosition", this.startMiningPosition.toLong());
 		compound.setInteger("MiningDistance", this.miningDistance);
 		compound.setInteger("TicksExisted", this.ticksExisted);
-		compound.setInteger("BlocksMined", this.months);
+		compound.setInteger("BlocksMined", this.blocksMined);
 		
 		NBTTagCompound subData = new NBTTagCompound();
 		subData.setInteger("Months", this.months);
