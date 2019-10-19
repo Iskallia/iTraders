@@ -16,8 +16,8 @@ public class SkullNeckMesh extends ItemMesh {
 
     @Override
     public ModelResourceLocation getModelLocation(ItemStack stack) {
-        return ((ItemSkullNeck) item).getMagicPower(stack) == 0
-                ? meshes[1] : meshes[0];
+        return ((ItemSkullNeck) item).getMagicPower(stack) > 0
+                ? meshes[0] : meshes[1];
     }
 
 }
