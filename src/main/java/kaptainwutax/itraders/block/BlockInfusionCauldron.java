@@ -2,6 +2,7 @@ package kaptainwutax.itraders.block;
 
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.block.entity.TileEntityInfusionCauldron;
+import kaptainwutax.itraders.init.InitBlock;
 import kaptainwutax.itraders.init.InitItem;
 import kaptainwutax.itraders.item.ItemSkullNeck;
 import net.minecraft.block.BlockCauldron;
@@ -20,6 +21,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
@@ -152,4 +154,9 @@ public class BlockInfusionCauldron extends BlockCauldron {
 		return new TileEntityInfusionCauldron();
 	}
 
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		return new ItemStack(InitBlock.ITEM_INFUSION_CAULDRON, 1);
+	}
+	
 }
