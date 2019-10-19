@@ -8,6 +8,10 @@ import kaptainwutax.itraders.SkinProfile;
 import kaptainwutax.itraders.block.entity.TileEntityGraveStone;
 import kaptainwutax.itraders.init.InitBlock;
 import kaptainwutax.itraders.net.FakeDigManager;
+import net.minecraft.block.BlockTorch;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.IEntityLivingData;
@@ -29,6 +33,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -90,26 +95,13 @@ public class EntityMiner extends EntityCreature {
 	}
 	
 	@Override
-	protected void collideWithEntity(Entity entity) {
-		entity.onCollideWithPlayer(this.fakePlayer);
+	protected boolean canDespawn() {
+		return false;
 	}
 	
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		
-        List<Entity> xpOrbs = this.world.getEntitiesInAABBexcluding(
-        		this, this.getEntityBoundingBox().grow(0.0f, 0.0f, 0.0f), 
-        		entity -> {return entity instanceof EntityXPOrb;}
-        	);
-
-        for(int i = 0; i < xpOrbs.size(); ++i) {
-            Entity entity = xpOrbs.get(i);
-
-            if(!entity.isDead && entity instanceof EntityXPOrb) {
-                this.collideWithEntity(entity);
-            }
-        }
 	}
 	
 	@Override
@@ -129,7 +121,20 @@ public class EntityMiner extends EntityCreature {
 			this.handleMining();
 		}	
 		
-		this.updateArmSwingProgress();
+		this.updateArmSwingProgress();		
+		
+        List<Entity> xpOrbs = this.world.getEntitiesInAABBexcluding(
+        		this, this.getEntityBoundingBox().grow(1.2f, 1.0f, 1.2f), 
+        		entity -> {return entity instanceof EntityXPOrb;}
+        	);
+
+        for(int i = 0; i < xpOrbs.size(); ++i) {
+            Entity entity = xpOrbs.get(i);
+
+            if(!entity.isDead) {
+            	entity.setDead();
+            }
+        }
 	}
 	
 	private void handleMining() {
@@ -162,7 +167,7 @@ public class EntityMiner extends EntityCreature {
 		for(int i = 1; i >= 0; i--) {
 			BlockPos pos = this.getPosition().up(i).offset(this.miningDirection);
 			
-			if(!this.world.isAirBlock(pos)) {
+			if(!this.inAirOrLiquid(pos)) {
 				this.digManager.onPlayerDamageBlock(pos, EnumFacing.NORTH, () -> {this.blocksMined++;});			
 				this.swingArm(EnumHand.MAIN_HAND);
 				mining = true;
@@ -174,16 +179,18 @@ public class EntityMiner extends EntityCreature {
 			BlockPos target = this.getPosition().offset(this.miningDirection, 1);
 			this.navigator.setPath(this.navigator.getPathToPos(target), 0.5f);
 			
-			if(this.world.isAirBlock(target.down())) {
+			this.placeTorch(this.getPosition());
+			
+			if(this.inAirOrLiquid(target.down())) {
 		        for(int i = 0; i < this.minerInventory.getSlots(); i++) {
 		        	ItemStack stack = this.minerInventory.getStackInSlot(i).copy();
 		        	
 		        	if(!stack.isEmpty() && stack.getItem() == Item.getItemFromBlock(Blocks.COBBLESTONE)) {
 		        		this.world.setBlockState(target.down(), Blocks.COBBLESTONE.getDefaultState());
-		        		this.swingArm(EnumHand.OFF_HAND);
-		        		this.world.playSound(null, target.down(), SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0f, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.4F);
+		        		this.world.playSound(null, target.down(), SoundType.STONE.getPlaceSound(), SoundCategory.BLOCKS, SoundType.STONE.getVolume(), SoundType.STONE.getPitch());
 		        		stack.setCount(stack.getCount() - 1);
 		        		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, stack.copy());
+		        		this.swingArm(EnumHand.OFF_HAND);
 		        		this.minerInventory.setStackInSlot(i, stack);
 		        		break;
 		        	}
@@ -192,6 +199,24 @@ public class EntityMiner extends EntityCreature {
 		}			
 	}
 
+	private void placeTorch(BlockPos pos) {
+		int lightLevel = this.world.getLightFor(EnumSkyBlock.BLOCK, pos);
+
+		if(lightLevel <= 7 && this.world.isAirBlock(pos) && ((BlockTorch)Blocks.TORCH).canPlaceBlockAt(this.world, pos)) {
+    		this.world.setBlockState(pos, Blocks.TORCH.getDefaultState());
+    		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Item.getItemFromBlock(Blocks.TORCH)));
+    		this.swingArm(EnumHand.OFF_HAND);
+    		this.world.playSound(null, pos, SoundType.WOOD.getPlaceSound(), SoundCategory.BLOCKS, SoundType.WOOD.getVolume(), SoundType.WOOD.getPitch());
+		}
+	}
+
+	public boolean inAirOrLiquid(BlockPos pos) {
+		IBlockState state = this.world.getBlockState(pos);
+		return state.getMaterial() == Material.AIR 
+				|| state.getMaterial() == Material.WATER
+				|| state.getMaterial() == Material.LAVA;
+	}
+	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
