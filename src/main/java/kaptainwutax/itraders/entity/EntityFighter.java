@@ -68,10 +68,12 @@ public class EntityFighter extends EntityZombie {
 	public boolean canPickUpLoot() {
 		return true;
 	}
-
+	
 	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-		super.setEquipmentBasedOnDifficulty(difficulty);
+	protected boolean canEquipItem(ItemStack stack) {
+		EntityEquipmentSlot slot = getSlotForItemStack(stack);
+		if(slot == EntityEquipmentSlot.HEAD)return false;
+		return super.canEquipItem(stack);
 	}
 
 	@Override
