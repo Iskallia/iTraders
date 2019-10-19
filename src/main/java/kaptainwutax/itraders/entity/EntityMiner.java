@@ -5,6 +5,7 @@ import java.util.List;
 import com.mojang.authlib.GameProfile;
 
 import kaptainwutax.itraders.SkinProfile;
+import kaptainwutax.itraders.block.entity.TileEntityGraveStone;
 import kaptainwutax.itraders.init.InitBlock;
 import kaptainwutax.itraders.net.FakeDigManager;
 import net.minecraft.entity.Entity;
@@ -44,6 +45,8 @@ public class EntityMiner extends EntityCreature {
 	private ItemStackHandler minerInventory = new ItemStackHandler(3 * 9 - 2);
 	private BlockPos startMiningPosition;
 	private int miningDistance;
+	private int months;
+	private int blocksMined;
 	
 	public EntityMiner(World world) {
 		super(world);
@@ -109,16 +112,15 @@ public class EntityMiner extends EntityCreature {
 	
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
+		super.onUpdate();		
 		
-		String name = this.getCustomNameTag();
-
-		if(!lastName.equals(name)) {
-			if(this.world.isRemote) {
-				this.skin.updateSkin(name);
+		if(this.world.isRemote) {
+			String name = this.getCustomNameTag();
+	
+			if(!lastName.equals(name)) {			
+				this.skin.updateSkin(name);			
+				this.lastName = name;
 			}
-			
-			this.lastName = name;
 		}
 		
 		if(!world.isRemote) {    
@@ -159,7 +161,7 @@ public class EntityMiner extends EntityCreature {
 			BlockPos pos = this.getPosition().up(i).offset(this.miningDirection);
 			
 			if(!this.world.isAirBlock(pos)) {
-				this.digManager.onPlayerDamageBlock(pos, EnumFacing.NORTH);			
+				this.digManager.onPlayerDamageBlock(pos, EnumFacing.NORTH, () -> {this.blocksMined++;});			
 				this.swingArm(EnumHand.MAIN_HAND);
 				mining = true;
 				break;
@@ -183,6 +185,11 @@ public class EntityMiner extends EntityCreature {
 		compound.setLong("StartMiningPosition", this.startMiningPosition.toLong());
 		compound.setInteger("MiningDistance", this.miningDistance);
 		compound.setInteger("TicksExisted", this.ticksExisted);
+		compound.setInteger("BlocksMined", this.months);
+		
+		NBTTagCompound subData = new NBTTagCompound();
+		subData.setInteger("Months", this.months);
+		compound.setTag("SubData", subData);
 	}
 	
 	@Override
@@ -197,6 +204,8 @@ public class EntityMiner extends EntityCreature {
 		this.startMiningPosition = BlockPos.fromLong(compound.getLong("StartMiningPosition"));
 		this.miningDistance = compound.getInteger("MiningDistance");
 		this.ticksExisted = compound.getInteger("TicksExisted");
+		this.blocksMined = compound.getInteger("BlocksMined");
+		this.months = compound.getCompoundTag("SubData").getInteger("Months");
 		
 		this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, this.getHeldItemMainhand());	
 	}
@@ -217,8 +226,9 @@ public class EntityMiner extends EntityCreature {
 		if(!this.world.isRemote) {
 			this.digManager.clickBlock(BlockPos.ORIGIN, EnumFacing.DOWN);
 			
+			this.placeGraveStone();
+			
 			this.world.setBlockState(this.getPosition(), Blocks.CHEST.getDefaultState().withProperty(Blocks.CHEST.FACING, this.miningDirection.getOpposite()));
-			this.world.setBlockState(this.getPosition().up(), InitBlock.GRAVE_STONE.getDefaultState().withProperty(InitBlock.GRAVE_STONE.FACING, this.miningDirection.getOpposite()));
 			
 			TileEntity tileEntity = world.getTileEntity(this.getPosition());
 			
@@ -241,7 +251,7 @@ public class EntityMiner extends EntityCreature {
 					itemHandler.insertItem(lastIndex + 1, pickaxe, false);
 				}
 				
-				if(this.getCustomNameTag() != this.lastName) {
+				if(!this.getCustomNameTag().equals(this.lastName)) {
 					ItemStack headDrop = new ItemStack(Items.SKULL, 1, 3);
 					NBTTagCompound nbt = new NBTTagCompound();
 					nbt.setString("SkullOwner", this.getCustomNameTag());
@@ -257,14 +267,28 @@ public class EntityMiner extends EntityCreature {
 		super.onDeath(cause);
 	}
 	
-	public void setMiningDistance(int subMonths) {
-		if(subMonths < 3) {
+	public void placeGraveStone() {
+		this.world.setBlockState(this.getPosition().up(), InitBlock.GRAVE_STONE.getDefaultState().withProperty(InitBlock.GRAVE_STONE.FACING, this.miningDirection.getOpposite()));
+	
+		TileEntity tileEntity = world.getTileEntity(this.getPosition().up());
+		
+		if(tileEntity instanceof TileEntityGraveStone) {
+			TileEntityGraveStone graveStoneTE = (TileEntityGraveStone)tileEntity;
+			graveStoneTE.setName(this.getCustomNameTag());
+			graveStoneTE.setMonths(this.months);
+			graveStoneTE.setBlocksMined(this.blocksMined);
+			this.world.setTileEntity(this.getPosition().up(), graveStoneTE);
+		}
+	}
+	
+	public void setMiningDistance(int months) {	
+		if(months < 3) {
 			this.miningDistance = 10 + this.rand.nextInt(25);
-		} else if(subMonths < 6) {
+		} else if(months < 6) {
 			this.miningDistance = 10 + this.rand.nextInt(55);
-		} else if(subMonths < 12) {
+		} else if(months < 12) {
 			this.miningDistance = 10 + this.rand.nextInt(85);
-		} else if(subMonths < 24) {
+		} else if(months < 24) {
 			this.miningDistance = 10 + this.rand.nextInt(121);
 		} else {
 			this.miningDistance = 10 + this.rand.nextInt(151);

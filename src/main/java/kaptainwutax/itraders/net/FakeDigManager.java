@@ -66,7 +66,7 @@ public class FakeDigManager {
         return true;
     }
     
-    public boolean onPlayerDamageBlock(BlockPos posBlock, EnumFacing directionFacing) {
+    public boolean onPlayerDamageBlock(BlockPos posBlock, EnumFacing directionFacing, Runnable onBreak) {
         if(this.blockHitDelay > 0) {
             --this.blockHitDelay;
             return true;
@@ -95,6 +95,7 @@ public class FakeDigManager {
                     this.curBlockDamageMP = 0.0F;
                     this.stepSoundTickCounter = 0.0F;
                     this.blockHitDelay = 5;
+                    onBreak.run();
                 }
 
                 this.player.world.sendBlockBreakProgress(this.player.getEntityId(), this.currentBlock, (int)(this.curBlockDamageMP * 10.0F) - 1);
