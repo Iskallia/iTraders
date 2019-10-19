@@ -7,16 +7,18 @@ import kaptainwutax.itraders.card.SubCardRarity;
 import kaptainwutax.itraders.card.damage.SubCardDamage;
 import kaptainwutax.itraders.card.damage.SubCardDamageType;
 import kaptainwutax.itraders.init.InitItem;
+import kaptainwutax.itraders.subgame.ArenaTemplateManager;
 import kaptainwutax.itraders.util.NBTHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.Tuple;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -50,6 +52,18 @@ public class ItemSubCard extends Item {
             setCardData(stack, generated.getSecond());
             setCardRarity(stack, generated.getFirst());
         }
+    }
+
+    @Override
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote) {
+            //TODO remove after tests
+            boolean capturePrev = worldIn.captureBlockSnapshots;
+            worldIn.captureBlockSnapshots = false;
+            ArenaTemplateManager.loadUserTemplate(player.getUniqueID()).placeInWorld(worldIn, pos);
+            worldIn.captureBlockSnapshots = capturePrev;
+        }
+        return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
 
     @Override

@@ -46,6 +46,7 @@ public class ItemSkullNeck extends Item implements IBauble {
         NBTTagCompound stackNBT = new NBTTagCompound();
 
         stackNBT.setString("HeadOwner", headOwner);
+        stackNBT.setInteger("MagicPower", 36000);
 
         int numEffects = Randomizer.randomInt(
                 InitConfig.CONFIG_SKULL_NECKLACE.NECKLACE_EFFECT_COUNT.getMin(),
@@ -149,9 +150,17 @@ public class ItemSkullNeck extends Item implements IBauble {
             );
         }
 
+        // Re-apply potion effects
+        List<PotionEffect> potionEffects = getPotionEffects(itemstack);
+        if (potionEffects != null && getMagicPower(itemstack) > 0) {
+            addEffectsTo(player, potionEffects);
+        }
+
+        // Consume magic power
         boolean drained = consumeMagicPower(itemstack, 1);
         if (drained) onMagicPowerDrained(itemstack, player);
 
+        // Re-calculate magic power percentage
         int damagePercent = 100 - (int) (100 * (getMagicPower(itemstack) / 36_000f));
         itemstack.setItemDamage(damagePercent);
     }
@@ -159,12 +168,6 @@ public class ItemSkullNeck extends Item implements IBauble {
     @Override
     public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
         if (!player.world.isRemote) {
-            List<PotionEffect> potionEffects = getPotionEffects(itemstack);
-
-            if (potionEffects != null && getMagicPower(itemstack) != 0) {
-                addEffectsTo(player, potionEffects);
-            }
-
             createMiniGhostFor(player, itemstack);
         }
     }
@@ -232,7 +235,7 @@ public class ItemSkullNeck extends Item implements IBauble {
         int magicPower = getMagicPower(stack);
 
         tooltip.add("");
-        tooltip.add(magicPower == 0
+        tooltip.add(magicPower <= 0
                 ? TextFormatting.RED + "Magic powers drained"
                 : TextFormatting.BLUE + "Magic power: " + magicPower + " ticks");
 
