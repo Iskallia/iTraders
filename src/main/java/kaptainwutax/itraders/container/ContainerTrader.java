@@ -58,7 +58,7 @@ public class ContainerTrader extends ContainerMerchant {
         	if(!playerInventory.addItemStackToInventory(currentStack))return;
         }
         
-        wantedStack.setCount(wantedStack.getCount() + currentCount);
+        wantedStack.grow(currentCount);
         
         if(shift || wantedStack.getCount() > wantedStack.getMaxStackSize()) {
         	wantedStack.setCount(wantedStack.getMaxStackSize());
@@ -70,11 +70,11 @@ public class ContainerTrader extends ContainerMerchant {
         	ItemStack stackInSlot = playerInventory.getStackInSlot(i);
         	if(!ItemHandlerHelper.canItemStacksStackRelaxed(stackInSlot, decreasingStack))continue;
         	int decreasedCount = playerInventory.decrStackSize(i, decreasingStack.getCount()).getCount();
-        	decreasingStack.setCount(decreasingStack.getCount() - decreasedCount);
+        	decreasingStack.shrink(decreasedCount);
         }                 
         
         if(!decreasingStack.isEmpty()) {
-        	wantedStack.setCount(wantedStack.getCount() - decreasingStack.getCount());
+        	wantedStack.shrink(decreasingStack.getCount());
         }
         
         this.inventorySlots.get(slotId).putStack(wantedStack);
