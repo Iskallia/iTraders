@@ -23,6 +23,7 @@ public class InitModel {
 		registerSimpleItemModel(InitItem.MAGIC_ORE_DUST, 0);
 		registerSimpleItemModel(InitBlock.ITEM_GRAVE_STONE, 0);
 		registerSimpleItemModel(InitBlock.ITEM_INFUSION_CAULDRON, 0);
+		registerSimpleItemModel(InitItem.CRYO_CHAMBER, 0);
 
 		registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
 

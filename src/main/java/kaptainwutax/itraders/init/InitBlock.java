@@ -2,8 +2,10 @@
 package kaptainwutax.itraders.init;
 
 import kaptainwutax.itraders.Traders;
+import kaptainwutax.itraders.block.BlockCryoChamber;
 import kaptainwutax.itraders.block.BlockGraveStone;
 import kaptainwutax.itraders.block.BlockInfusionCauldron;
+import kaptainwutax.itraders.block.entity.TileEntityCryoChamber;
 import kaptainwutax.itraders.block.entity.TileEntityGraveStone;
 import kaptainwutax.itraders.block.entity.TileEntityInfusionCauldron;
 import kaptainwutax.itraders.block.render.TESRGraveStone;
@@ -22,15 +24,19 @@ public class InitBlock {
 
 	public static final BlockInfusionCauldron INFUSION_CAULDRON = new BlockInfusionCauldron("infusion_cauldron");
 	public static final ItemBlock ITEM_INFUSION_CAULDRON = getItemBlock(INFUSION_CAULDRON);
+	
+	public static final BlockCryoChamber CRYO_CHAMBER = new BlockCryoChamber("cryo_chamber", Material.IRON);
 
 	public static void registerBlocks(IForgeRegistry<Block> registry) {
 		registerBlock(GRAVE_STONE, registry);
 		registerBlock(INFUSION_CAULDRON, registry);
+		registerBlock(CRYO_CHAMBER, registry);
 	}
 
     public static void registerTileEntities() {
         GameRegistry.registerTileEntity(TileEntityInfusionCauldron.class, Traders.getResource("infusion_cauldron"));
         GameRegistry.registerTileEntity(TileEntityGraveStone.class, Traders.getResource("grave_stone"));
+        GameRegistry.registerTileEntity(TileEntityCryoChamber.class, Traders.getResource("cryo_chamber"));
     }
     
     public static void registerTileEntityRenderers() {
