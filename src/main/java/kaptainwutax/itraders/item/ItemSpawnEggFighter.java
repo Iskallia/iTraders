@@ -54,7 +54,10 @@ public class ItemSpawnEggFighter extends ItemSpawnEgg<EntityFighter> {
 	
 	@Override
 	protected EntityFighter onDispenserSpawn(World world, EnumFacing facing, BlockPos pos, ItemStack stack) {
-		return this.onPlayerSpawn(world, null, pos, stack);
+		EntityFighter fighter = this.spawnCreature(world, getNamedIdFrom(stack), pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+		if (stack.hasDisplayName())fighter.setCustomNameTag(stack.getDisplayName());
+		ItemMonsterPlacer.applyItemEntityDataToEntity(world, (EntityPlayer) null, stack, fighter);
+		return fighter;
 	}
 
 	public static boolean shouldSpawnEntity(NBTTagCompound compound) {
