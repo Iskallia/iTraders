@@ -16,6 +16,8 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
@@ -169,7 +171,24 @@ public class EntityMiner extends EntityCreature {
 		}	
 		
 		if(!mining) {
-			this.navigator.setPath(this.navigator.getPathToPos(this.getPosition().offset(this.miningDirection, 1)), 0.5f);
+			BlockPos target = this.getPosition().offset(this.miningDirection, 1);
+			this.navigator.setPath(this.navigator.getPathToPos(target), 0.5f);
+			
+			if(this.world.isAirBlock(target.down())) {
+		        for(int i = 0; i < this.minerInventory.getSlots(); i++) {
+		        	ItemStack stack = this.minerInventory.getStackInSlot(i).copy();
+		        	
+		        	if(!stack.isEmpty() && stack.getItem() == Item.getItemFromBlock(Blocks.COBBLESTONE)) {
+		        		this.world.setBlockState(target.down(), Blocks.COBBLESTONE.getDefaultState());
+		        		this.swingArm(EnumHand.OFF_HAND);
+		        		this.world.playSound(null, target.down(), SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0f, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.4F);
+		        		stack.setCount(stack.getCount() - 1);
+		        		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, stack.copy());
+		        		this.minerInventory.setStackInSlot(i, stack);
+		        		break;
+		        	}
+		        }
+			}
 		}			
 	}
 
