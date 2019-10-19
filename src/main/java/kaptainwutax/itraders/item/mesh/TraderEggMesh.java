@@ -9,7 +9,7 @@ public class TraderEggMesh extends ItemMesh {
 	public TraderEggMesh(ItemSpawnEggTrader item) {
 		super(item);
 
-		this.addMesh(this.createMesh("trader_coin_1"));
+		this.addMesh(this.createMesh("coin_1"));
 		this.bakeMeshes();
 	}
 
