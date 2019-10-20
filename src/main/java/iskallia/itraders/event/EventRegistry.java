@@ -28,7 +28,7 @@ public class EventRegistry {
 
 	@SubscribeEvent
 	public static void onModelRegister(ModelRegistryEvent event) {
-		InitModel.registerModels();
+		InitModel.registerItemModels();
 	}
 
 }

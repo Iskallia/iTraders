@@ -1,6 +1,8 @@
 package iskallia.itraders.init;
 
 import iskallia.itraders.Traders;
+import iskallia.itraders.block.entity.TileEntityGraveStone;
+import iskallia.itraders.block.render.TESRGraveStone;
 import iskallia.itraders.item.mesh.FighterEggMesh;
 import iskallia.itraders.item.mesh.MinerEggMesh;
 import iskallia.itraders.item.mesh.SkullNeckMesh;
@@ -9,10 +11,11 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 public class InitModel {
 
-	public static void registerModels() {
+	public static void registerItemModels() {
 		registerSimpleItemModel(InitItem.BIT_100, 0);
 		registerSimpleItemModel(InitItem.BIT_500, 0);
 		registerSimpleItemModel(InitItem.BIT_1000, 0);
@@ -30,6 +33,10 @@ public class InitModel {
 		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_MINER, new MinerEggMesh(InitItem.SPAWN_EGG_MINER));
 		ModelLoader.setCustomMeshDefinition(InitItem.SKULL_NECKLACE, new SkullNeckMesh(InitItem.SKULL_NECKLACE));
 	}
+    
+    public static void registerTileEntityRenderers() {
+    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGraveStone.class, new TESRGraveStone());
+    }
 
 	private static void registerSimpleItemModel(Item item, int metadata) {
 		ModelLoader.setCustomModelResourceLocation(item, metadata,

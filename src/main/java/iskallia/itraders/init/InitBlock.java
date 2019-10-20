@@ -6,12 +6,10 @@ import iskallia.itraders.block.BlockGraveStone;
 import iskallia.itraders.block.BlockInfusionCauldron;
 import iskallia.itraders.block.entity.TileEntityGraveStone;
 import iskallia.itraders.block.entity.TileEntityInfusionCauldron;
-import iskallia.itraders.block.render.TESRGraveStone;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -31,10 +29,6 @@ public class InitBlock {
     public static void registerTileEntities() {
         GameRegistry.registerTileEntity(TileEntityInfusionCauldron.class, Traders.getResource("infusion_cauldron"));
         GameRegistry.registerTileEntity(TileEntityGraveStone.class, Traders.getResource("grave_stone"));
-    }
-    
-    public static void registerTileEntityRenderers() {
-    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGraveStone.class, new TESRGraveStone());
     }
 
 	public static void registerItemBlocks(IForgeRegistry<Item> registry) {

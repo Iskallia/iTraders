@@ -6,6 +6,7 @@ import iskallia.itraders.gui.GuiHandler;
 import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitEntity;
+import iskallia.itraders.init.InitModel;
 import iskallia.itraders.init.InitPacket;
 import iskallia.itraders.init.InitTieredLoot;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
@@ -27,7 +28,7 @@ public class EventMod {
 
 		if (event.getSide() == Side.CLIENT) {
 			InitEntity.registerEntityRenderers();
-			InitBlock.registerTileEntityRenderers();
+			InitModel.registerTileEntityRenderers();
 		}
 	}
 
