@@ -1,5 +1,13 @@
 package kaptainwutax.itraders.item;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import kaptainwutax.itraders.Traders;
@@ -7,8 +15,8 @@ import kaptainwutax.itraders.config.definition.PotionEffectDefinition;
 import kaptainwutax.itraders.entity.EntityMiniGhost;
 import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.init.InitItem;
-import kaptainwutax.itraders.util.Randomizer;
 import kaptainwutax.itraders.util.RomanLiterals;
+import kaptainwutax.itraders.util.math.Randomizer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityList;
@@ -25,9 +33,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 /*
  * NBT: {

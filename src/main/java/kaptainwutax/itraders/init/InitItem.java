@@ -1,13 +1,16 @@
 package kaptainwutax.itraders.init;
 
 import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.item.*;
+import kaptainwutax.itraders.item.ItemBit;
+import kaptainwutax.itraders.item.ItemEggPouch;
+import kaptainwutax.itraders.item.ItemMagicOreDust;
+import kaptainwutax.itraders.item.ItemSkullNeck;
+import kaptainwutax.itraders.item.ItemSpawnEggFighter;
+import kaptainwutax.itraders.item.ItemSpawnEggMiner;
+import kaptainwutax.itraders.item.ItemSpawnEggTrader;
+import kaptainwutax.itraders.item.ItemSubCard;
 import kaptainwutax.itraders.tab.CreativeTabsITraders;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
-import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class InitItem {

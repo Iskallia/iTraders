@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.mojang.authlib.GameProfile;
 
-import kaptainwutax.itraders.SkinProfile;
 import kaptainwutax.itraders.block.entity.TileEntityGraveStone;
 import kaptainwutax.itraders.init.InitBlock;
 import kaptainwutax.itraders.net.FakeDigManager;
+import kaptainwutax.itraders.util.profile.SkinProfile;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

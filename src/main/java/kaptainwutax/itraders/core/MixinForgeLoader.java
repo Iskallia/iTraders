@@ -1,4 +1,4 @@
-package kaptainwutax.itraders;
+package kaptainwutax.itraders.core;
 
 import java.util.Map;
 

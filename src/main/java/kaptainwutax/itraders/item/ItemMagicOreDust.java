@@ -1,5 +1,7 @@
 package kaptainwutax.itraders.item;
 
+import javax.annotation.Nullable;
+
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.entity.EntityItemMagicOreDust;
 import kaptainwutax.itraders.init.InitItem;
@@ -8,8 +10,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 public class ItemMagicOreDust extends Item {
 

@@ -1,5 +1,7 @@
 package kaptainwutax.itraders.entity;
 
+import java.awt.Color;
+
 import hellfirepvp.astralsorcery.client.effect.EffectHelper;
 import hellfirepvp.astralsorcery.client.effect.EntityComplexFX;
 import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
@@ -9,8 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.awt.*;
 
 /**
  * Class: EntityItemMagicOreDust

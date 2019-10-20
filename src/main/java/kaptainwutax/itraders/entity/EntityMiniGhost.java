@@ -1,9 +1,13 @@
 package kaptainwutax.itraders.entity;
 
-import kaptainwutax.itraders.SkinProfile;
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import kaptainwutax.itraders.util.profile.SkinProfile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -15,12 +19,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.UUID;
 
 public class EntityMiniGhost extends EntityLivingBase {
 

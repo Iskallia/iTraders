@@ -12,7 +12,6 @@ import org.lwjgl.input.Keyboard;
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.entity.EntityFighter;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;

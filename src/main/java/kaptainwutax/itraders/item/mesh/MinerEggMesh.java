@@ -1,9 +1,7 @@
 package kaptainwutax.itraders.item.mesh;
 
-import kaptainwutax.itraders.item.ItemSpawnEggFighter;
 import kaptainwutax.itraders.item.ItemSpawnEggMiner;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 

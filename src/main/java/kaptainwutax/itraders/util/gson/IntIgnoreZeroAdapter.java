@@ -1,4 +1,4 @@
-package kaptainwutax.itraders.util;
+package kaptainwutax.itraders.util.gson;
 
 import java.io.IOException;
 

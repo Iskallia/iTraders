@@ -1,5 +1,7 @@
 package kaptainwutax.itraders.entity.render;
 
+import java.awt.Color;
+
 import hellfirepvp.astralsorcery.client.util.RenderingUtils;
 import kaptainwutax.itraders.entity.EntityItemMagicOreDust;
 import net.minecraft.client.Minecraft;
@@ -9,8 +11,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-
-import java.awt.*;
 
 /**
  * Class: RenderItemMagicOreDust

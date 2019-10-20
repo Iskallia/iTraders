@@ -8,7 +8,6 @@ import kaptainwutax.itraders.item.mesh.TraderEggMesh;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class InitModel {

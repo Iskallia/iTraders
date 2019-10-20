@@ -1,10 +1,10 @@
 package kaptainwutax.itraders.util;
 
+import javax.annotation.Nonnull;
+
 import kaptainwutax.itraders.Traders;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import javax.annotation.Nonnull;
 
 /**
  * Class: NBTHelper

@@ -1,21 +1,13 @@
 package kaptainwutax.itraders.event;
 
-import baubles.api.BaublesApi;
-import baubles.common.Baubles;
 import kaptainwutax.itraders.Traders;
 import kaptainwutax.itraders.entity.EntityFighter;
-import kaptainwutax.itraders.entity.EntityMiniGhost;
 import kaptainwutax.itraders.init.InitPacket;
-import kaptainwutax.itraders.item.ItemSkullNeck;
 import kaptainwutax.itraders.net.packet.S2CFighterHeight;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 

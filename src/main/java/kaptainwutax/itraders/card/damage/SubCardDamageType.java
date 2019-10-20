@@ -1,9 +1,9 @@
 package kaptainwutax.itraders.card.damage;
 
-import kaptainwutax.itraders.util.ValueRangeInt;
-import net.minecraft.util.text.TextFormatting;
-
 import java.util.function.Function;
+
+import kaptainwutax.itraders.util.math.ValueRangeInt;
+import net.minecraft.util.text.TextFormatting;
 
 /**
  * Class: SubCardDamageType

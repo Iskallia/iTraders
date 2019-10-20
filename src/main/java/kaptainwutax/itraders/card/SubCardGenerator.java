@@ -1,13 +1,13 @@
 package kaptainwutax.itraders.card;
 
-import kaptainwutax.itraders.card.damage.SubCardDamage;
-import kaptainwutax.itraders.card.damage.SubCardDamageType;
-import kaptainwutax.itraders.util.ValueRangeInt;
-import net.minecraft.util.Tuple;
+import static kaptainwutax.itraders.init.InitConfig.CONFIG_CARD_GENERATOR;
 
 import java.util.Random;
 
-import static kaptainwutax.itraders.init.InitConfig.CONFIG_CARD_GENERATOR;
+import kaptainwutax.itraders.card.damage.SubCardDamage;
+import kaptainwutax.itraders.card.damage.SubCardDamageType;
+import kaptainwutax.itraders.util.math.ValueRangeInt;
+import net.minecraft.util.Tuple;
 
 /**
  * Class: SubCardGenerator

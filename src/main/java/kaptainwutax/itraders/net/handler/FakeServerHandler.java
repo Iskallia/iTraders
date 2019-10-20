@@ -1,4 +1,4 @@
-package kaptainwutax.itraders.net;
+package kaptainwutax.itraders.net.handler;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.EnumPacketDirection;

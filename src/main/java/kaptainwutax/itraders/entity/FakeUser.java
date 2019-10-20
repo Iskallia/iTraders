@@ -2,7 +2,7 @@ package kaptainwutax.itraders.entity;
 
 import com.mojang.authlib.GameProfile;
 
-import kaptainwutax.itraders.net.FakeServerHandler;
+import kaptainwutax.itraders.net.handler.FakeServerHandler;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 

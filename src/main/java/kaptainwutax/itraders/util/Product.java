@@ -3,6 +3,7 @@ package kaptainwutax.itraders.util;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.JsonAdapter;
 
+import kaptainwutax.itraders.util.gson.IntIgnoreZeroAdapter;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

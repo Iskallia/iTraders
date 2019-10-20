@@ -1,7 +1,7 @@
 package kaptainwutax.itraders.config.definition;
 
 import com.google.gson.annotations.Expose;
-import net.minecraft.init.MobEffects;
+
 import net.minecraft.potion.Potion;
 
 public class PotionEffectDefinition {

@@ -4,12 +4,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import kaptainwutax.itraders.SkinProfile;
 import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.init.InitPacket;
 import kaptainwutax.itraders.net.packet.S2CFighterHeight;
 import kaptainwutax.itraders.util.Product;
 import kaptainwutax.itraders.util.TieredLoot;
+import kaptainwutax.itraders.util.profile.SkinProfile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;

@@ -1,8 +1,16 @@
 package kaptainwutax.itraders.init;
 
 import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.entity.*;
-import kaptainwutax.itraders.entity.render.*;
+import kaptainwutax.itraders.entity.EntityFighter;
+import kaptainwutax.itraders.entity.EntityItemMagicOreDust;
+import kaptainwutax.itraders.entity.EntityMiner;
+import kaptainwutax.itraders.entity.EntityMiniGhost;
+import kaptainwutax.itraders.entity.EntityTrader;
+import kaptainwutax.itraders.entity.render.RenderFighter;
+import kaptainwutax.itraders.entity.render.RenderItemMagicOreDust;
+import kaptainwutax.itraders.entity.render.RenderMiner;
+import kaptainwutax.itraders.entity.render.RenderMiniGhost;
+import kaptainwutax.itraders.entity.render.RenderTrader;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;

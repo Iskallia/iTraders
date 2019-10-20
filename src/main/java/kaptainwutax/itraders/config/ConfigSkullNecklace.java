@@ -1,14 +1,15 @@
 package kaptainwutax.itraders.config;
 
-import com.google.gson.annotations.Expose;
-import kaptainwutax.itraders.config.definition.PotionEffectDefinition;
-import kaptainwutax.itraders.config.definition.RangeDefinition;
-import kaptainwutax.itraders.util.Randomizer;
-import net.minecraft.init.MobEffects;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.google.gson.annotations.Expose;
+
+import kaptainwutax.itraders.config.definition.PotionEffectDefinition;
+import kaptainwutax.itraders.config.definition.RangeDefinition;
+import kaptainwutax.itraders.util.math.Randomizer;
+import net.minecraft.init.MobEffects;
 
 public class ConfigSkullNecklace extends Config {
 

@@ -1,15 +1,15 @@
 package kaptainwutax.itraders.card.damage;
 
-import kaptainwutax.itraders.util.ValueRangeInt;
+import java.util.Random;
+import java.util.function.Consumer;
+
+import kaptainwutax.itraders.util.math.ValueRangeInt;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Random;
-import java.util.function.Consumer;
 
 /**
  * Class: SubCardDamage

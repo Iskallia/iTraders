@@ -1,8 +1,8 @@
-package kaptainwutax.itraders.util;
-
-import com.google.gson.annotations.Expose;
+package kaptainwutax.itraders.util.math;
 
 import java.util.Random;
+
+import com.google.gson.annotations.Expose;
 
 /**
  * Class: ValueRangeFloat

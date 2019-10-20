@@ -1,7 +1,6 @@
 package kaptainwutax.itraders.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,8 +13,6 @@ import kaptainwutax.itraders.container.ContainerTrader;
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerMerchant;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;

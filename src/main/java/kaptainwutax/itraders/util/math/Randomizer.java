@@ -1,4 +1,4 @@
-package kaptainwutax.itraders.util;
+package kaptainwutax.itraders.util.math;
 
 import java.util.Random;
 

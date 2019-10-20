@@ -1,14 +1,13 @@
 package kaptainwutax.itraders.config;
 
-import com.google.gson.annotations.Expose;
-import kaptainwutax.itraders.card.damage.SubCardDamage;
-import kaptainwutax.itraders.card.damage.SubCardDamageType;
-import kaptainwutax.itraders.util.ValueRangeFloat;
-import kaptainwutax.itraders.util.ValueRangeInt;
-import net.minecraft.util.Tuple;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.gson.annotations.Expose;
+
+import kaptainwutax.itraders.card.damage.SubCardDamageType;
+import kaptainwutax.itraders.util.math.ValueRangeFloat;
+import kaptainwutax.itraders.util.math.ValueRangeInt;
 
 /**
  * Class: ConfigCardGenerator

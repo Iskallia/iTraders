@@ -5,16 +5,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import kaptainwutax.itraders.SkinProfile;
 import kaptainwutax.itraders.init.InitConfig;
 import kaptainwutax.itraders.util.Trade;
+import kaptainwutax.itraders.util.profile.SkinProfile;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;

@@ -1,14 +1,14 @@
 package kaptainwutax.itraders.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import hellfirepvp.astralsorcery.client.util.resource.BindableResource;
 import hellfirepvp.astralsorcery.client.util.resource.SpriteSheetResource;
 import kaptainwutax.itraders.Traders;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Class: SpriteHelper

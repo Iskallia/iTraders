@@ -1,5 +1,7 @@
 package kaptainwutax.itraders.entity.render;
 
+import javax.annotation.Nullable;
+
 import kaptainwutax.itraders.entity.EntityMiniGhost;
 import kaptainwutax.itraders.init.InitConfig;
 import net.minecraft.client.model.ModelPlayer;
@@ -11,8 +13,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-
-import javax.annotation.Nullable;
 
 public class RenderMiniGhost extends RenderLivingBase<EntityMiniGhost> {
 

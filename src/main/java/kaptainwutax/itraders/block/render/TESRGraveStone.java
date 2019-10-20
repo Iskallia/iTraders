@@ -1,19 +1,12 @@
 package kaptainwutax.itraders.block.render;
 
-import java.util.List;
-
 import kaptainwutax.itraders.block.BlockGraveStone;
 import kaptainwutax.itraders.block.entity.TileEntityGraveStone;
 import kaptainwutax.itraders.init.InitBlock;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 
 public class TESRGraveStone extends TileEntitySpecialRenderer<TileEntityGraveStone> {
 	

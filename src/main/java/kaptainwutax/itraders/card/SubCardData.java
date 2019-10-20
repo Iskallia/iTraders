@@ -1,14 +1,14 @@
 package kaptainwutax.itraders.card;
 
+import java.text.DecimalFormat;
+import java.util.function.Consumer;
+
 import kaptainwutax.itraders.card.damage.SubCardDamage;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.text.DecimalFormat;
-import java.util.function.Consumer;
 
 
 /**

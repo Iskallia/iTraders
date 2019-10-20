@@ -1,4 +1,4 @@
-package kaptainwutax.itraders;
+package kaptainwutax.itraders.util.profile;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

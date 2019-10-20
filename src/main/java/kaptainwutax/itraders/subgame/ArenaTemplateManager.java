@@ -1,12 +1,5 @@
 package kaptainwutax.itraders.subgame;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.util.JsonBlockStateAdapter;
-import net.minecraft.block.state.IBlockState;
-
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -14,6 +7,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.annotation.Nonnull;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import kaptainwutax.itraders.Traders;
+import kaptainwutax.itraders.util.gson.JsonBlockStateAdapter;
+import net.minecraft.block.state.IBlockState;
 
 /**
  * Class: ArenaTemplateManager
