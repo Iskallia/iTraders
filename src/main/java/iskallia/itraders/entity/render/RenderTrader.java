@@ -108,6 +108,7 @@ public class RenderTrader extends RenderLivingBase<EntityTrader> {
 	}
 
 	public ResourceLocation getEntityTexture(EntityTrader entity) {
+		if(entity.skin == null)return DefaultPlayerSkin.getDefaultSkinLegacy();
 		return entity.skin.getLocationSkin();
 	}
 
