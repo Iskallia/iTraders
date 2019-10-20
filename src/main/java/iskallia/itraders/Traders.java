@@ -22,7 +22,7 @@ public class Traders {
 
 	public static final String MOD_ID = "itraders";
 	public static final String MOD_NAME = "iTraders";
-	public static final String MOD_VERSION = "0.3.9";
+	public static final String MOD_VERSION = "0.3.10";
 
 	public static Traders getInstance() {
 		return INSTANCE;

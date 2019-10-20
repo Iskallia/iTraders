@@ -25,6 +25,10 @@ public class EntityTrader extends EntityVillager {
 	public EntityTrader(World world) {
 		super(world);
 		this.setCustomNameTag(this.lastName);
+		
+		if(world.isRemote) {			
+			this.skin = new SkinProfile();
+		}
 	}
 
 	//Stops traders from restocking.
@@ -43,8 +47,6 @@ public class EntityTrader extends EntityVillager {
 				this.skin.updateSkin(name);
 				this.lastName = name;
 			}
-			
-			this.skin = new SkinProfile();
 		} 
 	}
 
