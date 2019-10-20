@@ -18,7 +18,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 
 
 version = '0.3.9'
-group = 'kaptainwutax' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'iskallia' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'itraders'
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -31,10 +31,10 @@ minecraft {
     runDir = 'run'
     
     def args = [
-            "-Dfml.coreMods.load=kaptainwutax.itraders.MixinForgeLoader"
+            "-Dfml.coreMods.load=iskallia.itraders.MixinForgeLoader"
     ]
     
-    coreMod = 'kaptainwutax.itraders.MixinForgeLoader'
+    coreMod = 'iskallia.itraders.MixinForgeLoader'
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -46,7 +46,7 @@ minecraft {
 
 jar.manifest.attributes(
         'FMLCorePluginContainsFMLMod': true,
-        'FMLCorePlugin': 'kaptainwutax.itraders.MixinForgeLoader',
+        'FMLCorePlugin': 'iskallia.itraders.MixinForgeLoader',
         'ForceLoadAsMod': true,
         'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker'
 )
