@@ -2,13 +2,13 @@
 {
   "modid": "itraders",
   "name": "iTraders",
-  "description": "Twitch integration plugin",
-  "version": "${version}",
+  "description": "Twitch integration gameplay for FunCraft.",
+  "version": "1.12-0.3.9",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "https://github.com/Iskallia/iTraders/",
   "updateUrl": "",
-  "authorList": ["KaptainWutax","iGoodie"],
-  "credits": "Iskall and kap",
+  "authorList": ["KaptainWutax","iGoodie", "HellFirePvP", "jmilthedude"],
+  "credits": "Iskall85 for designing and testing the mod.",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
