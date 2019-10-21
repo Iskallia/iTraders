@@ -14,7 +14,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
 
@@ -111,7 +110,8 @@ public class FakeDigManager {
         boolean flag = this.currentItemHittingBlock.isEmpty() && itemstack.isEmpty();
 
         if(!this.currentItemHittingBlock.isEmpty() && !itemstack.isEmpty()) {
-            flag = !ForgeHooksClient.shouldCauseBlockBreakReset(this.currentItemHittingBlock, itemstack);
+        	flag = !this.currentItemHittingBlock.getItem().shouldCauseBlockBreakReset(this.currentItemHittingBlock, itemstack);
+            //flag = !ForgeHooksClient.shouldCauseBlockBreakReset(this.currentItemHittingBlock, itemstack);
         }
 
         return pos.equals(this.currentBlock) && flag;
