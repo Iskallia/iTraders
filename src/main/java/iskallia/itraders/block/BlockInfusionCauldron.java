@@ -80,7 +80,7 @@ public class BlockInfusionCauldron extends BlockCauldron {
 		String name = "";
 		NBTTagCompound stackNBT = stack.getTagCompound();
 
-		if (stackNBT != null)
+		if (stackNBT != null) {
 
 			if (stackNBT.hasKey("SkullOwner", Constants.NBT.TAG_COMPOUND)) {
 
@@ -95,7 +95,12 @@ public class BlockInfusionCauldron extends BlockCauldron {
 				name = stackNBT.getString("SkullOwner");
 
 			}
-		
+			
+		} else {
+			
+			return false;
+			
+		}
 		if (Math.random() <= NECKLACE_CREATION_RATE) {
 			ItemStack necklaceStack = ItemSkullNeck.generateRandom(name);
 			this.spawnNecklace((WorldServer) world, pos, necklaceStack);
