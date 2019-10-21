@@ -3,6 +3,7 @@ package iskallia.itraders.block;
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.entity.TileEntityInfusionCauldron;
 import iskallia.itraders.init.InitBlock;
+import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitItem;
 import iskallia.itraders.item.ItemSkullNeck;
 import net.minecraft.block.BlockCauldron;
@@ -12,6 +13,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,9 +29,9 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidUtil;
 
-public class BlockInfusionCauldron extends BlockCauldron {
+import java.util.Random;
 
-	public static final double NECKLACE_CREATION_RATE = 0.01d;
+public class BlockInfusionCauldron extends BlockCauldron {
 
 	public BlockInfusionCauldron(String name) {
 		super();
@@ -37,6 +39,7 @@ public class BlockInfusionCauldron extends BlockCauldron {
 		this.setUnlocalizedName(name);
 		this.setRegistryName(Traders.getResource(name));
 
+		this.setHardness(2f);
 		this.setCreativeTab(InitItem.ITRADERS_TAB);
 	}
 
@@ -45,8 +48,8 @@ public class BlockInfusionCauldron extends BlockCauldron {
 		if (world.isRemote)
 			return true;
 
-		TileEntityInfusionCauldron te = (TileEntityInfusionCauldron) world.getTileEntity(pos);
-		if (te == null)
+		TileEntityInfusionCauldron tileEntity = (TileEntityInfusionCauldron) world.getTileEntity(pos);
+		if (tileEntity == null)
 			return true;
 
 		ItemStack heldStack = player.getHeldItem(hand);
@@ -55,7 +58,7 @@ public class BlockInfusionCauldron extends BlockCauldron {
 			return true;
 		}
 
-		if (handleSkull(world, pos, heldStack)) {
+		if (consumeSkull(world, pos, heldStack)) {
 			if (!player.isCreative())
 				heldStack.shrink(1);
 		}
@@ -63,13 +66,13 @@ public class BlockInfusionCauldron extends BlockCauldron {
 		return true;
 	}
 
-	private boolean handleSkull(World world, BlockPos pos, ItemStack stack) {
+	private boolean consumeSkull(World world, BlockPos pos, ItemStack stack) {
+		TileEntityInfusionCauldron tileEntity = (TileEntityInfusionCauldron) world.getTileEntity(pos);
 
-		TileEntityInfusionCauldron te = (TileEntityInfusionCauldron) world.getTileEntity(pos);
-		if (te == null)
+		if (tileEntity == null)
 			return false;
 
-		int currentWaterLevel = te.getTank().getFluidAmount();
+		int currentWaterLevel = tileEntity.getTank().getFluidAmount();
 
 		if (currentWaterLevel <= 0)
 			return false;
@@ -80,47 +83,48 @@ public class BlockInfusionCauldron extends BlockCauldron {
 		String name = "";
 		NBTTagCompound stackNBT = stack.getTagCompound();
 
-		if (stackNBT != null) {
-
-			if (stackNBT.hasKey("SkullOwner", Constants.NBT.TAG_COMPOUND)) {
-
-				NBTTagCompound skullOwnerNBT = stackNBT.getCompoundTag("SkullOwner");
-				if (!skullOwnerNBT.hasKey("Name", Constants.NBT.TAG_STRING))
-					return false;
-
-				name = skullOwnerNBT.getString("Name");
-
-			} else if (stackNBT.hasKey("SkullOwner")) {
-
-				name = stackNBT.getString("SkullOwner");
-
-			}
-			
-		} else {
-			
+		if(stackNBT == null)
 			return false;
-			
+
+		if (stackNBT.hasKey("SkullOwner", Constants.NBT.TAG_COMPOUND)) {
+			NBTTagCompound skullOwnerNBT = stackNBT.getCompoundTag("SkullOwner");
+
+			if (!skullOwnerNBT.hasKey("Name", Constants.NBT.TAG_STRING))
+				return false;
+
+			name = skullOwnerNBT.getString("Name");
+
+		} else if (stackNBT.hasKey("SkullOwner", Constants.NBT.TAG_STRING)) {
+			name = stackNBT.getString("SkullOwner");
+
+		} else {
+			return false;
 		}
-		if (Math.random() <= NECKLACE_CREATION_RATE) {
+
+		// Finally roll the dice!
+		if (Math.random() <= InitConfig.CONFIG_SKULL_NECKLACE.NECKLACE_CREATION_RATE) {
 			ItemStack necklaceStack = ItemSkullNeck.generateRandom(name);
 			this.spawnNecklace((WorldServer) world, pos, necklaceStack);
+
 		} else {
 			this.spawnFailParticles((WorldServer) world, pos);
 		}
 
-		int toDrain = currentWaterLevel - 333 < 300 ? te.getTank().getFluidAmount() : 333;
-		te.getTank().drain(toDrain, true);	
-
+		// ..And drain water from the tank
+		int toDrain = currentWaterLevel - 333 < 300 ? tileEntity.getTank().getFluidAmount() : 333;
+		tileEntity.getTank().drain(toDrain, true);
 		return true;
 	}
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-		if(world.isRemote) return; 
+		if(world.isRemote) return;
+
 		if (entity instanceof EntityItem) {
 			EntityItem item = (EntityItem) entity;
 			ItemStack stack = item.getItem();
-			if (handleSkull(world, pos, stack)) {
+
+			if (consumeSkull(world, pos, stack)) {
 				entity.setDead();
 			}
 		}
@@ -171,5 +175,10 @@ public class BlockInfusionCauldron extends BlockCauldron {
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		return new ItemStack(InitBlock.ITEM_INFUSION_CAULDRON, 1);
 	}
-	
+
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return InitBlock.ITEM_INFUSION_CAULDRON;
+	}
+
 }
