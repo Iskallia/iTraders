@@ -77,19 +77,27 @@ public class BlockInfusionCauldron extends BlockCauldron {
 		if (stack.getItem() != Items.SKULL)
 			return false;
 
+		String name = "";
 		NBTTagCompound stackNBT = stack.getTagCompound();
 
-		if (stackNBT == null || !stackNBT.hasKey("SkullOwner", Constants.NBT.TAG_COMPOUND))
-			return false;
+		if (stackNBT != null)
 
-		NBTTagCompound skullOwnerNBT = stackNBT.getCompoundTag("SkullOwner");
+			if (stackNBT.hasKey("SkullOwner", Constants.NBT.TAG_COMPOUND)) {
 
-		if (!skullOwnerNBT.hasKey("Name", Constants.NBT.TAG_STRING))
-			return false;
+				NBTTagCompound skullOwnerNBT = stackNBT.getCompoundTag("SkullOwner");
+				if (!skullOwnerNBT.hasKey("Name", Constants.NBT.TAG_STRING))
+					return false;
 
+				name = skullOwnerNBT.getString("Name");
+
+			} else if (stackNBT.hasKey("SkullOwner")) {
+
+				name = stackNBT.getString("SkullOwner");
+
+			}
+		
 		if (Math.random() <= NECKLACE_CREATION_RATE) {
-			String ghostName = skullOwnerNBT.getString("Name");
-			ItemStack necklaceStack = ItemSkullNeck.generateRandom(ghostName);
+			ItemStack necklaceStack = ItemSkullNeck.generateRandom(name);
 			this.spawnNecklace((WorldServer) world, pos, necklaceStack);
 		} else {
 			this.spawnFailParticles((WorldServer) world, pos);
