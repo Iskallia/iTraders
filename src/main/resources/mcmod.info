@@ -3,7 +3,7 @@
   "modid": "itraders",
   "name": "iTraders",
   "description": "Twitch integration gameplay for FunCraft.",
-  "version": "1.12-0.3.10",
+  "version": "1.12-${version}",
   "mcversion": "${mcversion}",
   "url": "https://github.com/Iskallia/iTraders/",
   "updateUrl": "",
