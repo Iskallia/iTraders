@@ -1,7 +1,9 @@
 package iskallia.itraders.init;
 
 import iskallia.itraders.Traders;
+import iskallia.itraders.block.entity.TileEntityCryoChamber;
 import iskallia.itraders.block.entity.TileEntityGraveStone;
+import iskallia.itraders.block.render.TESRCryoChamber;
 import iskallia.itraders.block.render.TESRGraveStone;
 import iskallia.itraders.item.mesh.FighterEggMesh;
 import iskallia.itraders.item.mesh.MinerEggMesh;
@@ -37,6 +39,7 @@ public class InitModel {
     
     public static void registerTileEntityRenderers() {
     	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGraveStone.class, new TESRGraveStone());
+    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCryoChamber.class, new TESRCryoChamber());
     }
 
 	private static void registerSimpleItemModel(Item item, int metadata) {
