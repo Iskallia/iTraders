@@ -1,4 +1,4 @@
-package kaptainwutax.itraders.block.entity;
+package iskallia.itraders.block.entity;
 
 import net.minecraft.tileentity.TileEntity;
 

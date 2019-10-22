@@ -1,9 +1,9 @@
-package kaptainwutax.itraders.item;
+package iskallia.itraders.item;
 
-import kaptainwutax.itraders.Traders;
+import iskallia.itraders.Traders;
 import iskallia.itraders.block.BlockCryoChamber;
-import kaptainwutax.itraders.init.InitBlock;
-import kaptainwutax.itraders.init.InitItem;
+import iskallia.itraders.init.InitBlock;
+import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;

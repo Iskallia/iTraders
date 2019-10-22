@@ -1,8 +1,9 @@
-package kaptainwutax.itraders.block;
+package iskallia.itraders.block;
 
-import kaptainwutax.itraders.Traders;
-import kaptainwutax.itraders.block.entity.TileEntityCryoChamber;
-import kaptainwutax.itraders.init.InitItem;
+import iskallia.itraders.Traders;
+import iskallia.itraders.init.InitItem;
+import iskallia.itraders.block.entity.TileEntityCryoChamber;
+import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
