@@ -1,7 +1,9 @@
 package iskallia.itraders.init;
 
 import iskallia.itraders.Traders;
+import iskallia.itraders.block.entity.TileEntityGhostPedestal;
 import iskallia.itraders.block.entity.TileEntityGraveStone;
+import iskallia.itraders.block.render.TESRGhostPedestal;
 import iskallia.itraders.block.render.TESRGraveStone;
 import iskallia.itraders.item.mesh.FighterEggMesh;
 import iskallia.itraders.item.mesh.MinerEggMesh;
@@ -25,6 +27,7 @@ public class InitModel {
 		registerSimpleItemModel(InitItem.MAGIC_ORE_DUST, 0);
 		registerSimpleItemModel(InitBlock.ITEM_GRAVE_STONE, 0);
 		registerSimpleItemModel(InitBlock.ITEM_INFUSION_CAULDRON, 0);
+		registerSimpleItemModel(InitBlock.ITEM_GHOST_PEDESTAL, 0);
 
 		registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
 
@@ -36,7 +39,10 @@ public class InitModel {
     
     public static void registerTileEntityRenderers() {
     	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGraveStone.class, new TESRGraveStone());
-    }
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGhostPedestal.class, new TESRGhostPedestal());
+	}
+
+    /* ---------------------------------- */
 
 	private static void registerSimpleItemModel(Item item, int metadata) {
 		ModelLoader.setCustomModelResourceLocation(item, metadata,
