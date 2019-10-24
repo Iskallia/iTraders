@@ -2,6 +2,8 @@ package iskallia.itraders.block;
 
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.entity.TileEntityGhostPedestal;
+import iskallia.itraders.entity.EntityMiniGhost;
+import iskallia.itraders.entity.EntityPedestalGhost;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
@@ -80,12 +82,12 @@ public class BlockGhostPedestal extends Block {
     }
 
     @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        if (!worldIn.isRemote) {
-            IBlockState north = worldIn.getBlockState(pos.north());
-            IBlockState south = worldIn.getBlockState(pos.south());
-            IBlockState west = worldIn.getBlockState(pos.west());
-            IBlockState east = worldIn.getBlockState(pos.east());
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+        if (!world.isRemote) {
+            IBlockState north = world.getBlockState(pos.north());
+            IBlockState south = world.getBlockState(pos.south());
+            IBlockState west = world.getBlockState(pos.west());
+            IBlockState east = world.getBlockState(pos.east());
             EnumFacing facing = state.getValue(FACING);
 
             if (facing == EnumFacing.NORTH && north.isFullBlock() && !south.isFullBlock()) {
@@ -98,7 +100,7 @@ public class BlockGhostPedestal extends Block {
                 facing = EnumFacing.WEST;
             }
 
-            worldIn.setBlockState(pos, state.withProperty(FACING, facing), 2);
+            world.setBlockState(pos, state.withProperty(FACING, facing), 2);
         }
     }
 
@@ -134,21 +136,13 @@ public class BlockGhostPedestal extends Block {
     }
 
     public boolean insertNecklace(World world, BlockPos pos, ItemStack necklaceStack) {
-        if (necklaceStack.getItem() != InitItem.SKULL_NECKLACE)
-            return false;
-
         TileEntity tileEntity = world.getTileEntity(pos);
 
         if (tileEntity == null)
             return false;
 
         TileEntityGhostPedestal teGhostPedestal = (TileEntityGhostPedestal) tileEntity;
-
-        if (teGhostPedestal.isOccupied())
-            return false;
-
-        teGhostPedestal.getInventoryHandler().insertItem(0, necklaceStack, false);
-        return true;
+        return teGhostPedestal.insertNecklace(necklaceStack);
     }
 
     public ItemStack extractNecklace(World world, BlockPos pos) {
@@ -158,8 +152,7 @@ public class BlockGhostPedestal extends Block {
             return ItemStack.EMPTY;
 
         TileEntityGhostPedestal teGhostPedestal = (TileEntityGhostPedestal) tileEntity;
-
-        return teGhostPedestal.getInventoryHandler().extractItem(0, 1, false);
+        return teGhostPedestal.extractNecklace();
     }
 
     @Override

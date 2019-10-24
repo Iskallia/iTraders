@@ -3,7 +3,6 @@ package iskallia.itraders.init;
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.entity.TileEntityGhostPedestal;
 import iskallia.itraders.block.entity.TileEntityGraveStone;
-import iskallia.itraders.block.render.TESRGhostPedestal;
 import iskallia.itraders.block.render.TESRGraveStone;
 import iskallia.itraders.item.mesh.FighterEggMesh;
 import iskallia.itraders.item.mesh.MinerEggMesh;
@@ -30,6 +29,7 @@ public class InitModel {
 		registerSimpleItemModel(InitBlock.ITEM_GHOST_PEDESTAL, 0);
 
 		registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
+		registerBlockModel(InitBlock.GHOST_PEDESTAL, 0);
 
 		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_TRADER, new TraderEggMesh(InitItem.SPAWN_EGG_TRADER));
 		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_FIGHTER, new FighterEggMesh(InitItem.SPAWN_EGG_FIGHTER));
@@ -39,7 +39,6 @@ public class InitModel {
     
     public static void registerTileEntityRenderers() {
     	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGraveStone.class, new TESRGraveStone());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGhostPedestal.class, new TESRGhostPedestal());
 	}
 
     /* ---------------------------------- */
