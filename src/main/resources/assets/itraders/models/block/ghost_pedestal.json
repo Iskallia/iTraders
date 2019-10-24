@@ -1,7 +1,6 @@
 {
-  "parent": "block/cube_top",
+  "parent": "block/pressure_plate_up",
   "textures": {
-    "top": "blocks/jukebox_top",
-    "side": "blocks/jukebox_side"
+    "texture": "blocks/iron_block"
   }
 }

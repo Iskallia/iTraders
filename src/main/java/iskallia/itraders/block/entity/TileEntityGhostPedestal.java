@@ -40,4 +40,8 @@ public class TileEntityGhostPedestal extends TileInventoryBase {
         return getInventoryHandler().getStackInSlot(0);
     }
 
+    public boolean isOccupied() {
+        return getNecklace() != ItemStack.EMPTY;
+    }
+
 }
