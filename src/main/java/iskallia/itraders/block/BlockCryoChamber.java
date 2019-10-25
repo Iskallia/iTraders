@@ -58,8 +58,31 @@ public class BlockCryoChamber extends Block {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!world.isRemote) {
+            TileEntityCryoChamber teCryoChamber = getTileEntity(world, pos, state);
+
+            if (teCryoChamber != null) {
+                ItemStack heldStack = player.getHeldItem(hand);
+                if (teCryoChamber.insertEgg(heldStack)) {
+                    player.setHeldItem(hand, ItemStack.EMPTY);
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private TileEntityCryoChamber getTileEntity(World world, BlockPos pos, IBlockState state) {
+        EnumPartType part = state.getValue(PART);
+        BlockPos tePos = part == EnumPartType.TOP ? pos.down() : pos;
+
+        TileEntity tileEntity = world.getTileEntity(tePos);
+
+        if (tileEntity == null)
+            return null;
+
+        return (TileEntityCryoChamber) tileEntity;
     }
 
     @Override
@@ -119,7 +142,7 @@ public class BlockCryoChamber extends Block {
 
     @Override
     public boolean hasTileEntity(IBlockState state) {
-        return true;
+        return state.getValue(PART) == EnumPartType.BOTTOM;
     }
 
     @Override

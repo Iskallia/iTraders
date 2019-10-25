@@ -4,6 +4,7 @@ import iskallia.itraders.block.BlockCryoChamber;
 import iskallia.itraders.block.entity.TileEntityCryoChamber;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -30,9 +31,6 @@ public class TESRCryoChamber extends TileEntitySpecialRenderer<TileEntityCryoCha
 
         IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
 
-        if(state.getValue(BlockCryoChamber.PART) == BlockCryoChamber.EnumPartType.BOTTOM)
-            return;
-
         bindTexture(tileEntity.getSkin().getLocationSkin());
         if (dummyEntity != null) {
             double dt = (System.currentTimeMillis() - animationStart) / 1000f;
@@ -46,7 +44,7 @@ public class TESRCryoChamber extends TileEntitySpecialRenderer<TileEntityCryoCha
             double rotate = 0;
 
             GlStateManager.pushMatrix();
-            GlStateManager.translate(x + 0.5f, y, z + 0.5f);
+            GlStateManager.translate(x + 0.5f, y + 1f, z + 0.5f);
             GlStateManager.rotate(getFacingAngle(state), 0f, 1f, 0f);
             GlStateManager.rotate(180f, 0f, 0f, 1f);
             GlStateManager.rotate((float) rotate, 0f, 1f, 0f);

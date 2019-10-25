@@ -1,38 +1,125 @@
 package iskallia.itraders.block.entity;
 
+import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
+import iskallia.itraders.init.InitItem;
 import iskallia.itraders.util.profile.SkinProfile;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.common.util.Constants;
 
-public class TileEntityCryoChamber extends TileEntity implements ITickable {
+import javax.annotation.Nonnull;
 
+public class TileEntityCryoChamber extends TileInventoryBase {
+
+    public static final int MAX_SHRINKING_TICKS = 20 * 10;
+
+    @Nonnull
     private SkinProfile skin = new SkinProfile();
-    private int cryoTicks; // TODO: Rename this to a better name (?) D:
 
-    public void updateSkin(String username) {
-        skin.updateSkin(username);
+    public CryoState state = CryoState.EMPTY;
+    public int shrinkingTicks = 0;
+
+    public TileEntityCryoChamber() {
+        super(1);
     }
 
+    public ItemStack getContent() {
+        return getInventoryHandler().getStackInSlot(0);
+    }
+
+    public boolean isOccupied() {
+        return getContent() != ItemStack.EMPTY;
+    }
+
+    @Nonnull
     public SkinProfile getSkin() {
         return skin;
     }
 
+    public CryoState getState() {
+        return state;
+    }
+
+    public boolean insertEgg(ItemStack eggStack) {
+        if (eggStack.getItem() != InitItem.SPAWN_EGG_FIGHTER)
+            return false;
+
+        if (isOccupied())
+            return false;
+
+        // Start shrinking state
+        state = CryoState.SHRINKING;
+        shrinkingTicks = MAX_SHRINKING_TICKS;
+        // TODO: Update skin
+
+        // Insert item
+        getInventoryHandler().insertItem(0, eggStack, false);
+        return true;
+    }
+
+    public ItemStack extractContent() {
+        if (state != CryoState.CARD)
+            return ItemStack.EMPTY;
+
+        // Go back to empty state
+        state = CryoState.EMPTY;
+
+        return getInventoryHandler().extractItem(0, 1, false);
+    }
+
+    @Override
+    protected ItemHandlerTile createNewItemHandler() {
+        return new ItemHandlerTileFiltered(this) {
+            @Override
+            public boolean canInsertItem(int slot, ItemStack toAdd, @Nonnull ItemStack existing) {
+                return existing.isEmpty() && (toAdd.getItem() == InitItem.SPAWN_EGG_FIGHTER);
+            }
+
+            @Override
+            public boolean canExtractItem(int slot, int amount, @Nonnull ItemStack existing) {
+                return !existing.isEmpty() && (state != CryoState.SHRINKING);
+            }
+        };
+    }
+
     @Override
     public void update() {
-        // TODO
+        if (!world.isRemote) {
+            if (state == CryoState.SHRINKING) {
+                if (shrinkingTicks == 0) {
+                    state = CryoState.CARD;
+                    getInventoryHandler().setStackInSlot(0, new ItemStack(InitItem.MAGIC_ORE_DUST)); // TODO
+
+                } else {
+                    shrinkingTicks--;
+                }
+            }
+        }
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        // TODO
-        super.readFromNBT(compound);
+    public void readCustomNBT(NBTTagCompound compound) {
+        super.readCustomNBT(compound);
+
+        this.state = CryoState.values()[compound.getInteger("CryoState")];
+
+        if (compound.hasKey("ShrinkingTicks", Constants.NBT.TAG_INT)) {
+            this.shrinkingTicks = compound.getInteger("ShrinkingTicks");
+        }
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        // TODO
-        return super.writeToNBT(compound);
+    public void writeCustomNBT(NBTTagCompound compound) {
+        super.writeCustomNBT(compound);
+
+        compound.setInteger("CryoState", state.ordinal());
+
+        if (state == CryoState.SHRINKING)
+            compound.setInteger("ShrinkingTicks", shrinkingTicks);
     }
+
+    public enum CryoState {EMPTY, SHRINKING, CARD}
 
 }
