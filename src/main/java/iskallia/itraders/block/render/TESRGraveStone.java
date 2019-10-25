@@ -4,9 +4,17 @@ import iskallia.itraders.block.BlockGraveStone;
 import iskallia.itraders.block.entity.TileEntityGraveStone;
 import iskallia.itraders.init.InitBlock;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 public class TESRGraveStone extends TileEntitySpecialRenderer<TileEntityGraveStone> {
 	
@@ -16,14 +24,13 @@ public class TESRGraveStone extends TileEntitySpecialRenderer<TileEntityGraveSto
 
 		IBlockState state = te.getWorld().getBlockState(te.getPos());
 		if(state.getBlock() != InitBlock.GRAVE_STONE)return;
-		
 		EnumFacing facing = state.getValue(BlockGraveStone.FACING);
         
 		this.drawString(facing, te.getName() == null ? "Unknown" : te.getName(), 12.0f / 16.0f, x, y, z, 0.01f);
 		this.drawString(facing, te.getMonths() == -1 ? "-" : te.getMonths() + " Months", 9.0f / 16.0f, x, y, z, 0.007f);
 		this.drawString(facing, te.getBlocksMined() == -1 ? "-" : "Mined " + te.getBlocksMined() + " Blocks", 7.0f / 16.0f, x, y, z, 0.007f);
 	}
-	
+
 	public void drawString(EnumFacing facing, String text, float yOffset, double x, double y, double z, float scale) {
         float size = (float)this.getFontRenderer().getStringWidth(text) * scale;
         float textCenter = (1.0f + size) / 2.0f;
@@ -49,7 +56,6 @@ public class TESRGraveStone extends TileEntitySpecialRenderer<TileEntityGraveSto
         }
         
         GlStateManager.scale(scale, scale, scale);
-        GlStateManager.depthMask(false);
         
         this.getFontRenderer().drawString(text, 0, 0, 0xFFFFFF);
         GlStateManager.popMatrix();

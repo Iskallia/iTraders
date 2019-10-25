@@ -1,16 +1,8 @@
 package iskallia.itraders.init;
 
 import iskallia.itraders.Traders;
-import iskallia.itraders.entity.EntityFighter;
-import iskallia.itraders.entity.EntityItemMagicOreDust;
-import iskallia.itraders.entity.EntityMiner;
-import iskallia.itraders.entity.EntityMiniGhost;
-import iskallia.itraders.entity.EntityTrader;
-import iskallia.itraders.entity.render.RenderFighter;
-import iskallia.itraders.entity.render.RenderItemMagicOreDust;
-import iskallia.itraders.entity.render.RenderMiner;
-import iskallia.itraders.entity.render.RenderMiniGhost;
-import iskallia.itraders.entity.render.RenderTrader;
+import iskallia.itraders.entity.*;
+import iskallia.itraders.entity.render.*;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -26,6 +18,7 @@ public class InitEntity {
 		registerEntity("miner", EntityMiner.class);
 		registerEntity("mini_ghost", EntityMiniGhost.class);
 		registerEntity("item_magic_ore_dust", EntityItemMagicOreDust.class);
+		registerEntity("pedestal_ghost", EntityPedestalGhost.class);
 	}
 
 	public static void registerEntityRenderers() {
@@ -34,7 +27,10 @@ public class InitEntity {
 		registerEntityRenderer(EntityMiner.class, RenderMiner.getRenderFactory());
 		registerEntityRenderer(EntityMiniGhost.class, RenderMiniGhost.getRenderFactory());
 		registerEntityRenderer(EntityItemMagicOreDust.class, RenderItemMagicOreDust.getRenderFactory());
+		registerEntityRenderer(EntityPedestalGhost.class, RenderPedestalGhost.getRenderFactory());
 	}
+
+	/* --------------------------------------------- */
 
 	private static void registerEntity(String name, Class<? extends Entity> entityClass) {
 		EntityRegistry.registerModEntity(Traders.getResource(name), entityClass, name, InitEntity.nextId(),

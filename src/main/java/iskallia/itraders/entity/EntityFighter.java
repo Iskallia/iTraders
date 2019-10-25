@@ -14,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -63,11 +64,6 @@ public class EntityFighter extends EntityZombie {
 	protected boolean canDespawn() {
 		return false;
 	}
-
-	@Override
-	public boolean canPickUpLoot() {
-		return true;
-	}
 	
 	@Override
 	protected boolean canEquipItem(ItemStack stack) {
@@ -92,7 +88,7 @@ public class EntityFighter extends EntityZombie {
 		} else {
 			double amplitude = this.motionX * this.motionX + this.motionZ * this.motionZ;
 
-			if (amplitude > 0.0034D) {
+			if(amplitude > 0.0034D) {
 				this.setSprinting(true);
 				this.getJumpHelper().setJumping();
 			} else {
@@ -170,10 +166,23 @@ public class EntityFighter extends EntityZombie {
 	}
 
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		IEntityLivingData livingdata1 = super.onInitialSpawn(difficulty, livingdata);
-		this.setCustomNameTag(this.getCustomNameTag());
-		return livingdata1;
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {		
+		this.setCustomNameTag(this.getCustomNameTag());	
+		this.setBreakDoorsAItask(true);
+		this.setCanPickUpLoot(true);
+		this.enablePersistence();
+		
+		//Good ol' easter egg. 
+		if(this.rand.nextInt(100) == 0) {
+	        EntityChicken chicken = new EntityChicken(this.world);
+	        chicken.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+	        chicken.onInitialSpawn(difficulty, (IEntityLivingData)null);
+	        chicken.setChickenJockey(true);
+	        this.world.spawnEntity(chicken);
+	        this.startRiding(chicken);
+		}
+		
+		return livingdata;
 	}
 
 	@Override
