@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "GGG",
+    "BBB"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:diamond_block"
+    },
+    "G": {
+      "item": "minecraft:concrete_powder",
+      "data": 7
+    },
+    "B": {
+      "item": "minecraft:concrete",
+      "data": 15
+    }
+  },
+  "result": {
+    "item": "itraders:ghost_pedestal",
+    "count": 1
+  }
+}
