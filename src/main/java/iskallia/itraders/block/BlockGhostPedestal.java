@@ -6,9 +6,11 @@ import iskallia.itraders.entity.EntityMiniGhost;
 import iskallia.itraders.entity.EntityPedestalGhost;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBasePressurePlate;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -54,6 +56,11 @@ public class BlockGhostPedestal extends Block {
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return AABB;
+    }
+
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        return BlockFaceShape.UNDEFINED;
     }
 
     @Override

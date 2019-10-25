@@ -60,7 +60,7 @@ public class RenderPedestalGhost extends RenderLivingBase<EntityPedestalGhost> {
 
         GlStateManager.color(.9f, .9f, .9f, alpha);
         GlStateManager.translate(x, y, z);
-        GlStateManager.translate(.5f, 2 * oneVoxel, .5f);
+        GlStateManager.translate(.5f, 6 * oneVoxel, .5f);
         GlStateManager.rotate(getFacingAngle(pedestalGhost.facing), 0f, 1f, 0f);
         GlStateManager.translate(0, Math.sin(dt + pedestalGhost.getEntityId()) / 20f, 0);
 
