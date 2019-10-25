@@ -15,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -101,6 +102,24 @@ public class BlockCryoChamber extends Block {
         }
 
         return true;
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        if (state.getValue(PART) == EnumPartType.BOTTOM) {
+            TileEntityCryoChamber tileEntity = getTileEntity(world, pos, state);
+
+            if (tileEntity != null) {
+                ItemStack contentStack = tileEntity.getContent();
+                if (!contentStack.isEmpty()) {
+                    InventoryHelper.spawnItemStack(
+                            world, pos.getX(), pos.getY(), pos.getZ(), contentStack
+                    );
+                }
+            }
+        }
+
+        super.breakBlock(world, pos, state);
     }
 
     private TileEntityCryoChamber getTileEntity(World world, BlockPos pos, IBlockState state) {
