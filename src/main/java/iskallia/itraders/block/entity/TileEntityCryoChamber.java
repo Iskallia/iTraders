@@ -1,6 +1,7 @@
 package iskallia.itraders.block.entity;
 
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
+import iskallia.itraders.block.BlockCryoChamber;
 import iskallia.itraders.card.SubCardData;
 import iskallia.itraders.card.SubCardGenerator;
 import iskallia.itraders.card.SubCardRarity;
@@ -9,9 +10,12 @@ import iskallia.itraders.util.profile.SkinProfile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.Tuple;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 
@@ -44,6 +48,24 @@ public class TileEntityCryoChamber extends TileInventoryBase {
 
     public CryoState getState() {
         return state;
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if (getBlockState().getValue(BlockCryoChamber.PART) == BlockCryoChamber.EnumPartType.TOP) {
+            TileEntity master = getWorld().getTileEntity(pos.down());
+            if (master != null) return master.hasCapability(capability, facing);
+        }
+        return super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (getBlockState().getValue(BlockCryoChamber.PART) == BlockCryoChamber.EnumPartType.TOP) {
+            TileEntity master = getWorld().getTileEntity(pos.down());
+            if (master != null) return master.getCapability(capability, facing);
+        }
+        return super.getCapability(capability, facing);
     }
 
     public boolean insertEgg(ItemStack eggStack) {

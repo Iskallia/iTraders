@@ -178,7 +178,7 @@ public class BlockCryoChamber extends Block {
 
     @Override
     public boolean hasTileEntity(IBlockState state) {
-        return state.getValue(PART) == EnumPartType.BOTTOM;
+        return true;
     }
 
     @Override
