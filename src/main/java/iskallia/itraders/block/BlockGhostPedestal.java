@@ -4,6 +4,7 @@ import iskallia.itraders.Traders;
 import iskallia.itraders.block.entity.TileEntityGhostPedestal;
 import iskallia.itraders.entity.EntityMiniGhost;
 import iskallia.itraders.entity.EntityPedestalGhost;
+import iskallia.itraders.gui.GuiHandler;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBasePressurePlate;
@@ -126,6 +127,9 @@ public class BlockGhostPedestal extends Block {
                 }
             }
         }
+
+        //To open the GUI. Call on client and server.
+        //player.openGui(Traders.getInstance(), GuiHandler.PEDESTAL, world, pos.getX(), pos.getY(), pos.getZ());            
 
         return super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
     }

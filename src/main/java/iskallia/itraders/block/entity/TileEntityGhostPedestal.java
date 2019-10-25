@@ -52,7 +52,7 @@ public class TileEntityGhostPedestal extends TileInventoryBase {
     }
 
     public boolean isOccupied() {
-        return getNecklace() != ItemStack.EMPTY;
+        return !getNecklace().isEmpty();
     }
 
     public boolean insertNecklace(ItemStack necklaceStack) {
