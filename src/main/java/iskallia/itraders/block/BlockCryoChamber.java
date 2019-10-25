@@ -12,6 +12,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -42,7 +43,9 @@ public class BlockCryoChamber extends Block {
         this.setRegistryName(Traders.getResource(name));
         this.setUnlocalizedName(name);
         this.setCreativeTab(InitItem.ITRADERS_TAB);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(PART, BlockCryoChamber.EnumPartType.BOTTOM));
+        this.setDefaultState(this.blockState.getBaseState()
+                .withProperty(PART, BlockCryoChamber.EnumPartType.BOTTOM)
+                .withProperty(FACING, EnumFacing.NORTH));
         this.setHardness(2f);
     }
 
@@ -89,7 +92,7 @@ public class BlockCryoChamber extends Block {
                     player.setHeldItem(hand, ItemStack.EMPTY);
                 }
 
-            } else if(teCryoChamber.state == TileEntityCryoChamber.CryoState.CARD) {
+            } else if (teCryoChamber.state == TileEntityCryoChamber.CryoState.CARD) {
                 ItemStack cardStack = teCryoChamber.extractContent();
                 if (cardStack != ItemStack.EMPTY) {
                     player.addItemStackToInventory(cardStack);
@@ -101,8 +104,7 @@ public class BlockCryoChamber extends Block {
     }
 
     private TileEntityCryoChamber getTileEntity(World world, BlockPos pos, IBlockState state) {
-        EnumPartType part = state.getValue(PART);
-        BlockPos tePos = part == EnumPartType.TOP ? pos.down() : pos;
+        BlockPos tePos = state.getValue(PART) == EnumPartType.TOP ? pos.down() : pos;
 
         TileEntity tileEntity = world.getTileEntity(tePos);
 
@@ -149,7 +151,8 @@ public class BlockCryoChamber extends Block {
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(PART, BlockCryoChamber.EnumPartType.values()[meta >> 2])
+        return this.getDefaultState()
+                .withProperty(PART, BlockCryoChamber.EnumPartType.values()[meta >> 2])
                 .withProperty(FACING, EnumFacing.getHorizontal(meta & 0b11));
     }
 

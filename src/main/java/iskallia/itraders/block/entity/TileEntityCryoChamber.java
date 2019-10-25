@@ -53,11 +53,6 @@ public class TileEntityCryoChamber extends TileInventoryBase {
         if (isOccupied())
             return false;
 
-        // Start shrinking state
-        state = CryoState.SHRINKING;
-        shrinkingTicks = MAX_SHRINKING_TICKS;
-        // TODO: Update skin
-
         // Insert item
         getInventoryHandler().insertItem(0, eggStack, false);
         return true;
@@ -67,15 +62,40 @@ public class TileEntityCryoChamber extends TileInventoryBase {
         if (state != CryoState.CARD)
             return ItemStack.EMPTY;
 
-        // Go back to empty state
-        state = CryoState.EMPTY;
-
         return getInventoryHandler().extractItem(0, 1, false);
     }
 
     @Override
     protected ItemHandlerTile createNewItemHandler() {
         return new ItemHandlerTileFiltered(this) {
+            @Nonnull
+            @Override
+            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+                ItemStack remainingStack = super.insertItem(slot, stack, simulate);
+
+                if (remainingStack == ItemStack.EMPTY) {
+                    // Start shrinking state
+                    state = CryoState.SHRINKING;
+                    shrinkingTicks = MAX_SHRINKING_TICKS;
+                    // TODO: Update skin
+                }
+
+                return remainingStack;
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                ItemStack extractedStack = super.extractItem(slot, amount, simulate);
+
+                if (extractedStack != ItemStack.EMPTY) {
+                    // Go back to empty state
+                    state = CryoState.EMPTY;
+                }
+
+                return extractedStack;
+            }
+
             @Override
             public boolean canInsertItem(int slot, ItemStack toAdd, @Nonnull ItemStack existing) {
                 return existing.isEmpty() && (toAdd.getItem() == InitItem.SPAWN_EGG_FIGHTER);
