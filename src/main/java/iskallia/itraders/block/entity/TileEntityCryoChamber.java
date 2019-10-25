@@ -1,12 +1,16 @@
 package iskallia.itraders.block.entity;
 
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
+import iskallia.itraders.card.SubCardData;
+import iskallia.itraders.card.SubCardGenerator;
+import iskallia.itraders.card.SubCardRarity;
 import iskallia.itraders.init.InitItem;
 import iskallia.itraders.util.profile.SkinProfile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
@@ -90,13 +94,22 @@ public class TileEntityCryoChamber extends TileInventoryBase {
             if (state == CryoState.SHRINKING) {
                 if (shrinkingTicks == 0) {
                     state = CryoState.CARD;
-                    getInventoryHandler().setStackInSlot(0, new ItemStack(InitItem.MAGIC_ORE_DUST)); // TODO
+                    turnEggIntoCard();
 
                 } else {
                     shrinkingTicks--;
                 }
+                markForUpdate();
             }
         }
+    }
+
+    private void turnEggIntoCard() { // TODO: Generate sub card and put on Slot#0
+        ItemStack eggStack = getContent();
+
+        ItemStack pseudoSubCard = new ItemStack(InitItem.MAGIC_ORE_DUST); // TODO
+
+        getInventoryHandler().setStackInSlot(0, pseudoSubCard);
     }
 
     @Override

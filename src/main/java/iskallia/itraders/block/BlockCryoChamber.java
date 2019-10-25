@@ -52,9 +52,27 @@ public class BlockCryoChamber extends Block {
                 ? BOTTOM_AABB : TOP_AABB;
     }
 
-    public int getMetaFromState(IBlockState state) {
-        return (state.getValue(PART).ordinal() << 2)
-                | state.getValue(FACING).getHorizontalIndex();
+    @Override
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+        if (!world.isRemote) {
+            IBlockState north = world.getBlockState(pos.north());
+            IBlockState south = world.getBlockState(pos.south());
+            IBlockState west = world.getBlockState(pos.west());
+            IBlockState east = world.getBlockState(pos.east());
+            EnumFacing facing = state.getValue(FACING);
+
+            if (facing == EnumFacing.NORTH && north.isFullBlock() && !south.isFullBlock()) {
+                facing = EnumFacing.SOUTH;
+            } else if (facing == EnumFacing.SOUTH && south.isFullBlock() && !north.isFullBlock()) {
+                facing = EnumFacing.NORTH;
+            } else if (facing == EnumFacing.WEST && west.isFullBlock() && !east.isFullBlock()) {
+                facing = EnumFacing.EAST;
+            } else if (facing == EnumFacing.EAST && east.isFullBlock() && !west.isFullBlock()) {
+                facing = EnumFacing.WEST;
+            }
+
+            world.setBlockState(pos, state.withProperty(FACING, facing), 2);
+        }
     }
 
     @Override
@@ -62,10 +80,19 @@ public class BlockCryoChamber extends Block {
         if (!world.isRemote) {
             TileEntityCryoChamber teCryoChamber = getTileEntity(world, pos, state);
 
-            if (teCryoChamber != null) {
+            if (teCryoChamber == null)
+                return true;
+
+            if (teCryoChamber.state == TileEntityCryoChamber.CryoState.EMPTY) {
                 ItemStack heldStack = player.getHeldItem(hand);
                 if (teCryoChamber.insertEgg(heldStack)) {
                     player.setHeldItem(hand, ItemStack.EMPTY);
+                }
+
+            } else if(teCryoChamber.state == TileEntityCryoChamber.CryoState.CARD) {
+                ItemStack cardStack = teCryoChamber.extractContent();
+                if (cardStack != ItemStack.EMPTY) {
+                    player.addItemStackToInventory(cardStack);
                 }
             }
         }
@@ -115,9 +142,15 @@ public class BlockCryoChamber extends Block {
         return new ItemStack(InitItem.CRYO_CHAMBER);
     }
 
+    public int getMetaFromState(IBlockState state) {
+        return (state.getValue(PART).ordinal() << 2)
+                | state.getValue(FACING).getHorizontalIndex();
+    }
+
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(PART, BlockCryoChamber.EnumPartType.values()[meta >> 2]).withProperty(FACING, EnumFacing.getHorizontal(meta & 0b11));
+        return this.getDefaultState().withProperty(PART, BlockCryoChamber.EnumPartType.values()[meta >> 2])
+                .withProperty(FACING, EnumFacing.getHorizontal(meta & 0b11));
     }
 
     @Override

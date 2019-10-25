@@ -4,9 +4,11 @@ import iskallia.itraders.block.BlockCryoChamber;
 import iskallia.itraders.block.entity.TileEntityCryoChamber;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,28 +31,41 @@ public class TESRCryoChamber extends TileEntitySpecialRenderer<TileEntityCryoCha
             initDummyEntity(tileEntity.getWorld());
         }
 
+        if(tileEntity.state == TileEntityCryoChamber.CryoState.EMPTY)
+            return; // Nothing to render
+
         IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
 
-        bindTexture(tileEntity.getSkin().getLocationSkin());
-        if (dummyEntity != null) {
-            double dt = (System.currentTimeMillis() - animationStart) / 1000f;
+        if (tileEntity.state == TileEntityCryoChamber.CryoState.SHRINKING) {
+            bindTexture(tileEntity.getSkin().getLocationSkin());
+            if (dummyEntity != null) {
+                double scale = map(tileEntity.shrinkingTicks,
+                        TileEntityCryoChamber.MAX_SHRINKING_TICKS, 0,
+                        0.075f, 0.010f);
 
-            if (dt >= 10) {
-               animationStart = System.currentTimeMillis();
-               dt = 0;
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(x + 0.5f, y + 1f, z + 0.5f);
+                GlStateManager.rotate(getFacingAngle(state), 0f, 1f, 0f);
+                GlStateManager.rotate(180f, 0f, 0f, 1f);
+                GlStateManager.rotate(180f, 0f, 1f, 0f);
+                GlStateManager.scale(scale, scale, scale);
+                GlStateManager.translate(0, -scale * 175, 0);
+                playerModel.render(dummyEntity, 0, 0, 0, 0, 0, 1f);
+                GlStateManager.popMatrix();
             }
+        }
 
-            double scale = map((float) dt, 0, 10, 0.075f, 0.010f);
-            double rotate = 0;
+        if(tileEntity.state == TileEntityCryoChamber.CryoState.CARD) {
+            double dt = (System.currentTimeMillis() - animationStart) / 1000d;
+            double animOffsetY = Math.sin(2 * dt + tileEntity.hashCode() % 100) / 16d;
+            float animRotation = (float) (dt * 50d);
 
             GlStateManager.pushMatrix();
-            GlStateManager.translate(x + 0.5f, y + 1f, z + 0.5f);
-            GlStateManager.rotate(getFacingAngle(state), 0f, 1f, 0f);
-            GlStateManager.rotate(180f, 0f, 0f, 1f);
-            GlStateManager.rotate((float) rotate, 0f, 1f, 0f);
-            GlStateManager.scale(scale, scale, scale);
-            GlStateManager.translate(0, -scale * 175, 0);
-            playerModel.render(dummyEntity, 0, 0, 0, 0, 0, 1f);
+            GlStateManager.translate(x + 0.5d, y + 0.75f + animOffsetY, z + 0.5d);
+            GlStateManager.rotate(getFacingAngle(state) + animRotation, 0f, 1f, 0f);
+            Minecraft.getMinecraft().getRenderItem().renderItem(
+                    tileEntity.getContent(),
+                    ItemCameraTransforms.TransformType.GROUND);
             GlStateManager.popMatrix();
         }
     }
