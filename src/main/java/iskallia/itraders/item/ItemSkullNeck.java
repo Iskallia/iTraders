@@ -101,6 +101,19 @@ public class ItemSkullNeck extends Item implements IBauble {
         return potionEffectList;
     }
 
+    @Nullable
+    public static String getHeadOwner(ItemStack stack) {
+        if(stack.getItem() != InitItem.SKULL_NECKLACE)
+            return null;
+
+        NBTTagCompound stackNBT = stack.getTagCompound();
+
+        if(stackNBT == null || !stackNBT.hasKey("HeadOwner", Constants.NBT.TAG_STRING))
+            return null;
+
+        return stackNBT.getString("HeadOwner");
+    }
+
     public static final Map<UUID, EntityMiniGhost> GHOST_MAP = new HashMap<>();
 
     public static EntityMiniGhost createMiniGhostFor(EntityLivingBase player, ItemStack stack) {

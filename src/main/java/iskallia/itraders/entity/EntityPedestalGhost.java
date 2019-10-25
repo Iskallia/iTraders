@@ -2,6 +2,7 @@ package iskallia.itraders.entity;
 
 import iskallia.itraders.block.entity.TileEntityGhostPedestal;
 import iskallia.itraders.init.InitItem;
+import iskallia.itraders.item.ItemSkullNeck;
 import iskallia.itraders.util.profile.SkinProfile;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -68,7 +69,12 @@ public class EntityPedestalGhost extends EntityLivingBase {
         if (stack.getItem() != InitItem.SKULL_NECKLACE)
             return true;
 
-        if (!stack.getTagCompound().getString("HeadOwner").equals(name))
+        String headOwner = ItemSkullNeck.getHeadOwner(stack);
+
+        if (headOwner == null)
+            return true;
+
+        if (!headOwner.equals(name))
             return true;
 
         return false;

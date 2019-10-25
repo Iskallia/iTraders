@@ -4,6 +4,7 @@ import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import iskallia.itraders.block.BlockGhostPedestal;
 import iskallia.itraders.entity.EntityPedestalGhost;
 import iskallia.itraders.init.InitItem;
+import iskallia.itraders.item.ItemSkullNeck;
 import iskallia.itraders.util.profile.SkinProfile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -81,12 +82,14 @@ public class TileEntityGhostPedestal extends TileInventoryBase {
         if ((pedestalGhost == null) && isOccupied()) {
             IBlockState blockState = world.getBlockState(pos);
             EnumFacing facing = blockState.getValue(BlockGhostPedestal.FACING);
-            String name = getNecklace().getTagCompound().getString("HeadOwner");
+            String name = ItemSkullNeck.getHeadOwner(getNecklace());
 
             pedestalGhost = new EntityPedestalGhost(world);
             pedestalGhost.setPosition(pos.getX(), pos.getY(), pos.getZ());
-            pedestalGhost.skin.updateSkin(name);
-            pedestalGhost.name = name;
+            if (name != null) {
+                pedestalGhost.skin.updateSkin(name);
+                pedestalGhost.name = name;
+            }
             pedestalGhost.facing = facing.getOpposite();
             pedestalGhost.blockPos = pos;
 
