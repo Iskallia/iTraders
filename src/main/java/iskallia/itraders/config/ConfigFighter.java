@@ -15,7 +15,11 @@ import net.minecraft.nbt.NBTTagList;
 public class ConfigFighter extends Config {
 
 	@Expose
+	public boolean CRAFTABLE_EGGS;
+
+	@Expose
 	public int LOOT_COUNT;
+	
 	@Expose
 	public List<Product> LOOT = new ArrayList<>();
 
@@ -26,6 +30,8 @@ public class ConfigFighter extends Config {
 
 	@Override
 	protected void resetConfig() {
+		this.CRAFTABLE_EGGS = false;
+		
 		this.LOOT_COUNT = 3;
 
 		this.LOOT.add(new Product(Items.REDSTONE, 0, 64, null));
