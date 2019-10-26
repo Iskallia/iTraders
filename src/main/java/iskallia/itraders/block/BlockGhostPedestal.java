@@ -6,6 +6,7 @@ import iskallia.itraders.entity.EntityMiniGhost;
 import iskallia.itraders.entity.EntityPedestalGhost;
 import iskallia.itraders.gui.GuiHandler;
 import iskallia.itraders.init.InitItem;
+import iskallia.itraders.util.Trade;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBasePressurePlate;
 import net.minecraft.block.BlockHorizontal;
@@ -114,22 +115,24 @@ public class BlockGhostPedestal extends Block {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!player.world.isRemote) {
-            if (player.isSneaking()) {
+        if(player.isSneaking()) { // Both SERVER + CLIENT
+            player.openGui(Traders.getInstance(), GuiHandler.PEDESTAL, world, pos.getX(), pos.getY(), pos.getZ());
+            return true;
+
+        } else /*if (!player.world.isRemote)*/ {
+            ItemStack heldStack = player.getHeldItem(hand);
+
+            if (heldStack.isEmpty()) {
                 ItemStack stack = extractNecklace(world, pos);
                 if (stack != ItemStack.EMPTY)
                     player.addItemStackToInventory(stack);
+                return true;
 
-            } else {
-                ItemStack stack = player.getHeldItem(hand);
-                if (insertNecklace(world, pos, stack)) {
-                    player.setHeldItem(hand, ItemStack.EMPTY);
-                }
+            } else if (insertNecklace(world, pos, heldStack)) {
+                player.setHeldItem(hand, ItemStack.EMPTY);
+                return true;
             }
         }
-
-        //To open the GUI. Call on client and server.
-        //player.openGui(Traders.getInstance(), GuiHandler.PEDESTAL, world, pos.getX(), pos.getY(), pos.getZ());            
 
         return super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
     }
