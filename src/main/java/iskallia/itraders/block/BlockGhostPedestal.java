@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 public class BlockGhostPedestal extends Block {
 
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.0625D, 0.9375D);
+    protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.3125D, 0.9375D);
 
     public BlockGhostPedestal(String name) {
         super(Material.ROCK);
@@ -52,7 +52,7 @@ public class BlockGhostPedestal extends Block {
     @Nullable
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-        return NULL_AABB;
+        return AABB;
     }
 
     @Override
