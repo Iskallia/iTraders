@@ -31,7 +31,7 @@ public class EntityFighter extends EntityZombie {
 	public SkinProfile skin;	
 	public String lastName = "Fighter";
 
-	public float sizeMultiplier = this.rand.nextFloat() * 2.0f + 0.8f;
+	public float sizeMultiplier = 1.0f;
 	public TieredLoot loot = TieredLoot.get(TieredLoot.Tier.COMMON);
 
 	public EntityFighter(World world) {
@@ -108,9 +108,11 @@ public class EntityFighter extends EntityZombie {
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 		
-		if(compound.hasKey("SizeMultiplier")) {
+		if(compound.getCompoundTag("SubData").hasKey("Months")) {
+			this.changeSize(compound.getCompoundTag("SubData").getInteger("Months") / 6.0f + 0.5f);
+		} else if(compound.hasKey("SizeMultiplier")) {
 			this.changeSize(compound.getFloat("SizeMultiplier"));
-		}
+		} 
 		
 		boolean needsGear = true;
 
