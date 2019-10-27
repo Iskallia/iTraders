@@ -11,7 +11,7 @@ import iskallia.itraders.card.SubCardData;
 import iskallia.itraders.card.SubCardGenerator;
 import iskallia.itraders.card.SubCardRarity;
 import iskallia.itraders.init.InitItem;
-import iskallia.itraders.subgame.ArenaTemplateManager;
+import iskallia.itraders.subgame.arena.ArenaTemplateManager;
 import iskallia.itraders.util.NBTHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -31,11 +31,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Class: ItemSubCard
- * Created by HellFirePvP
- * Date: 16.10.2019 / 20:06
- */
 public class ItemSubCard extends Item {
 
     public ItemSubCard(String name) {

@@ -2,11 +2,6 @@ package iskallia.itraders.card;
 
 import net.minecraft.util.text.TextFormatting;
 
-/**
- * Class: SubCardRarity
- * Created by HellFirePvP
- * Date: 16.10.2019 / 20:45
- */
 public enum SubCardRarity {
 
     COMMON(TextFormatting.WHITE),

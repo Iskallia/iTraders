@@ -10,11 +10,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-/**
- * Class: BlockGameController
- * Created by HellFirePvP
- * Date: 16.10.2019 / 19:54
- */
 public class BlockSubGameController extends BlockContainer {
 
     public BlockSubGameController() {

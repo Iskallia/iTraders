@@ -4,11 +4,6 @@ import java.util.Random;
 
 import com.google.gson.annotations.Expose;
 
-/**
- * Class: ValueRangeFloat
- * Created by HellFirePvP
- * Date: 17.10.2019 / 20:48
- */
 public class ValueRangeFloat {
 
     @Expose

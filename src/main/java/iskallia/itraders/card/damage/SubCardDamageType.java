@@ -5,11 +5,6 @@ import java.util.function.Function;
 import iskallia.itraders.util.math.ValueRangeInt;
 import net.minecraft.util.text.TextFormatting;
 
-/**
- * Class: SubCardDamageType
- * Created by HellFirePvP
- * Date: 17.10.2019 / 17:09
- */
 public enum SubCardDamageType {
 
     UNTYPED(TextFormatting.GOLD, (rangeIn) -> rangeIn);

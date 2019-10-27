@@ -1,13 +1,8 @@
-package iskallia.itraders.subgame;
+package iskallia.itraders.subgame.arena;
 
 import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.init.Blocks;
 
-/**
- * Class: DefaultArenaTemplate
- * Created by HellFirePvP
- * Date: 19.10.2019 / 12:58
- */
 public class DefaultArenaTemplate extends ArenaTemplate {
 
     public static DefaultArenaTemplate INSTANCE = new DefaultArenaTemplate();

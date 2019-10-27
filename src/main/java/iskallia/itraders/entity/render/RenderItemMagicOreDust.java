@@ -12,11 +12,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-/**
- * Class: RenderItemMagicOreDust
- * Created by HellFirePvP
- * Date: 18.10.2019 / 21:01
- */
 public class RenderItemMagicOreDust extends RenderEntityItem {
 
     protected static IRenderFactory renderFactory = new RenderItemMagicOreDust.Factory();

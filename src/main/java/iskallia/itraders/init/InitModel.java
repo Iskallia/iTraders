@@ -3,7 +3,9 @@ package iskallia.itraders.init;
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.entity.TileEntityGhostPedestal;
 import iskallia.itraders.block.entity.TileEntityGraveStone;
+import iskallia.itraders.block.entity.TileEntitySubGameController;
 import iskallia.itraders.block.render.TESRGraveStone;
+import iskallia.itraders.block.render.TESRSubGameController;
 import iskallia.itraders.item.mesh.FighterEggMesh;
 import iskallia.itraders.item.mesh.MinerEggMesh;
 import iskallia.itraders.item.mesh.SkullNeckMesh;
@@ -39,6 +41,7 @@ public class InitModel {
     
     public static void registerTileEntityRenderers() {
     	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGraveStone.class, new TESRGraveStone());
+    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySubGameController.class, new TESRSubGameController());
 	}
 
     /* ---------------------------------- */

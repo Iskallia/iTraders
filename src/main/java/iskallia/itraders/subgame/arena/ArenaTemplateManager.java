@@ -1,4 +1,4 @@
-package iskallia.itraders.subgame;
+package iskallia.itraders.subgame.arena;
 
 import java.io.File;
 import java.io.FileReader;
@@ -17,11 +17,6 @@ import iskallia.itraders.Traders;
 import iskallia.itraders.util.gson.JsonBlockStateAdapter;
 import net.minecraft.block.state.IBlockState;
 
-/**
- * Class: ArenaTemplateManager
- * Created by HellFirePvP
- * Date: 19.10.2019 / 12:54
- */
 public class ArenaTemplateManager {
 
     private static final String ROOT_PATH = "subgame/arena";
@@ -32,8 +27,18 @@ public class ArenaTemplateManager {
     private static Map<UUID, ArenaTemplate> loadedTemplates = new HashMap<>();
 
     @Nonnull
-    public static ArenaTemplate loadUserTemplate(UUID plUUID) {
+    public static ArenaTemplate loadUserTemplate(@Nonnull UUID plUUID) {
         return loadedTemplates.computeIfAbsent(plUUID, uuid -> loadTemplate(uuid.toString() + ".tpl"));
+    }
+
+    @Nonnull
+    public static String serializeArenaTemplate(@Nonnull ArenaTemplate template) {
+        return GSON.toJson(ArenaTemplatePalette.fromTemplate(template));
+    }
+
+    @Nonnull
+    public static ArenaTemplate deserializeArenaTemplate(@Nonnull String templateStr) {
+        return GSON.fromJson(templateStr, ArenaTemplatePalette.class).toTemplate();
     }
 
     //Allows for modification of the base template.

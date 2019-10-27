@@ -8,6 +8,7 @@ import iskallia.itraders.block.BlockInfusionCauldron;
 import iskallia.itraders.block.entity.TileEntityGhostPedestal;
 import iskallia.itraders.block.entity.TileEntityGraveStone;
 import iskallia.itraders.block.entity.TileEntityInfusionCauldron;
+import iskallia.itraders.block.entity.TileEntitySubGameController;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -38,6 +39,7 @@ public class InitBlock {
         GameRegistry.registerTileEntity(TileEntityInfusionCauldron.class, Traders.getResource("infusion_cauldron"));
         GameRegistry.registerTileEntity(TileEntityGraveStone.class, Traders.getResource("grave_stone"));
  		GameRegistry.registerTileEntity(TileEntityGhostPedestal.class, Traders.getResource("ghost_pedestal"));
+ 		GameRegistry.registerTileEntity(TileEntitySubGameController.class, Traders.getResource("subgame_controller"));
     }
 
 	public static void registerItemBlocks(IForgeRegistry<Item> registry) {

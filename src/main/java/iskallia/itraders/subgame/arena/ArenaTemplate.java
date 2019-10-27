@@ -1,14 +1,9 @@
-package iskallia.itraders.subgame;
+package iskallia.itraders.subgame.arena;
 
 import hellfirepvp.astralsorcery.common.structure.array.BlockArray;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 
-/**
- * Class: ArenaTemplate
- * Created by HellFirePvP
- * Date: 19.10.2019 / 09:23
- */
 public class ArenaTemplate extends BlockArray {
 
     public BlockArray rotateYCCW() {

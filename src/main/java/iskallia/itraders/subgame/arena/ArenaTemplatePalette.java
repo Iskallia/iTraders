@@ -1,4 +1,4 @@
-package iskallia.itraders.subgame;
+package iskallia.itraders.subgame.arena;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,11 +12,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 
-/**
- * Class: ArenaTemplatePalette
- * Created by HellFirePvP
- * Date: 19.10.2019 / 13:20
- */
 public class ArenaTemplatePalette {
 
     private Map<Integer, IBlockState> palette;

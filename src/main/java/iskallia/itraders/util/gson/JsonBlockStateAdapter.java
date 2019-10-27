@@ -16,11 +16,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-/**
- * Class: JsonBlockStateAdapter
- * Created by HellFirePvP
- * Date: 19.10.2019 / 13:01
- */
 public class JsonBlockStateAdapter extends TypeAdapter<IBlockState> {
 
     @Override

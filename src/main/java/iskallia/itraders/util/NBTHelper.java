@@ -6,11 +6,6 @@ import iskallia.itraders.Traders;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-/**
- * Class: NBTHelper
- * Created by HellFirePvP
- * Date: 16.10.2019 / 20:09
- */
 public class NBTHelper {
 
     @Nonnull

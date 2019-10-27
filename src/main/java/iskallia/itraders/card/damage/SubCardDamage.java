@@ -11,25 +11,23 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Class: SubCardDamage
- * Created by HellFirePvP
- * Date: 17.10.2019 / 17:10
- */
 public class SubCardDamage {
 
     private static final Random rand = new Random();
 
     private final SubCardDamageType type;
+    private final SubCardAttackType attackType;
     private final ValueRangeInt damageRange;
 
-    public SubCardDamage(SubCardDamageType type, ValueRangeInt damageRange) {
+    public SubCardDamage(SubCardDamageType type, SubCardAttackType attackType, ValueRangeInt damageRange) {
         this.type = type;
+        this.attackType = attackType;
         this.damageRange = type.modify(damageRange);
     }
 
     public SubCardDamage(NBTTagCompound in) {
         this.type = SubCardDamageType.values()[MathHelper.clamp(in.getInteger("type"), 0, SubCardDamageType.values().length - 1)];
+        this.attackType = SubCardAttackType.values()[MathHelper.clamp(in.getInteger("attackType"), 0, SubCardAttackType.values().length - 1)];
         this.damageRange = new ValueRangeInt(in.getInteger("min"), in.getInteger("max"));
     }
 
@@ -46,12 +44,17 @@ public class SubCardDamage {
         return type;
     }
 
+    public SubCardAttackType getAttackType() {
+        return attackType;
+    }
+
     public int getDamageRoll() {
         return this.damageRange.getValue(rand);
     }
 
     public void writeToNBT(NBTTagCompound out) {
         out.setInteger("type", this.type.ordinal());
+        out.setInteger("attackType", this.attackType.ordinal());
         out.setInteger("min", this.damageRange.getMin());
         out.setInteger("max", this.damageRange.getMax());
     }

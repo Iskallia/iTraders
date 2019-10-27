@@ -12,11 +12,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Class: EntityItemMagicOreDust
- * Created by HellFirePvP
- * Date: 18.10.2019 / 20:59
- */
 public class EntityItemMagicOreDust extends EntityItem {
 
     public EntityItemMagicOreDust(World worldIn) {

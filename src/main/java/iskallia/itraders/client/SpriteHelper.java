@@ -10,11 +10,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Class: SpriteHelper
- * Created by HellFirePvP
- * Date: 18.10.2019 / 06:24
- */
 @SideOnly(Side.CLIENT)
 public class SpriteHelper {
 

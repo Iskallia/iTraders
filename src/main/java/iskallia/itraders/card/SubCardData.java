@@ -11,11 +11,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 
-/**
- * Class: SubCardData
- * Created by HellFirePvP
- * Date: 16.10.2019 / 19:45
- */
 public class SubCardData {
 
     private static final DecimalFormat MS_FORMAT = new DecimalFormat("##.##");
@@ -37,6 +32,22 @@ public class SubCardData {
         this.armor = in.getInteger("armor");
         this.movespeed = in.getFloat("movespeed");
         this.damage = new SubCardDamage(in.getCompoundTag("damage"));
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getArmor() {
+        return armor;
+    }
+
+    public float getTileSpeed() {
+        return movespeed;
+    }
+
+    public SubCardDamage getDamage() {
+        return damage;
     }
 
     @SideOnly(Side.CLIENT)

@@ -9,11 +9,6 @@ import iskallia.itraders.card.damage.SubCardDamageType;
 import iskallia.itraders.util.math.ValueRangeFloat;
 import iskallia.itraders.util.math.ValueRangeInt;
 
-/**
- * Class: ConfigCardGenerator
- * Created by HellFirePvP
- * Date: 16.10.2019 / 20:51
- */
 public class ConfigCardGenerator extends Config {
 
     @Expose

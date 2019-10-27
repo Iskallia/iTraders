@@ -4,11 +4,6 @@ import java.util.Random;
 
 import com.google.gson.annotations.Expose;
 
-/**
- * Class: ValueRangeInt
- * Created by HellFirePvP
- * Date: 17.10.2019 / 20:47
- */
 public class ValueRangeInt {
 
     @Expose

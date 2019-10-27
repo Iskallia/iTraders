@@ -9,11 +9,6 @@ import iskallia.itraders.card.damage.SubCardDamageType;
 import iskallia.itraders.util.math.ValueRangeInt;
 import net.minecraft.util.Tuple;
 
-/**
- * Class: SubCardGenerator
- * Created by HellFirePvP
- * Date: 16.10.2019 / 20:55
- */
 public class SubCardGenerator {
 
     private static final Random rand = new Random();
