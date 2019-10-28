@@ -89,7 +89,7 @@ public class BlockCryoChamber extends Block {
 
             if (teCryoChamber.state == TileEntityCryoChamber.CryoState.EMPTY) {
                 ItemStack heldStack = player.getHeldItem(hand);
-                if (teCryoChamber.insertEgg(heldStack)) {
+                if (teCryoChamber.insertEgg(heldStack) && !player.isCreative()) {
                     player.setHeldItem(hand, ItemStack.EMPTY);
                 }
 

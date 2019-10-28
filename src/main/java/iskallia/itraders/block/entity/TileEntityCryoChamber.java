@@ -6,6 +6,7 @@ import iskallia.itraders.card.SubCardData;
 import iskallia.itraders.card.SubCardGenerator;
 import iskallia.itraders.card.SubCardRarity;
 import iskallia.itraders.init.InitItem;
+import iskallia.itraders.item.ItemSpawnEggFighter;
 import iskallia.itraders.util.profile.SkinProfile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,6 +26,7 @@ public class TileEntityCryoChamber extends TileInventoryBase {
 
     @Nonnull
     private SkinProfile skin = new SkinProfile();
+    private String nickname;
 
     public CryoState state = CryoState.EMPTY;
     public int shrinkingTicks = 0;
@@ -39,6 +41,10 @@ public class TileEntityCryoChamber extends TileInventoryBase {
 
     public boolean isOccupied() {
         return getContent() != ItemStack.EMPTY;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 
     @Nonnull
@@ -99,7 +105,7 @@ public class TileEntityCryoChamber extends TileInventoryBase {
                     // Start shrinking state
                     state = CryoState.SHRINKING;
                     shrinkingTicks = MAX_SHRINKING_TICKS;
-                    // TODO: Update skin
+                    nickname = ItemSpawnEggFighter.getNickname(stack);
                 }
 
                 return remainingStack;
@@ -144,6 +150,15 @@ public class TileEntityCryoChamber extends TileInventoryBase {
                 markForUpdate();
             }
         }
+
+        if (world.isRemote) {
+            if (nickname != null) {
+                String previousNickname = skin.getLatestNickname();
+                if (previousNickname == null || !previousNickname.equals(nickname)) {
+                    skin.updateSkin(nickname);
+                }
+            }
+        }
     }
 
     private void turnEggIntoCard() { // TODO: Generate sub card and put on Slot#0
@@ -158,16 +173,20 @@ public class TileEntityCryoChamber extends TileInventoryBase {
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
+        if (compound.hasKey("Nickname", Constants.NBT.TAG_STRING))
+            this.nickname = compound.getString("Nickname");
+
         this.state = CryoState.values()[compound.getInteger("CryoState")];
 
-        if (compound.hasKey("ShrinkingTicks", Constants.NBT.TAG_INT)) {
+        if (compound.hasKey("ShrinkingTicks", Constants.NBT.TAG_INT))
             this.shrinkingTicks = compound.getInteger("ShrinkingTicks");
-        }
     }
 
     @Override
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
+
+        compound.setString("Nickname", nickname != null ? nickname : "");
 
         compound.setInteger("CryoState", state.ordinal());
 

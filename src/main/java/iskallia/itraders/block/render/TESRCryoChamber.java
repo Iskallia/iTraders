@@ -10,6 +10,7 @@ import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -37,7 +38,10 @@ public class TESRCryoChamber extends TileEntitySpecialRenderer<TileEntityCryoCha
         IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
 
         if (tileEntity.state == TileEntityCryoChamber.CryoState.SHRINKING) {
-            bindTexture(tileEntity.getSkin().getLocationSkin());
+            bindTexture(!tileEntity.getNickname().isEmpty()
+                    ? tileEntity.getSkin().getLocationSkin()
+                    : DefaultPlayerSkin.getDefaultSkinLegacy());
+
             if (dummyEntity != null) {
                 double scale = map(tileEntity.shrinkingTicks,
                         TileEntityCryoChamber.MAX_SHRINKING_TICKS, 0,
