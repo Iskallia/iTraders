@@ -7,6 +7,7 @@ import iskallia.itraders.card.SubCardGenerator;
 import iskallia.itraders.card.SubCardRarity;
 import iskallia.itraders.init.InitItem;
 import iskallia.itraders.item.ItemSpawnEggFighter;
+import iskallia.itraders.item.ItemSubCard;
 import iskallia.itraders.util.profile.SkinProfile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -161,12 +162,17 @@ public class TileEntityCryoChamber extends TileInventoryBase {
         }
     }
 
-    private void turnEggIntoCard() { // TODO: Generate sub card and put on Slot#0
+    private void turnEggIntoCard() {
         ItemStack eggStack = getContent();
+        String eggNickname = ItemSpawnEggFighter.getNickname(eggStack);
 
-        ItemStack pseudoSubCard = new ItemStack(InitItem.MAGIC_ORE_DUST); // TODO
+        ItemStack subCard = new ItemStack(InitItem.SUB_CARD);
+        Tuple<SubCardRarity, SubCardData> cardData = SubCardGenerator.generateRandom();
+        ItemSubCard.setSubUUID(subCard, eggNickname != null ? eggNickname : "");
+        ItemSubCard.setCardRarity(subCard, cardData.getFirst());
+        ItemSubCard.setCardData(subCard, cardData.getSecond());
 
-        getInventoryHandler().setStackInSlot(0, pseudoSubCard);
+        getInventoryHandler().setStackInSlot(0, subCard);
     }
 
     @Override
