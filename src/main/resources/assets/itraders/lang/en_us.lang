@@ -19,6 +19,8 @@ item.magic_ore_dust.name=Magic Ore Dust
 tile.infusion_cauldron.name=Infusion Cauldron
 tile.grave_stone.name=Grave Stone
 tile.ghost_pedestal.name=Ghost Pedestal
+tile.stone.andesite.name=Andersite
+tile.stone.andesiteSmooth.name=Polished Andersite
 
 itraders.card.rarity.common.name=
 itraders.card.rarity.rare.name=Rare
