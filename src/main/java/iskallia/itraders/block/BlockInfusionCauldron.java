@@ -40,6 +40,7 @@ public class BlockInfusionCauldron extends BlockCauldron {
 		this.setRegistryName(Traders.getResource(name));
 
 		this.setHardness(2f);
+		this.setLightLevel(12.0f / 15.0f);
 		this.setCreativeTab(InitItem.ITRADERS_TAB);
 	}
 
