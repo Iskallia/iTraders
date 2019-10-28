@@ -328,17 +328,7 @@ public class EntityMiner extends EntityCreature {
 	}
 	
 	public void setMiningDistance(int months) {	
-		if(months < 3) {
-			this.miningDistance = 10 + this.rand.nextInt(25);
-		} else if(months < 6) {
-			this.miningDistance = 10 + this.rand.nextInt(55);
-		} else if(months < 12) {
-			this.miningDistance = 10 + this.rand.nextInt(85);
-		} else if(months < 24) {
-			this.miningDistance = 10 + this.rand.nextInt(121);
-		} else {
-			this.miningDistance = 10 + this.rand.nextInt(151);
-		}
+		this.miningDistance = months * 5 + 10;
 	}
 	
 }
