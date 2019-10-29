@@ -6,10 +6,7 @@ import iskallia.itraders.block.entity.TileEntityGhostPedestal;
 import iskallia.itraders.block.entity.TileEntityGraveStone;
 import iskallia.itraders.block.render.TESRCryoChamber;
 import iskallia.itraders.block.render.TESRGraveStone;
-import iskallia.itraders.item.mesh.FighterEggMesh;
-import iskallia.itraders.item.mesh.MinerEggMesh;
-import iskallia.itraders.item.mesh.SkullNeckMesh;
-import iskallia.itraders.item.mesh.TraderEggMesh;
+import iskallia.itraders.item.mesh.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -38,6 +35,7 @@ public class InitModel {
 		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_FIGHTER, new FighterEggMesh(InitItem.SPAWN_EGG_FIGHTER));
 		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_MINER, new MinerEggMesh(InitItem.SPAWN_EGG_MINER));
 		ModelLoader.setCustomMeshDefinition(InitItem.SKULL_NECKLACE, new SkullNeckMesh(InitItem.SKULL_NECKLACE));
+		ModelLoader.setCustomMeshDefinition(InitItem.SUB_CARD, new SubCardMesh(InitItem.SUB_CARD));
 	}
     
     public static void registerTileEntityRenderers() {
