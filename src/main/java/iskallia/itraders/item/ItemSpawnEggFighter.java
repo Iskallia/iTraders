@@ -7,6 +7,7 @@ import java.util.TimeZone;
 
 import javax.annotation.Nullable;
 
+import iskallia.itraders.init.InitItem;
 import org.lwjgl.input.Keyboard;
 
 import iskallia.itraders.Traders;
@@ -57,6 +58,16 @@ public class ItemSpawnEggFighter extends ItemSpawnEgg<EntityFighter> {
 		if (stack.hasDisplayName())fighter.setCustomNameTag(stack.getDisplayName());
 		ItemMonsterPlacer.applyItemEntityDataToEntity(world, (EntityPlayer) null, stack, fighter);
 		return fighter;
+	}
+
+	public static String getNickname(ItemStack stack) {
+		if (stack.getItem() != InitItem.SPAWN_EGG_FIGHTER)
+			return null;
+
+		if (!stack.hasDisplayName())
+			return null;
+
+		return stack.getDisplayName();
 	}
 
 	public static boolean shouldSpawnEntity(NBTTagCompound compound) {

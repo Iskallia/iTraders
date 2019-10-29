@@ -27,4 +27,11 @@ public class Randomizer {
         return RANDOM.nextInt(max - min + 1) + min;
     }
 
+    /**
+     * @return A random double between [0.0, 1.0)
+     */
+    public static double randomDouble() {
+        return RANDOM.nextDouble();
+    }
+
 }

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DDD",
+    "DDD",
+    "DDD"
+  ],
+  "key": {
+    "D": {
+      "item": "itraders:magic_ore_dust"
+    }
+  },
+  "result": {
+    "item": "itraders:magic_ore_block",
+    "count": 1
+  }
+}

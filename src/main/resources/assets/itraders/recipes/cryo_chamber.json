@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "dGd",
+    "dGd",
+    "BDB"
+  ],
+  "key": {
+    "d": {
+      "item": "itraders:magic_ore_dust"
+    },
+    "B": {
+      "item": "itraders:magic_ore_block"
+    },
+    "D": {
+      "item": "minecraft:diamond_block"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "item": "itraders:item_cryo_chamber",
+    "count": 1
+  }
+}

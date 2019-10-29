@@ -14,14 +14,23 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 public class SkinProfile {
 
 	public static final ExecutorService service = Executors.newFixedThreadPool(5);
 
+	private String latestNickname;
 	public AtomicReference<GameProfile> gameProfile = new AtomicReference<GameProfile>();
 	public AtomicReference<NetworkPlayerInfo> playerInfo = new AtomicReference<NetworkPlayerInfo>();
 
+	@Nullable
+	public String getLatestNickname() {
+		return latestNickname;
+	}
+
 	public void updateSkin(String name) {
+		latestNickname = name;
 		service.submit(() -> {
 			gameProfile.set(new GameProfile(null, name));
 			gameProfile.set(TileEntitySkull.updateGameprofile(gameProfile.get()));
