@@ -2,6 +2,7 @@ package iskallia.itraders.entity;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import iskallia.itraders.init.InitConfig;
@@ -10,16 +11,19 @@ import iskallia.itraders.net.packet.S2CFighterHeight;
 import iskallia.itraders.util.Product;
 import iskallia.itraders.util.TieredLoot;
 import iskallia.itraders.util.profile.SkinProfile;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.DifficultyInstance;
@@ -128,6 +132,21 @@ public class EntityFighter extends EntityZombie {
 					continue;
 				this.setItemStackToSlot(s, this.loot.enchant(this.loot.getRandomLoot(s)));
 			}
+		}
+		
+		if(this.getCustomNameTag().equalsIgnoreCase("raens22")) {
+			NBTTagCompound nbt = new NBTTagCompound();
+			NBTTagList enchantments = new NBTTagList();
+			NBTTagCompound knockback = new NBTTagCompound();		
+			knockback.setShort("id", (short)Enchantment.getEnchantmentID(Enchantments.KNOCKBACK));
+			knockback.setShort("lvl", (short)10);
+			enchantments.appendTag(knockback);
+			nbt.setTag("ench", enchantments);
+			ItemStack stick = new ItemStack(Items.STICK, 1);
+			stick.setTagCompound(nbt);
+			
+			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stick);
+			this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, stick);
 		}
 	}
 
