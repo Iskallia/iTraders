@@ -15,10 +15,12 @@ item.egg_pouch.name=Egg Pouch
 item.sub_card.name=[WIP] SubCard
 item.skull_neck.name=Skull Necklace
 item.magic_ore_dust.name=Magic Ore Dust
+item.item_cryo_chamber.name=Cryo Chamber
 
 tile.infusion_cauldron.name=Infusion Cauldron
 tile.grave_stone.name=Grave Stone
 tile.ghost_pedestal.name=Ghost Pedestal
+tile.magic_ore_block.name=Magic Ore Block
 
 itraders.card.rarity.common.name=
 itraders.card.rarity.rare.name=Rare

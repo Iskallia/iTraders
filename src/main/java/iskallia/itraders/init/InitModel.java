@@ -27,9 +27,11 @@ public class InitModel {
 		registerSimpleItemModel(InitBlock.ITEM_INFUSION_CAULDRON, 0);
 		registerSimpleItemModel(InitItem.CRYO_CHAMBER, 0);
 		registerSimpleItemModel(InitBlock.ITEM_GHOST_PEDESTAL, 0);
+		registerSimpleItemModel(InitBlock.ITEM_MAGIC_ORE_BLOCK, 0);
 
 		registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
 		registerBlockModel(InitBlock.GHOST_PEDESTAL, 0);
+		registerBlockModel(InitBlock.MAGIC_ORE_BLOCK, 0);
 
 		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_TRADER, new TraderEggMesh(InitItem.SPAWN_EGG_TRADER));
 		ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_FIGHTER, new FighterEggMesh(InitItem.SPAWN_EGG_FIGHTER));
