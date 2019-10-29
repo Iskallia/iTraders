@@ -2,6 +2,7 @@ package iskallia.itraders.block.render;
 
 import iskallia.itraders.block.BlockCryoChamber;
 import iskallia.itraders.block.entity.TileEntityCryoChamber;
+import iskallia.itraders.init.InitConfig;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -44,7 +45,7 @@ public class TESRCryoChamber extends TileEntitySpecialRenderer<TileEntityCryoCha
 
             if (dummyEntity != null) {
                 double scale = map(tileEntity.shrinkingTicks,
-                        TileEntityCryoChamber.MAX_SHRINKING_TICKS, 0,
+                        InitConfig.CONFIG_CRYO_CHAMBER.SHRINKING_TICKS, 0,
                         0.075f, 0.010f);
 
                 GlStateManager.pushMatrix();

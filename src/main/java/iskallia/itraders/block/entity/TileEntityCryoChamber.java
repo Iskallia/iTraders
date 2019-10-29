@@ -5,6 +5,7 @@ import iskallia.itraders.block.BlockCryoChamber;
 import iskallia.itraders.card.SubCardData;
 import iskallia.itraders.card.SubCardGenerator;
 import iskallia.itraders.card.SubCardRarity;
+import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitItem;
 import iskallia.itraders.item.ItemSpawnEggFighter;
 import iskallia.itraders.item.ItemSubCard;
@@ -22,8 +23,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nonnull;
 
 public class TileEntityCryoChamber extends TileInventoryBase {
-
-    public static final int MAX_SHRINKING_TICKS = 20 * 10;
 
     @Nonnull
     private SkinProfile skin = new SkinProfile();
@@ -105,7 +104,7 @@ public class TileEntityCryoChamber extends TileInventoryBase {
                 if (remainingStack == ItemStack.EMPTY) {
                     // Start shrinking state
                     state = CryoState.SHRINKING;
-                    shrinkingTicks = MAX_SHRINKING_TICKS;
+                    shrinkingTicks = InitConfig.CONFIG_CRYO_CHAMBER.SHRINKING_TICKS;
                     nickname = ItemSpawnEggFighter.getNickname(stack);
                 }
 
