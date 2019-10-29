@@ -7,12 +7,10 @@ import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryHelper;
@@ -93,7 +91,7 @@ public class BlockCryoChamber extends Block {
                     player.setHeldItem(hand, ItemStack.EMPTY);
                 }
 
-            } else if (teCryoChamber.state == TileEntityCryoChamber.CryoState.CARD) {
+            } else if (teCryoChamber.state == TileEntityCryoChamber.CryoState.DONE) {
                 ItemStack cardStack = teCryoChamber.extractContent();
                 if (cardStack != ItemStack.EMPTY) {
                     player.addItemStackToInventory(cardStack);

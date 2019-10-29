@@ -1,12 +1,11 @@
 package iskallia.itraders.block.render;
 
-import iskallia.itraders.block.BlockCryoChamber;
 import iskallia.itraders.block.entity.TileEntityCryoChamber;
 import iskallia.itraders.init.InitConfig;
+import iskallia.itraders.util.math.MathHelper;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -44,7 +43,7 @@ public class TESRCryoChamber extends TileEntitySpecialRenderer<TileEntityCryoCha
                     : DefaultPlayerSkin.getDefaultSkinLegacy());
 
             if (dummyEntity != null) {
-                double scale = map(tileEntity.shrinkingTicks,
+                double scale = MathHelper.map(tileEntity.shrinkingRemainingTicks,
                         InitConfig.CONFIG_CRYO_CHAMBER.SHRINKING_TICKS, 0,
                         0.075f, 0.010f);
 
@@ -60,7 +59,7 @@ public class TESRCryoChamber extends TileEntitySpecialRenderer<TileEntityCryoCha
             }
         }
 
-        if(tileEntity.state == TileEntityCryoChamber.CryoState.CARD) {
+        if(tileEntity.state == TileEntityCryoChamber.CryoState.DONE) {
             double dt = (System.currentTimeMillis() - animationStart) / 1000d;
             double animOffsetY = Math.sin(2 * dt + tileEntity.hashCode() % 100) / 16d;
             float animRotation = (float) (dt * 50d);
@@ -73,10 +72,6 @@ public class TESRCryoChamber extends TileEntitySpecialRenderer<TileEntityCryoCha
                     ItemCameraTransforms.TransformType.GROUND);
             GlStateManager.popMatrix();
         }
-    }
-
-    private float map(float value, float s1, float e1, float s2, float e2) {
-        return (value - s1) * (e2 - s2) / (e1 - s1) + s2;
     }
 
     protected float getFacingAngle(IBlockState blockState) {
