@@ -6,12 +6,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import iskallia.itraders.init.InitConfig;
+import iskallia.itraders.init.InitItem;
 import iskallia.itraders.util.Trade;
 import iskallia.itraders.util.profile.SkinProfile;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.DifficultyInstance;
@@ -48,6 +51,20 @@ public class EntityTrader extends EntityVillager {
 				this.lastName = name;
 			}
 		} 
+	}
+
+	@Override
+	public boolean processInteract(EntityPlayer player, EnumHand hand) {
+		ItemStack heldStack = player.getHeldItem(hand);
+
+		if(!player.world.isRemote && heldStack.getItem() == InitItem.RAENS22_STICK) {
+			// TODO: Check if their coordinate is cool for Statue placement
+			// TODO: Play *poof* effect (both sfx and particle fx)
+			// TODO: Destroy them and create their statue
+			return false;
+		}
+
+		return super.processInteract(player, hand);
 	}
 
 	@Override
