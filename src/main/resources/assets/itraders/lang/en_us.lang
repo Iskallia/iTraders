@@ -24,6 +24,8 @@ tile.stone.andesite.name=Andersite
 tile.stone.andesiteSmooth.name=Polished Andersite
 tile.magic_ore_block.name=Magic Ore Block
 
+item.raens22_stick.name=Raens22's Poke Stick
+
 itraders.card.rarity.common.name=
 itraders.card.rarity.rare.name=Rare
 itraders.card.rarity.legendary.name=Legendary

@@ -26,6 +26,8 @@ public class InitItem {
 	public static ItemSubCard SUB_CARD = new ItemSubCard("sub_card");
 	public static ItemCryoChamber CRYO_CHAMBER = new ItemCryoChamber("item_cryo_chamber");
 
+	public static ItemRaens22Stick RAENS22_STICK = new ItemRaens22Stick("raens22_stick");
+
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		registerItem(BIT_100, registry);
 		registerItem(BIT_500, registry);
@@ -38,9 +40,9 @@ public class InitItem {
 		registerItem(EGG_POUCH, registry);
 		registerItem(SUB_CARD, registry);
 		registerItem(CRYO_CHAMBER, registry);
-
 		registerItem(SKULL_NECKLACE, registry);
 		registerItem(MAGIC_ORE_DUST, registry);
+		registerItem(RAENS22_STICK, registry);
 	}
 
 	private static void registerItem(Item item, IForgeRegistry<Item> registry) {
