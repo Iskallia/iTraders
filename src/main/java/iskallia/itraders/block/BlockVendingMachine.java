@@ -1,7 +1,7 @@
 package iskallia.itraders.block;
 
 import iskallia.itraders.Traders;
-import iskallia.itraders.block.entity.TileEntityTraderStatue;
+import iskallia.itraders.block.entity.TileEntityVendingMachine;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -14,11 +14,11 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class BlockTraderStatue extends Block {
+public class BlockVendingMachine extends Block {
 
     public static final AxisAlignedBB AABB = new AxisAlignedBB(0, 0, 0, 1, 2, 1);
 
-    public BlockTraderStatue(String name) {
+    public BlockVendingMachine(String name) {
         super(Material.ROCK);
 
         this.setUnlocalizedName(name);
@@ -47,7 +47,7 @@ public class BlockTraderStatue extends Block {
     @Nullable
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileEntityTraderStatue();
+        return new TileEntityVendingMachine();
     }
 
 }

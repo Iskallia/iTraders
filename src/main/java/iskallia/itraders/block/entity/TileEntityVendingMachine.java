@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileEntityTraderStatue extends TileEntity implements IMerchant {
+public class TileEntityVendingMachine extends TileEntity implements IMerchant {
 
     private EntityPlayer buyingPlayer;
     private MerchantRecipeList buyingList;

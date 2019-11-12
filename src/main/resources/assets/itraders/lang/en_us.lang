@@ -23,6 +23,7 @@ tile.ghost_pedestal.name=Ghost Pedestal
 tile.stone.andesite.name=Andersite
 tile.stone.andesiteSmooth.name=Polished Andersite
 tile.magic_ore_block.name=Magic Ore Block
+tile.vending_machine.name=Vending Machine
 
 item.raens22_stick.name=Raens22's Poke Stick
 
