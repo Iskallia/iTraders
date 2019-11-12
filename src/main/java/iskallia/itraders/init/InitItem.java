@@ -1,14 +1,7 @@
 package iskallia.itraders.init;
 
 import iskallia.itraders.Traders;
-import iskallia.itraders.item.ItemBit;
-import iskallia.itraders.item.ItemEggPouch;
-import iskallia.itraders.item.ItemMagicOreDust;
-import iskallia.itraders.item.ItemSkullNeck;
-import iskallia.itraders.item.ItemSpawnEggFighter;
-import iskallia.itraders.item.ItemSpawnEggMiner;
-import iskallia.itraders.item.ItemSpawnEggTrader;
-import iskallia.itraders.item.ItemSubCard;
+import iskallia.itraders.item.*;
 import iskallia.itraders.tab.CreativeTabsITraders;
 import net.minecraft.item.Item;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -31,6 +24,7 @@ public class InitItem {
 	public static ItemMagicOreDust MAGIC_ORE_DUST = new ItemMagicOreDust("magic_ore_dust");
 
 	public static ItemSubCard SUB_CARD = new ItemSubCard("sub_card");
+	public static ItemCryoChamber CRYO_CHAMBER = new ItemCryoChamber("item_cryo_chamber");
 
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		registerItem(BIT_100, registry);
@@ -42,7 +36,8 @@ public class InitItem {
 		registerItem(SPAWN_EGG_FIGHTER, registry);
 		registerItem(SPAWN_EGG_MINER, registry);
 		registerItem(EGG_POUCH, registry);
-        registerItem(SUB_CARD, registry);
+		registerItem(SUB_CARD, registry);
+		registerItem(CRYO_CHAMBER, registry);
 
 		registerItem(SKULL_NECKLACE, registry);
 		registerItem(MAGIC_ORE_DUST, registry);
