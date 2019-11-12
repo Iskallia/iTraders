@@ -29,8 +29,7 @@ public class InitBlock {
 	public static final BlockMagicOre MAGIC_ORE_BLOCK = new BlockMagicOre("magic_ore_block");
 	public static final ItemBlock ITEM_MAGIC_ORE_BLOCK = getItemBlock(MAGIC_ORE_BLOCK);
 
-	public static final BlockVendingMachine VENDING_MACHINE = new BlockVendingMachine("trader_statue");
-	public static final ItemBlock ITEM_VENDING_MACHINE = getItemBlock(VENDING_MACHINE);
+	public static final BlockVendingMachine VENDING_MACHINE = new BlockVendingMachine("vending_machine");
 
 	public static void registerBlocks(IForgeRegistry<Block> registry) {
 		registerBlock(GRAVE_STONE, registry);
@@ -54,7 +53,6 @@ public class InitBlock {
 		registry.register(ITEM_GRAVE_STONE);
 		registry.register(ITEM_GHOST_PEDESTAL);
 		registry.register(ITEM_MAGIC_ORE_BLOCK);
-		registry.register(ITEM_VENDING_MACHINE);
 	}
 
 	/* -------------------------- */

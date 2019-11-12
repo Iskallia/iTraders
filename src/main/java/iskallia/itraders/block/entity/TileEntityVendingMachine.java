@@ -1,8 +1,10 @@
 package iskallia.itraders.block.entity;
 
+import hellfirepvp.astralsorcery.common.tile.base.TileEntitySynchronized;
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -14,7 +16,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileEntityVendingMachine extends TileEntity implements IMerchant {
+public class TileEntityVendingMachine extends TileEntitySynchronized implements IMerchant {
 
     private EntityPlayer buyingPlayer;
     private MerchantRecipeList buyingList;
@@ -105,6 +107,16 @@ public class TileEntityVendingMachine extends TileEntity implements IMerchant {
     @Override
     public BlockPos getPos() {
         return this.pos;
+    }
+
+    @Override
+    public void readCustomNBT(NBTTagCompound compound) {
+        super.readCustomNBT(compound);
+    }
+
+    @Override
+    public void writeCustomNBT(NBTTagCompound compound) {
+        super.writeCustomNBT(compound);
     }
 
 }
