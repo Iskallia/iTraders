@@ -3,8 +3,10 @@ package iskallia.itraders.init;
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.entity.TileEntityCryoChamber;
 import iskallia.itraders.block.entity.TileEntityGraveStone;
+import iskallia.itraders.block.entity.TileEntityVendingMachine;
 import iskallia.itraders.block.render.TESRCryoChamber;
 import iskallia.itraders.block.render.TESRGraveStone;
+import iskallia.itraders.block.render.TESRVendingMachine;
 import iskallia.itraders.item.mesh.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -44,7 +46,8 @@ public class InitModel {
     public static void registerTileEntityRenderers() {
     	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGraveStone.class, new TESRGraveStone());
     	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCryoChamber.class, new TESRCryoChamber());
-    }
+    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVendingMachine.class, new TESRVendingMachine());
+	}
 
     /* ---------------------------------- */
 

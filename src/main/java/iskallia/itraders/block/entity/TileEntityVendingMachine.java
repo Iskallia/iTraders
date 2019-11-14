@@ -36,7 +36,11 @@ public class TileEntityVendingMachine extends TileEntitySynchronized implements 
     }
 
     public String getNickname() {
-        return nickname;
+        return nickname == null ? "" : nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     @Override

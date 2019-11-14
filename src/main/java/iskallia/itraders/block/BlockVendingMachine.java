@@ -121,7 +121,7 @@ public class BlockVendingMachine extends Block {
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(!world.isRemote) {
             TileEntityVendingMachine tileEntity = getTileEntity(world, pos, state);
-            System.out.println(tileEntity.getNickname());
+            tileEntity.setNickname("iGoodie"); // TODO: Remove, duh..
         }
 
         return true;
