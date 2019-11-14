@@ -40,21 +40,21 @@
   },
   "elements": [
     {
-      "name": "Front",
+      "name": "Side",
       "from": [ 0, 0, 0 ],
       "to": [ 16, 16, 0 ],
       "faces": {
-        "north": { "texture": "#vending_machine_bottom_front", "uv": [ 0, 0, 16, 16 ], "cullface": "north" },
-        "south": { "texture": "#vending_machine_bottom_front", "uv": [ 0, 0, 16, 16 ] }
+        "north": { "texture": "#vending_machine_bottom_side", "uv": [ 0, 0, 16, 16 ], "cullface": "north" },
+        "south": { "texture": "#vending_machine_bottom_side", "uv": [ 0, 0, 16, 16 ] }
       }
     },
     {
-      "name": "Side",
+      "name": "Front",
       "from": [ 0, 0, 0 ],
       "to": [ 0, 16, 16 ],
       "faces": {
-        "east": { "texture": "#vending_machine_bottom_side", "uv": [ 0, 0, 16, 16 ] },
-        "west": { "texture": "#vending_machine_bottom_side", "uv": [ 0, 0, 16, 16 ], "cullface": "west" }
+        "east": { "texture": "#vending_machine_bottom_front", "uv": [ 0, 0, 16, 16 ] },
+        "west": { "texture": "#vending_machine_bottom_front", "uv": [ 0, 0, 16, 16 ], "cullface": "west" }
       }
     },
     {

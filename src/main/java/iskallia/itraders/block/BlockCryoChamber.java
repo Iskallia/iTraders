@@ -2,6 +2,7 @@ package iskallia.itraders.block;
 
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.entity.TileEntityCryoChamber;
+import iskallia.itraders.block.entity.TileEntityVendingMachine;
 import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
@@ -125,7 +126,7 @@ public class BlockCryoChamber extends Block {
 
         TileEntity tileEntity = world.getTileEntity(tePos);
 
-        if (tileEntity == null)
+        if (!(tileEntity instanceof TileEntityCryoChamber))
             return null;
 
         return (TileEntityCryoChamber) tileEntity;

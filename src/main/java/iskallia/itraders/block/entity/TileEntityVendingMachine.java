@@ -1,25 +1,55 @@
 package iskallia.itraders.block.entity;
 
 import hellfirepvp.astralsorcery.common.tile.base.TileEntitySynchronized;
+import iskallia.itraders.util.profile.SkinProfile;
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileEntityVendingMachine extends TileEntitySynchronized implements IMerchant {
+public class TileEntityVendingMachine extends TileEntitySynchronized implements IMerchant, ITickable {
 
     private EntityPlayer buyingPlayer;
     private MerchantRecipeList buyingList;
+
+    @Nonnull
+    private SkinProfile skin = new SkinProfile();
+    private String nickname;
+
+    @Nonnull
+    public SkinProfile getSkin() {
+        return skin;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    @Override
+    public void update() {
+        if (world.isRemote) {
+            if (nickname != null) {
+                String previousNickname = skin.getLatestNickname();
+                if (previousNickname == null || !previousNickname.equals(nickname)) {
+                    skin.updateSkin(nickname);
+                }
+            }
+        }
+    }
 
     @Override
     public void setCustomer(@Nullable EntityPlayer player) {
@@ -112,11 +142,24 @@ public class TileEntityVendingMachine extends TileEntitySynchronized implements 
     @Override
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
+
+        this.nickname = compound.getString("Nickname");
+
+        if (compound.hasKey("Offers", Constants.NBT.TAG_COMPOUND)) {
+            NBTTagCompound offersNBT = compound.getCompoundTag("Offers");
+            this.buyingList = new MerchantRecipeList(offersNBT);
+        }
     }
 
     @Override
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
+
+        compound.setString("Nickname", nickname != null ? nickname : "");
+
+        if (this.buyingList != null) {
+            compound.setTag("Offers", this.buyingList.getRecipiesAsTags());
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package iskallia.itraders.block;
 
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.entity.TileEntityVendingMachine;
+import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
@@ -15,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -99,6 +101,7 @@ public class BlockVendingMachine extends Block {
             IBlockState west = world.getBlockState(pos.west());
             IBlockState east = world.getBlockState(pos.east());
             EnumFacing facing = state.getValue(FACING);
+            System.out.println(facing);
 
             if (facing == EnumFacing.NORTH && north.isFullBlock() && !south.isFullBlock()) {
                 facing = EnumFacing.SOUTH;
@@ -111,6 +114,45 @@ public class BlockVendingMachine extends Block {
             }
 
             world.setBlockState(pos, state.withProperty(FACING, facing), 2);
+        }
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if(!world.isRemote) {
+            TileEntityVendingMachine tileEntity = getTileEntity(world, pos, state);
+            System.out.println(tileEntity.getNickname());
+        }
+
+        return true;
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        if (state.getValue(PART) == EnumPartType.BOTTOM) {
+            TileEntityVendingMachine tileEntity = getTileEntity(world, pos, state);
+
+            if(tileEntity != null) {
+                // TODO: drop item
+            }
+        }
+    }
+
+    @Override
+    public void neighborChanged(IBlockState stateObserved, World world, BlockPos posObserved, Block blockChanged, BlockPos fromPos) {
+        if (blockChanged != InitBlock.VENDING_MACHINE)
+            return; // No need to handle, anything other than Vending Machine was changed
+
+        EnumPartType observedPart = stateObserved.getValue(PART);
+        BlockPos posOtherPart = observedPart == EnumPartType.BOTTOM ? posObserved.up() : posObserved.down();
+        IBlockState stateOtherPart = world.getBlockState(posOtherPart);
+
+        // Block was changed from Vending Machine to something else
+        if (stateOtherPart.getBlock() != InitBlock.VENDING_MACHINE) {
+            world.setBlockToAir(posObserved);
+
+            if (!world.isRemote)
+                dropBlockAsItem(world, posObserved, stateObserved, 0);
         }
     }
 
@@ -128,6 +170,17 @@ public class BlockVendingMachine extends Block {
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileEntityVendingMachine();
+    }
+
+    public static TileEntityVendingMachine getTileEntity(World world, BlockPos pos, IBlockState state) {
+        BlockPos tePos = state.getValue(PART) == EnumPartType.TOP ? pos.down() : pos;
+
+        TileEntity tileEntity = world.getTileEntity(tePos);
+
+        if (!(tileEntity instanceof TileEntityVendingMachine))
+            return null;
+
+        return (TileEntityVendingMachine) tileEntity;
     }
 
     public static void placeVendingMachine(World world, BlockPos pos, EnumFacing facing, Block block) {
