@@ -1,6 +1,7 @@
 {
   "__comment": "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)",
   "textures": {
+    "particle": "itraders:blocks/vending_machine_top",
     "vending_machine_top_side": "itraders:blocks/vending_machine_top_side",
     "vending_machine_top": "itraders:blocks/vending_machine_top",
     "vending_machine_top_front": "itraders:blocks/vending_machine_top_front"
