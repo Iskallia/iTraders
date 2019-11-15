@@ -88,14 +88,14 @@ public class TESRVendingMachine extends TileEntitySpecialRenderer<TileEntityVend
         GlStateManager.translate((float) x, (float) y, (float) z);
 
         if (facing == EnumFacing.NORTH) {
-            GlStateManager.translate(textCenter, yOffset, 6.0f / 16.0f - 0.01f);
+            GlStateManager.translate(textCenter, yOffset, 6.0f / 16.0f - 0.4f);
             GlStateManager.rotate(180, 0, 0, 1);
         } else if (facing == EnumFacing.SOUTH) {
-            GlStateManager.translate(-textCenter + 1, yOffset, (16.0f - 6.0f) / 16.0f + 0.01f);
+            GlStateManager.translate(-textCenter + 1, yOffset, (16.0f - 6.0f) / 16.0f + 0.4f);
             GlStateManager.rotate(180, 0, 0, 1);
             GlStateManager.rotate(180, 0, 1, 0);
         } else if (facing == EnumFacing.EAST) {
-            GlStateManager.translate((16.0f - 6.0f) / 16.0f + 0.01f, yOffset, textCenter);
+            GlStateManager.translate((16.0f - 6.0f) / 16.0f + 0.4f, yOffset, textCenter);
             GlStateManager.rotate(180, 0, 0, 1);
             GlStateManager.rotate(90, 0, 1, 0);
         } else if (facing == EnumFacing.WEST) {
