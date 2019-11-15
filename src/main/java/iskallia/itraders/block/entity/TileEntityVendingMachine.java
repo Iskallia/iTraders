@@ -45,12 +45,13 @@ public class TileEntityVendingMachine extends TileEntitySynchronized implements 
 
     @Override
     public void update() {
-        if (world.isRemote) {
-            if (nickname != null) {
-                String previousNickname = skin.getLatestNickname();
-                if (previousNickname == null || !previousNickname.equals(nickname)) {
+        if (nickname != null) {
+            String previousNickname = skin.getLatestNickname();
+            if (previousNickname == null || !previousNickname.equals(nickname)) {
+                if (world.isRemote)
                     skin.updateSkin(nickname);
-                }
+                else
+                    markForUpdate();
             }
         }
     }
@@ -128,7 +129,7 @@ public class TileEntityVendingMachine extends TileEntitySynchronized implements 
     @Nonnull
     @Override
     public ITextComponent getDisplayName() {
-        return new TextComponentString("TODO"); // TODO
+        return new TextComponentString(getNickname()); // TODO
     }
 
     @Nonnull

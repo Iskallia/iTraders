@@ -12,7 +12,10 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 public class TESRVendingMachine extends TileEntitySpecialRenderer<TileEntityVendingMachine> {
@@ -27,8 +30,32 @@ public class TESRVendingMachine extends TileEntitySpecialRenderer<TileEntityVend
 
         IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
 
-        if (state.getValue(BlockVendingMachine.PART) == BlockVendingMachine.EnumPartType.TOP)
+        if (state.getValue(BlockVendingMachine.PART) == BlockVendingMachine.EnumPartType.TOP) {
+//            TileEntityVendingMachine teBottom = BlockVendingMachine.getTileEntity(
+//                    tileEntity.getWorld(),
+//                    tileEntity.getPos(),
+//                    tileEntity.getBlockState());
+//
+//            if (teBottom != null) {
+//                ITextComponent displayName = teBottom.getDisplayName();
+//
+//                if (this.rendererDispatcher.cameraHitResult != null
+//                        && tileEntity.getPos().equals(this.rendererDispatcher.cameraHitResult.getBlockPos())) {
+//                    this.setLightmapDisabled(true);
+//                    this.drawNameplate(tileEntity, displayName.getFormattedText(), x, y, z, 12);
+//                    this.setLightmapDisabled(false);
+//                }
+//            }
+
             return;
+        }
+
+//        super.render(tileEntity, x, y + 1, z, partialTicks, destroyStage, alpha);
+
+        this.drawString(
+                state.getValue(BlockVendingMachine.FACING).getOpposite(),
+                tileEntity.getDisplayName().getUnformattedText(),
+                6f / 16f, x, y, z, 0.01f);
 
         if (dummyEntity == null) {
             initDummyEntity(tileEntity.getWorld());
@@ -51,9 +78,38 @@ public class TESRVendingMachine extends TileEntitySpecialRenderer<TileEntityVend
             playerModel.render(dummyEntity, 0, 0, 0, 0, 0, 1f);
             GlStateManager.popMatrix();
         }
+    }
 
-//        if (tileEntity.getBlockState().getValue(BlockVendingMachine.PART) == BlockVendingMachine.EnumPartType.TOP)
-//            super.render(tileEntity, x, y, z, partialTicks, destroyStage, alpha);
+    public void drawString(EnumFacing facing, String text, float yOffset, double x, double y, double z, float scale) {
+        float size = (float) this.getFontRenderer().getStringWidth(text) * scale;
+        float textCenter = (1.0f + size) / 2.0f;
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((float) x, (float) y, (float) z);
+
+        if (facing == EnumFacing.NORTH) {
+            GlStateManager.translate(textCenter, yOffset, 6.0f / 16.0f - 0.01f);
+            GlStateManager.rotate(180, 0, 0, 1);
+        } else if (facing == EnumFacing.SOUTH) {
+            GlStateManager.translate(-textCenter + 1, yOffset, (16.0f - 6.0f) / 16.0f + 0.01f);
+            GlStateManager.rotate(180, 0, 0, 1);
+            GlStateManager.rotate(180, 0, 1, 0);
+        } else if (facing == EnumFacing.EAST) {
+            GlStateManager.translate((16.0f - 6.0f) / 16.0f + 0.01f, yOffset, textCenter);
+            GlStateManager.rotate(180, 0, 0, 1);
+            GlStateManager.rotate(90, 0, 1, 0);
+        } else if (facing == EnumFacing.WEST) {
+            GlStateManager.translate(6.0f / 16.0f - 0.4f, yOffset, -textCenter + 1);
+            GlStateManager.rotate(180, 0, 0, 1);
+            GlStateManager.rotate(270, 0, 1, 0);
+        }
+
+        GlStateManager.scale(scale, scale, scale);
+
+        this.setLightmapDisabled(true);
+        this.getFontRenderer().drawString(text, 0, 0, 0xFFFFFF);
+        this.setLightmapDisabled(false);
+        GlStateManager.popMatrix();
     }
 
     protected float getFacingAngle(IBlockState blockState) {
