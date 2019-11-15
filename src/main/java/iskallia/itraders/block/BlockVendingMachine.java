@@ -4,6 +4,7 @@ import iskallia.itraders.Traders;
 import iskallia.itraders.block.entity.TileEntityVendingMachine;
 import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.init.InitItem;
+import iskallia.itraders.util.math.Randomizer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -118,11 +119,11 @@ public class BlockVendingMachine extends Block {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(!world.isRemote) {
-            TileEntityVendingMachine tileEntity = getTileEntity(world, pos, state);
-            tileEntity.setNickname("iGoodie"); // TODO: Remove, duh..
-        }
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        TileEntityVendingMachine tileEntity = getTileEntity(world, pos, state);
+
+        tileEntity.setCustomer(player);
+        player.displayVillagerTradeGui(tileEntity);
 
         return true;
     }
@@ -132,7 +133,7 @@ public class BlockVendingMachine extends Block {
         if (state.getValue(PART) == EnumPartType.BOTTOM) {
             TileEntityVendingMachine tileEntity = getTileEntity(world, pos, state);
 
-            if(tileEntity != null) {
+            if (tileEntity != null) {
                 // TODO: drop item
             }
         }

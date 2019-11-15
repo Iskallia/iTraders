@@ -2,8 +2,13 @@ package iskallia.itraders.block.entity;
 
 import hellfirepvp.astralsorcery.common.tile.base.TileEntitySynchronized;
 import iskallia.itraders.util.profile.SkinProfile;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.IMerchant;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -20,10 +25,12 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.UUID;
 
 public class TileEntityVendingMachine extends TileEntitySynchronized implements IMerchant, ITickable {
 
     private EntityPlayer buyingPlayer;
+    private UUID lastBuyingPlayer;
     private MerchantRecipeList buyingList;
 
     @Nonnull
@@ -84,34 +91,33 @@ public class TileEntityVendingMachine extends TileEntitySynchronized implements 
 
     @Override
     public void useRecipe(@Nonnull MerchantRecipe recipe) {
-        System.out.println("useRecipe(" + recipe + ");");
-//        recipe.incrementToolUses();
+        recipe.incrementToolUses();
 //        this.livingSoundTime = -this.getTalkInterval();
 //        this.playSound(SoundEvents.ENTITY_VILLAGER_YES, this.getSoundVolume(), this.getSoundPitch());
-//        int i = 3 + this.rand.nextInt(4);
-//
-//        if (recipe.getToolUses() == 1 || this.rand.nextInt(5) == 0) {
+        int i = 3 + this.rand.nextInt(4);
+
+        if (recipe.getToolUses() == 1 || this.rand.nextInt(5) == 0) {
 //            this.timeUntilReset = 40;
 //            this.needsInitilization = true;
 //            this.isWillingToMate = true;
-//
-//            if (this.buyingPlayer != null) {
-//                this.lastBuyingPlayer = this.buyingPlayer.getUniqueID();
-//            } else {
-//                this.lastBuyingPlayer = null;
-//            }
-//
-//            i += 5;
-//        }
-//
+
+            if (this.buyingPlayer != null) {
+                this.lastBuyingPlayer = this.buyingPlayer.getUniqueID();
+            } else {
+                this.lastBuyingPlayer = null;
+            }
+
+            i += 5;
+        }
+
 //        if (recipe.getItemToBuy().getItem() == Items.EMERALD) {
 //            this.wealth += recipe.getItemToBuy().getCount();
 //        }
-//
+
 //        if (recipe.getRewardsExp()) {
 //            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, i));
 //        }
-//
+
 //        if (this.buyingPlayer instanceof EntityPlayerMP) {
 //            CriteriaTriggers.VILLAGER_TRADE.trigger((EntityPlayerMP) this.buyingPlayer, this, recipe.getItemToSell());
 //        }
