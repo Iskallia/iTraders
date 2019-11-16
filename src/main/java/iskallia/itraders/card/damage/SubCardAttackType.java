@@ -1,7 +1,11 @@
 package iskallia.itraders.card.damage;
 
+import iskallia.itraders.subgame.lane.GameLane;
 import iskallia.itraders.subgame.lane.LaneEntity;
+import iskallia.itraders.subgame.lane.task.AttackEntityTask;
 import iskallia.itraders.subgame.lane.task.LaneEntityTask;
+import iskallia.itraders.subgame.lane.task.MoveAttackEntityTask;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
@@ -29,6 +33,7 @@ public enum SubCardAttackType {
 
     public LaneEntityTask createAttackTask(LaneEntity laneEntity) {
         //TODO uh... generic provider fn
-        return null;
+        MoveAttackEntityTask attackTask = new MoveAttackEntityTask(laneEntity);
+        return attackTask;
     }
 }
