@@ -4,6 +4,7 @@ import static iskallia.itraders.init.InitConfig.CONFIG_CARD_GENERATOR;
 
 import java.util.Random;
 
+import iskallia.itraders.card.damage.SubCardAttackType;
 import iskallia.itraders.card.damage.SubCardDamage;
 import iskallia.itraders.card.damage.SubCardDamageType;
 import iskallia.itraders.util.math.ValueRangeInt;
@@ -29,11 +30,12 @@ public class SubCardGenerator {
         float moveSpeed = CONFIG_CARD_GENERATOR.MOVESPEED_RANGE.getValue(rand) * bonusMultiplier;
 
         SubCardDamageType damageType = SubCardDamageType.UNTYPED; // reee
+        SubCardAttackType attackType = SubCardAttackType.MELEE;
         ValueRangeInt minRange = CONFIG_CARD_GENERATOR.DAMAGE_RANGES.get(damageType).getMinRange();
         ValueRangeInt maxRange = CONFIG_CARD_GENERATOR.DAMAGE_RANGES.get(damageType).getMaxRange();
         int min = Math.round(minRange.getValue(rand) * bonusMultiplier);
         int max = Math.round(maxRange.getValue(rand) * bonusMultiplier);
-        SubCardDamage damage = new SubCardDamage(damageType, new ValueRangeInt(min, max));
+        SubCardDamage damage = new SubCardDamage(damageType, attackType, new ValueRangeInt(min, max));
 
         SubCardData generated = new SubCardData(health, armor, moveSpeed, damage);
         return new Tuple<>(rarity, generated);
