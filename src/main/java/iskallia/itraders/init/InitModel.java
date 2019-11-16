@@ -30,6 +30,7 @@ public class InitModel {
 		registerSimpleItemModel(InitBlock.ITEM_GHOST_PEDESTAL, 0);
 		registerSimpleItemModel(InitBlock.ITEM_MAGIC_ORE_BLOCK, 0);
 		registerSimpleItemModel(InitItem.RAENS22_STICK, 0);
+		registerSimpleItemModel(InitItem.CARDBOARD_BOX, 0);
 
 		registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
 		registerBlockModel(InitBlock.GHOST_PEDESTAL, 0);

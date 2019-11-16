@@ -67,15 +67,15 @@ public class ItemVendingMachine extends Item {
         NBTTagCompound stackNBT = stack.getTagCompound();
 
         if (stackNBT != null) {
-            tooltip.add(stackNBT.toString()); // TODO: Remove, here for debugging!
-//            tooltip.add("Nickname: " +
-//                    (stackNBT.hasKey("Nickname", Constants.NBT.TAG_STRING)
-//                            ? stackNBT.getString("Nickname") : ""));
-//
-//            tooltip.add("Trade Count:" + stackNBT.getCompoundTag("Offers")
-//                    .getTagList("Recipes", Constants.NBT.TAG_COMPOUND).tagCount());
+            tooltip.add("Nickname: " +
+                    (stackNBT.hasKey("Nickname", Constants.NBT.TAG_STRING)
+                            ? stackNBT.getString("Nickname") : ""));
+
+            tooltip.add("Trade Count:" + stackNBT.getCompoundTag("Offers")
+                    .getTagList("Recipes", Constants.NBT.TAG_COMPOUND).tagCount());
         }
 
         super.addInformation(stack, world, tooltip, flagIn);
     }
+
 }

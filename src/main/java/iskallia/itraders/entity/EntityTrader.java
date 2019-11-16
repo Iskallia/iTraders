@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitItem;
+import iskallia.itraders.item.ItemCardboardBox;
 import iskallia.itraders.util.Trade;
 import iskallia.itraders.util.profile.SkinProfile;
 import net.minecraft.entity.IEntityLivingData;
@@ -22,91 +23,95 @@ import net.minecraft.world.World;
 
 public class EntityTrader extends EntityVillager {
 
-	public SkinProfile skin;	
-	private String lastName = "Trader";
+    public SkinProfile skin;
+    private String lastName = "Trader";
 
-	public EntityTrader(World world) {
-		super(world);
-		this.setCustomNameTag(this.lastName);
-		
-		if(world.isRemote) {			
-			this.skin = new SkinProfile();
-		}
-	}
+    public EntityTrader(World world) {
+        super(world);
+        this.setCustomNameTag(this.lastName);
 
-	//Stops traders from restocking.
-    protected void updateAITasks() {
-    	return;
+        if (world.isRemote) {
+            this.skin = new SkinProfile();
+        }
     }
-	
-	@Override
-	public void onUpdate() {
-		super.onUpdate();
 
-		if(this.world.isRemote) {
-			String name = this.getCustomNameTag();
+    //Stops traders from restocking.
+    protected void updateAITasks() {
+        return;
+    }
 
-			if(!lastName.equals(name)) {
-				this.skin.updateSkin(name);
-				this.lastName = name;
-			}
-		} 
-	}
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
 
-	@Override
-	public boolean processInteract(EntityPlayer player, EnumHand hand) {
-		ItemStack heldStack = player.getHeldItem(hand);
+        if (this.world.isRemote) {
+            String name = this.getCustomNameTag();
 
-		if(!player.world.isRemote && heldStack.getItem() == InitItem.RAENS22_STICK) {
-			// TODO: Check if their coordinate is cool for Statue placement
-			// TODO: Play *poof* effect (both sfx and particle fx)
-			// TODO: Destroy them and create their statue
-			return false;
-		}
+            if (!lastName.equals(name)) {
+                this.skin.updateSkin(name);
+                this.lastName = name;
+            }
+        }
+    }
 
-		return super.processInteract(player, hand);
-	}
+    @Override
+    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+        ItemStack heldStack = player.getHeldItem(hand);
 
-	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		IEntityLivingData livingdata1 = super.onInitialSpawn(difficulty, livingdata);
-		this.setCustomTrades();
-		this.setCustomNameTag(this.getCustomNameTag());
-		return livingdata1;
-	}
+        if (!player.world.isRemote && player.isSneaking() && heldStack.getItem() == InitItem.CARDBOARD_BOX) {
+            if (!ItemCardboardBox.carryingTrader(heldStack)) {
+                ItemCardboardBox.boxTrader(this, heldStack);
 
-	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
-		super.readEntityFromNBT(compound);
-	}
+                // TODO: Play a sfx and particle fx (?)
 
-	private void setCustomTrades() {
-		MerchantRecipeList recipeList = new MerchantRecipeList();
+                player.world.removeEntity(this);
+                return false;
+            }
+        }
 
-		List<Trade> trades = InitConfig.CONFIG_TRADER.TRADES.stream().filter(trade -> trade.isValid())
-				.collect(Collectors.toList());
+        return super.processInteract(player, hand);
+    }
 
-		Collections.shuffle(trades);
+    @Override
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+        IEntityLivingData livingdata1 = super.onInitialSpawn(difficulty, livingdata);
+        this.setCustomTrades();
+        this.setCustomNameTag(this.getCustomNameTag());
+        return livingdata1;
+    }
 
-		for (int i = 0; i < Math.min(trades.size(), InitConfig.CONFIG_TRADER.TRADES_COUNT); i++) {
-			Trade trade = trades.get(i);
-			if (trade == null)
-				continue;
+    @Override
+    public void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+    }
 
-			recipeList.add(new MerchantRecipe(trade.getBuy() == null ? ItemStack.EMPTY : trade.getBuy().toStack(),
-					trade.getExtra() == null ? ItemStack.EMPTY : trade.getExtra().toStack(),
-					trade.getSell() == null ? ItemStack.EMPTY : trade.getSell().toStack(), 0,
-					this.rand.nextInt(38) + 3));
-		}
+    private void setCustomTrades() {
+        MerchantRecipeList recipeList = new MerchantRecipeList();
 
-		Field tradesField = EntityVillager.class.getDeclaredFields()[7];
-		tradesField.setAccessible(true);
+        List<Trade> trades = InitConfig.CONFIG_TRADER.TRADES.stream().filter(trade -> trade.isValid())
+                .collect(Collectors.toList());
 
-		try {
-			tradesField.set(this, recipeList);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-	}
+        Collections.shuffle(trades);
+
+        for (int i = 0; i < Math.min(trades.size(), InitConfig.CONFIG_TRADER.TRADES_COUNT); i++) {
+            Trade trade = trades.get(i);
+            if (trade == null)
+                continue;
+
+            recipeList.add(new MerchantRecipe(trade.getBuy() == null ? ItemStack.EMPTY : trade.getBuy().toStack(),
+                    trade.getExtra() == null ? ItemStack.EMPTY : trade.getExtra().toStack(),
+                    trade.getSell() == null ? ItemStack.EMPTY : trade.getSell().toStack(), 0,
+                    this.rand.nextInt(38) + 3));
+        }
+
+        Field tradesField = EntityVillager.class.getDeclaredFields()[7];
+        tradesField.setAccessible(true);
+
+        try {
+            tradesField.set(this, recipeList);
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
