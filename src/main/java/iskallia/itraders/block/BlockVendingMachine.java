@@ -14,6 +14,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -102,7 +103,6 @@ public class BlockVendingMachine extends Block {
             IBlockState west = world.getBlockState(pos.west());
             IBlockState east = world.getBlockState(pos.east());
             EnumFacing facing = state.getValue(FACING);
-            System.out.println(facing);
 
             if (facing == EnumFacing.NORTH && north.isFullBlock() && !south.isFullBlock()) {
                 facing = EnumFacing.SOUTH;
@@ -134,7 +134,12 @@ public class BlockVendingMachine extends Block {
             TileEntityVendingMachine tileEntity = getTileEntity(world, pos, state);
 
             if (tileEntity != null) {
-                // TODO: drop item
+                ItemStack stack = new ItemStack(InitItem.ITEM_VENDING_MACHINE);
+                NBTTagCompound stackNBT = new NBTTagCompound();
+                tileEntity.writeCustomNBT(stackNBT);
+                stack.setTagCompound(stackNBT);
+
+                spawnAsEntity(world, pos, stack);
             }
         }
     }
@@ -184,12 +189,15 @@ public class BlockVendingMachine extends Block {
         return (TileEntityVendingMachine) tileEntity;
     }
 
-    public static void placeVendingMachine(World world, BlockPos pos, EnumFacing facing, Block block) {
+    public static void placeVendingMachine(World world, BlockPos pos, EnumFacing facing, Block block, NBTTagCompound nbt) {
         BlockPos posTopPart = pos.up();
         IBlockState blockstate = block.getDefaultState().withProperty(FACING, facing);
 
         world.setBlockState(pos, blockstate.withProperty(PART, EnumPartType.BOTTOM), 2);
         world.setBlockState(posTopPart, blockstate.withProperty(PART, EnumPartType.TOP), 2);
+
+        if (nbt != null)
+            ((TileEntityVendingMachine) world.getTileEntity(pos)).readCustomNBT(nbt);
 
         world.notifyNeighborsOfStateChange(pos, block, false);
         world.notifyNeighborsOfStateChange(posTopPart, block, false);

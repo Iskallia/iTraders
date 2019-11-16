@@ -79,6 +79,10 @@ public class TileEntityVendingMachine extends TileEntitySynchronized implements 
     public MerchantRecipeList getRecipes(@Nonnull EntityPlayer player) {
         if (this.buyingList == null) {
             this.buyingList = new MerchantRecipeList();
+            this.buyingList.add(new MerchantRecipe(
+                    new ItemStack(Items.APPLE),
+                    new ItemStack(Items.ITEM_FRAME)
+            ));
         }
 
         return net.minecraftforge.event.ForgeEventFactory.listTradeOffers(this, player, buyingList);
@@ -114,9 +118,10 @@ public class TileEntityVendingMachine extends TileEntitySynchronized implements 
 //            this.wealth += recipe.getItemToBuy().getCount();
 //        }
 
-//        if (recipe.getRewardsExp()) {
-//            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, i));
-//        }
+        if (recipe.getRewardsExp()) {
+            BlockPos pos = getPos();
+            this.world.spawnEntity(new EntityXPOrb(this.world, pos.getX(), pos.getY() + 0.5D, pos.getZ(), i));
+        }
 
 //        if (this.buyingPlayer instanceof EntityPlayerMP) {
 //            CriteriaTriggers.VILLAGER_TRADE.trigger((EntityPlayerMP) this.buyingPlayer, this, recipe.getItemToSell());
@@ -135,7 +140,7 @@ public class TileEntityVendingMachine extends TileEntitySynchronized implements 
     @Nonnull
     @Override
     public ITextComponent getDisplayName() {
-        return new TextComponentString(getNickname()); // TODO
+        return new TextComponentString(getNickname());
     }
 
     @Nonnull

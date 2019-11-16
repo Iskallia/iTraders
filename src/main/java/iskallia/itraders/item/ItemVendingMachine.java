@@ -7,15 +7,21 @@ import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemVendingMachine extends Item {
 
@@ -43,7 +49,7 @@ public class ItemVendingMachine extends Item {
 
         if (player.canPlayerEdit(pos, facing, heldStack) && InitBlock.VENDING_MACHINE.canPlaceBlockAt(world, pos)) {
             EnumFacing enumFacing = EnumFacing.fromAngle(player.rotationYaw);
-            BlockVendingMachine.placeVendingMachine(world, pos, enumFacing, InitBlock.VENDING_MACHINE);
+            BlockVendingMachine.placeVendingMachine(world, pos, enumFacing, InitBlock.VENDING_MACHINE, heldStack.getTagCompound());
 
             SoundType soundType = block.getSoundType(blockstate, world, pos, player);
             world.playSound(player, pos, soundType.getPlaceSound(),
@@ -56,4 +62,20 @@ public class ItemVendingMachine extends Item {
         return EnumActionResult.FAIL;
     }
 
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
+        NBTTagCompound stackNBT = stack.getTagCompound();
+
+        if (stackNBT != null) {
+            tooltip.add(stackNBT.toString()); // TODO: Remove, here for debugging!
+//            tooltip.add("Nickname: " +
+//                    (stackNBT.hasKey("Nickname", Constants.NBT.TAG_STRING)
+//                            ? stackNBT.getString("Nickname") : ""));
+//
+//            tooltip.add("Trade Count:" + stackNBT.getCompoundTag("Offers")
+//                    .getTagList("Recipes", Constants.NBT.TAG_COMPOUND).tagCount());
+        }
+
+        super.addInformation(stack, world, tooltip, flagIn);
+    }
 }
