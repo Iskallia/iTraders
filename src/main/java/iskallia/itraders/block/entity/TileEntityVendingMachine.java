@@ -37,13 +37,17 @@ public class TileEntityVendingMachine extends TileEntitySynchronized implements 
     private SkinProfile skin = new SkinProfile();
     private String nickname;
 
+    public boolean isOccupied() {
+        return nickname != null;
+    }
+
     @Nonnull
     public SkinProfile getSkin() {
         return skin;
     }
 
     public String getNickname() {
-        return nickname == null ? "" : nickname;
+        return nickname;
     }
 
     public void setNickname(String nickname) {
@@ -159,7 +163,8 @@ public class TileEntityVendingMachine extends TileEntitySynchronized implements 
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        this.nickname = compound.getString("Nickname");
+        if (compound.hasKey("Nickname", Constants.NBT.TAG_STRING))
+            this.nickname = compound.getString("Nickname");
 
         if (compound.hasKey("Offers", Constants.NBT.TAG_COMPOUND)) {
             NBTTagCompound offersNBT = compound.getCompoundTag("Offers");
@@ -171,7 +176,8 @@ public class TileEntityVendingMachine extends TileEntitySynchronized implements 
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
-        compound.setString("Nickname", nickname != null ? nickname : "");
+        if (nickname != null)
+            compound.setString("Nickname", nickname);
 
         if (this.buyingList != null) {
             compound.setTag("Offers", this.buyingList.getRecipiesAsTags());

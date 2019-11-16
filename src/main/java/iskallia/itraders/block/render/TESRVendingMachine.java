@@ -28,6 +28,9 @@ public class TESRVendingMachine extends TileEntitySpecialRenderer<TileEntityVend
         if (!tileEntity.hasWorld())
             return;
 
+        if (!tileEntity.isOccupied())
+            return;
+
         IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
 
         if (state.getValue(BlockVendingMachine.PART) == BlockVendingMachine.EnumPartType.TOP) {
