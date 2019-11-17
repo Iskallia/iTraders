@@ -68,7 +68,7 @@ public class TESRVendingMachine extends TileEntitySpecialRenderer<TileEntityVend
                 ? tileEntity.getSkin().getLocationSkin()
                 : DefaultPlayerSkin.getDefaultSkinLegacy());
 
-        double scale = 0.075;
+        double scale = 0.050;
 
         if (dummyEntity != null) {
             GlStateManager.pushMatrix();
@@ -77,8 +77,14 @@ public class TESRVendingMachine extends TileEntitySpecialRenderer<TileEntityVend
             GlStateManager.rotate(180f, 0f, 0f, 1f);
             GlStateManager.rotate(180f, 0f, 1f, 0f);
             GlStateManager.scale(scale, scale, scale);
-            GlStateManager.translate(0, -scale * 175, 0);
-            playerModel.render(dummyEntity, 0, 0, 0, 0, 0, 1f);
+            GlStateManager.translate(0, -scale * 125, 0);
+            playerModel.bipedHead.render(1f);
+            playerModel.bipedBody.render(1f);
+            playerModel.bipedRightArm.render(1f);
+            playerModel.bipedLeftArm.render(1f);
+            playerModel.bipedRightLeg.render(1f);
+            playerModel.bipedLeftLeg.render(1f);
+            playerModel.bipedHeadwear.render(1f);
             GlStateManager.popMatrix();
         }
     }
