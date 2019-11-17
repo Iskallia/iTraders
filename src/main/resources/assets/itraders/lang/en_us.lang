@@ -16,6 +16,7 @@ item.sub_card.name=[WIP] SubCard
 item.skull_neck.name=Skull Necklace
 item.magic_ore_dust.name=Magic Ore Dust
 item.item_cryo_chamber.name=Cryo Chamber
+item.item_power_chamber.name=Power Chamber
 
 tile.infusion_cauldron.name=Infusion Cauldron
 tile.grave_stone.name=Grave Stone
