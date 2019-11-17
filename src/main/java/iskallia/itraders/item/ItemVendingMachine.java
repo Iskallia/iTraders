@@ -69,7 +69,7 @@ public class ItemVendingMachine extends Item {
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
         NBTTagCompound stackNBT = stack.getTagCompound();
 
-        if (stackNBT == null) {
+        if (stackNBT == null || !stackNBT.hasKey("Nickname", Constants.NBT.TAG_STRING)) {
             tooltip.add("No trader is in yet.");
             tooltip.add("");
             tooltip.add("(" + TextFormatting.DARK_PURPLE + "Right click"

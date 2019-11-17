@@ -4,6 +4,7 @@ import iskallia.itraders.Traders;
 import iskallia.itraders.block.entity.TileEntityVendingMachine;
 import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.init.InitItem;
+import iskallia.itraders.item.ItemCardboardBox;
 import iskallia.itraders.util.math.Randomizer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
@@ -121,9 +122,21 @@ public class BlockVendingMachine extends Block {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntityVendingMachine tileEntity = getTileEntity(world, pos, state);
+        ItemStack heldStack = player.getHeldItem(hand);
 
-        tileEntity.setCustomer(player);
-        player.displayVillagerTradeGui(tileEntity);
+        if (heldStack.getItem() == InitItem.CARDBOARD_BOX && ItemCardboardBox.carryingTrader(heldStack)) {
+            if (tileEntity != null && !tileEntity.isOccupied()) {
+                NBTTagCompound stackNBT = heldStack.getTagCompound();
+                tileEntity.readCustomNBT(stackNBT);
+                ItemCardboardBox.unboxTrader(heldStack);
+                return true;
+            }
+        }
+
+        if (tileEntity != null && tileEntity.isOccupied()) {
+            tileEntity.setCustomer(player);
+            player.displayVillagerTradeGui(tileEntity);
+        }
 
         return true;
     }
@@ -164,7 +177,7 @@ public class BlockVendingMachine extends Block {
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return ItemStack.EMPTY;
+        return new ItemStack(InitItem.ITEM_VENDING_MACHINE);
     }
 
     @Override

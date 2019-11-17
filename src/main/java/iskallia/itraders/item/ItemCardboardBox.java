@@ -69,6 +69,19 @@ public class ItemCardboardBox extends Item {
         cardboardStack.setTagCompound(stackNBT);
     }
 
+    public static void unboxTrader(ItemStack cardboardStack) {
+        if (cardboardStack.getItem() != InitItem.CARDBOARD_BOX)
+            return; // Can unbox Traders only into a Cardboard Box
+
+        NBTTagCompound stackNBT = cardboardStack.getTagCompound();
+
+        if (stackNBT == null)
+            return;
+
+        stackNBT.removeTag("Nickname");
+        stackNBT.removeTag("Offers");
+    }
+
     public static boolean carryingTrader(ItemStack cardboardStack) {
         if (cardboardStack.getItem() != InitItem.CARDBOARD_BOX)
             return false;

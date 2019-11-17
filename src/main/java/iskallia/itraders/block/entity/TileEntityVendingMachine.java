@@ -83,10 +83,6 @@ public class TileEntityVendingMachine extends TileEntitySynchronized implements 
     public MerchantRecipeList getRecipes(@Nonnull EntityPlayer player) {
         if (this.buyingList == null) {
             this.buyingList = new MerchantRecipeList();
-            this.buyingList.add(new MerchantRecipe(
-                    new ItemStack(Items.APPLE),
-                    new ItemStack(Items.ITEM_FRAME)
-            ));
         }
 
         return net.minecraftforge.event.ForgeEventFactory.listTradeOffers(this, player, buyingList);
