@@ -16,6 +16,8 @@ item.sub_card.name=[WIP] SubCard
 item.skull_neck.name=Skull Necklace
 item.magic_ore_dust.name=Magic Ore Dust
 item.item_cryo_chamber.name=Cryo Chamber
+item.item_vending_machine.name=Vending Machine
+item.cardboard_box.name=Cardboard Box
 
 tile.infusion_cauldron.name=Infusion Cauldron
 tile.grave_stone.name=Grave Stone
@@ -23,6 +25,9 @@ tile.ghost_pedestal.name=Ghost Pedestal
 tile.stone.andesite.name=Andersite
 tile.stone.andesiteSmooth.name=Polished Andersite
 tile.magic_ore_block.name=Magic Ore Block
+tile.vending_machine.name=Vending Machine
+
+item.raens22_stick.name=Raens22's Poke Stick
 
 itraders.card.rarity.common.name=
 itraders.card.rarity.rare.name=Rare

@@ -1,10 +1,11 @@
 package iskallia.itraders.block;
 
 import iskallia.itraders.Traders;
-import iskallia.itraders.block.entity.TileEntityCryoChamber;
 import iskallia.itraders.block.entity.TileEntityVendingMachine;
 import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.init.InitItem;
+import iskallia.itraders.item.ItemCardboardBox;
+import iskallia.itraders.util.math.Randomizer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -13,10 +14,8 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -28,31 +27,73 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.Random;
+import javax.annotation.Nullable;
 
-public class BlockCryoChamber extends Block {
+public class BlockVendingMachine extends Block {
 
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    public static final PropertyEnum<BlockCryoChamber.EnumPartType> PART = PropertyEnum.create("part", BlockCryoChamber.EnumPartType.class);
+    public static final PropertyEnum<EnumPartType> PART = PropertyEnum.create("part", EnumPartType.class);
 
     public static final AxisAlignedBB TOP_AABB = new AxisAlignedBB(0, -1, 0, 1, 1, 1);
     public static final AxisAlignedBB BOTTOM_AABB = new AxisAlignedBB(0, 0, 0, 1, 2, 1);
 
-    public BlockCryoChamber(String name, Material materialIn) {
-        super(materialIn);
-        this.setRegistryName(Traders.getResource(name));
+    public BlockVendingMachine(String name) {
+        super(Material.ROCK);
+
         this.setUnlocalizedName(name);
-        this.setCreativeTab(InitItem.ITRADERS_TAB);
-        this.setDefaultState(this.blockState.getBaseState()
-                .withProperty(PART, BlockCryoChamber.EnumPartType.BOTTOM)
-                .withProperty(FACING, EnumFacing.NORTH));
+        this.setRegistryName(Traders.getResource(name));
+
         this.setHardness(2f);
+
+        this.setDefaultState(this.blockState.getBaseState()
+                .withProperty(PART, EnumPartType.BOTTOM)
+                .withProperty(FACING, EnumFacing.NORTH));
     }
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return state.getValue(PART) == EnumPartType.BOTTOM
                 ? BOTTOM_AABB : TOP_AABB;
+    }
+
+    @Nullable
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+        return blockState.getValue(PART) == EnumPartType.BOTTOM
+                ? BOTTOM_AABB : TOP_AABB;
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return (state.getValue(PART).ordinal() << 2)
+                | state.getValue(FACING).getHorizontalIndex();
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState()
+                .withProperty(PART, EnumPartType.values()[meta >> 2])
+                .withProperty(FACING, EnumFacing.getHorizontal(meta & 0b11));
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, PART, FACING);
+    }
+
+    @Override
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.TRANSLUCENT;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
     }
 
     @Override
@@ -80,24 +121,21 @@ public class BlockCryoChamber extends Block {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!world.isRemote) {
-            TileEntityCryoChamber teCryoChamber = getTileEntity(world, pos, state);
+        TileEntityVendingMachine tileEntity = getTileEntity(world, pos, state);
+        ItemStack heldStack = player.getHeldItem(hand);
 
-            if (teCryoChamber == null)
+        if (heldStack.getItem() == InitItem.CARDBOARD_BOX && ItemCardboardBox.carryingTrader(heldStack)) {
+            if (tileEntity != null && !tileEntity.isOccupied()) {
+                NBTTagCompound stackNBT = heldStack.getTagCompound();
+                tileEntity.readCustomNBT(stackNBT);
+                ItemCardboardBox.unboxTrader(heldStack);
                 return true;
-
-            if (teCryoChamber.state == TileEntityCryoChamber.CryoState.EMPTY) {
-                ItemStack heldStack = player.getHeldItem(hand);
-                if (teCryoChamber.insertEgg(heldStack) && !player.isCreative()) {
-                    player.setHeldItem(hand, ItemStack.EMPTY);
-                }
-
-            } else if (teCryoChamber.state == TileEntityCryoChamber.CryoState.DONE) {
-                ItemStack cardStack = teCryoChamber.extractContent();
-                if (cardStack != ItemStack.EMPTY) {
-                    player.addItemStackToInventory(cardStack);
-                }
             }
+        }
+
+        if (tileEntity != null && tileEntity.isOccupied()) {
+            tileEntity.setCustomer(player);
+            player.displayVillagerTradeGui(tileEntity);
         }
 
         return true;
@@ -106,43 +144,30 @@ public class BlockCryoChamber extends Block {
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         if (state.getValue(PART) == EnumPartType.BOTTOM) {
-            TileEntityCryoChamber tileEntity = getTileEntity(world, pos, state);
+            TileEntityVendingMachine tileEntity = getTileEntity(world, pos, state);
 
             if (tileEntity != null) {
-                ItemStack contentStack = tileEntity.getContent();
-                if (!contentStack.isEmpty()) {
-                    InventoryHelper.spawnItemStack(
-                            world, pos.getX(), pos.getY(), pos.getZ(), contentStack
-                    );
-                }
+                ItemStack stack = new ItemStack(InitItem.ITEM_VENDING_MACHINE);
+                NBTTagCompound stackNBT = new NBTTagCompound();
+                tileEntity.writeCustomNBT(stackNBT);
+                stack.setTagCompound(stackNBT);
+
+                spawnAsEntity(world, pos, stack);
             }
         }
-
-        super.breakBlock(world, pos, state);
-    }
-
-    private TileEntityCryoChamber getTileEntity(World world, BlockPos pos, IBlockState state) {
-        BlockPos tePos = state.getValue(PART) == EnumPartType.TOP ? pos.down() : pos;
-
-        TileEntity tileEntity = world.getTileEntity(tePos);
-
-        if (!(tileEntity instanceof TileEntityCryoChamber))
-            return null;
-
-        return (TileEntityCryoChamber) tileEntity;
     }
 
     @Override
     public void neighborChanged(IBlockState stateObserved, World world, BlockPos posObserved, Block blockChanged, BlockPos fromPos) {
-        if (blockChanged != InitBlock.CRYO_CHAMBER)
-            return; // No need to handle, anything other than Cryo-chamber was changed
+        if (blockChanged != InitBlock.VENDING_MACHINE)
+            return; // No need to handle, anything other than Vending Machine was changed
 
         EnumPartType observedPart = stateObserved.getValue(PART);
         BlockPos posOtherPart = observedPart == EnumPartType.BOTTOM ? posObserved.up() : posObserved.down();
         IBlockState stateOtherPart = world.getBlockState(posOtherPart);
 
-        // Block was changed from Cryo-chamber to something else
-        if (stateOtherPart.getBlock() != InitBlock.CRYO_CHAMBER) {
+        // Block was changed from Vending Machine to something else
+        if (stateOtherPart.getBlock() != InitBlock.VENDING_MACHINE) {
             world.setBlockToAir(posObserved);
 
             if (!world.isRemote)
@@ -151,47 +176,8 @@ public class BlockCryoChamber extends Block {
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return state.getValue(PART) == EnumPartType.BOTTOM
-                ? InitItem.CRYO_CHAMBER
-                : Items.AIR;
-    }
-
-    @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return new ItemStack(InitItem.CRYO_CHAMBER);
-    }
-
-    public int getMetaFromState(IBlockState state) {
-        return (state.getValue(PART).ordinal() << 2)
-                | state.getValue(FACING).getHorizontalIndex();
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState()
-                .withProperty(PART, BlockCryoChamber.EnumPartType.values()[meta >> 2])
-                .withProperty(FACING, EnumFacing.getHorizontal(meta & 0b11));
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, PART, FACING);
-    }
-
-    @Override
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isFullCube(IBlockState state) {
-        return false;
+        return new ItemStack(InitItem.ITEM_VENDING_MACHINE);
     }
 
     @Override
@@ -199,11 +185,38 @@ public class BlockCryoChamber extends Block {
         return true;
     }
 
+    @Nullable
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileEntityCryoChamber();
+        return new TileEntityVendingMachine();
     }
 
+    public static TileEntityVendingMachine getTileEntity(World world, BlockPos pos, IBlockState state) {
+        BlockPos tePos = state.getValue(PART) == EnumPartType.TOP ? pos.down() : pos;
+
+        TileEntity tileEntity = world.getTileEntity(tePos);
+
+        if (!(tileEntity instanceof TileEntityVendingMachine))
+            return null;
+
+        return (TileEntityVendingMachine) tileEntity;
+    }
+
+    public static void placeVendingMachine(World world, BlockPos pos, EnumFacing facing, Block block, NBTTagCompound nbt) {
+        BlockPos posTopPart = pos.up();
+        IBlockState blockstate = block.getDefaultState().withProperty(FACING, facing);
+
+        world.setBlockState(pos, blockstate.withProperty(PART, EnumPartType.BOTTOM), 2);
+        world.setBlockState(posTopPart, blockstate.withProperty(PART, EnumPartType.TOP), 2);
+
+        if (nbt != null)
+            ((TileEntityVendingMachine) world.getTileEntity(pos)).readCustomNBT(nbt);
+
+        world.notifyNeighborsOfStateChange(pos, block, false);
+        world.notifyNeighborsOfStateChange(posTopPart, block, false);
+    }
+
+    // Proudly copied from Jmil's snippet :p -Goodie
     public enum EnumPartType implements IStringSerializable {
 
         TOP("top"), BOTTOM("bottom");
