@@ -1,6 +1,7 @@
 package iskallia.itraders.event;
 
 import iskallia.itraders.Traders;
+import iskallia.itraders.command.CommandGiveBits;
 import iskallia.itraders.command.CommandITraders;
 import iskallia.itraders.gui.GuiHandler;
 import iskallia.itraders.init.InitBlock;
@@ -44,6 +45,7 @@ public class EventMod {
 
 	public static void onServerStart(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandITraders());
+		event.registerServerCommand(new CommandGiveBits());
 	}
 
 }
