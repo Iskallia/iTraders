@@ -5,6 +5,7 @@ import iskallia.itraders.item.ItemBit;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -50,15 +51,13 @@ public class CommandGiveBits extends CommandBase {
         int bitsInput = parseInt(args[1]);
 
         // Fetch player from player list
-        EntityPlayerMP player = server.getPlayerList().getPlayerByUsername(nickname);
-
-        if (player == null)
-            return; // Player is not online, do not handle
+        EntityPlayerMP player = getPlayer(server, sender, nickname);
+        System.out.println("For " + player);
 
         List<ItemStack> itemsToGive = new LinkedList<>();
 
         for (ItemBit bitItem : BIT_ITEMS) {
-            if (bitsInput < bitItem.value) break;
+            if (bitsInput < bitItem.value) continue;
 
             int amount = bitsInput / bitItem.value;
 
