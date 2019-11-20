@@ -1,5 +1,8 @@
 package iskallia.itraders.block.entity;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import javax.annotation.Nonnull;
 
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
@@ -44,6 +47,11 @@ public class TileEntityPowerChamber extends TileInventoryBase implements IEnergy
 	private SkinProfile skin = new SkinProfile();
 	private String nickname;
 	
+	public int energy = 0;
+	public int remainingTicks = 0;
+	
+	public static final Capability<IEnergyStorage> ENERGY_HANDLER = null;
+	
 	public TileEntityPowerChamber() {
 		super(1);
 	}
@@ -73,13 +81,37 @@ public class TileEntityPowerChamber extends TileInventoryBase implements IEnergy
 			return false;
 		
 		getInventoryHandler().insertItem(0, eggStack, false);
+		remainingTicks = 2000;
 		return true;
     }
 	
 	@Override
 	public void update() {
 		if (!world.isRemote) {
+			if (!this.isOccupied())
+				return;
 			
+			ItemStack eggStack = this.getInventoryHandler().getStackInSlot(0);
+			
+			if (eggStack.getItem() == InitItem.SPAWN_EGG_TRADER)
+			{
+				NBTTagCompound nbttagcompound = eggStack.getTagCompound();
+				
+				if (nbttagcompound != null && nbttagcompound.hasKey("EntityTag", 10)) {
+					NBTTagCompound entityTag = nbttagcompound.getCompoundTag("EntityTag");
+					
+					if (!entityTag.hasKey("SubData"))
+						return;
+					
+					NBTTagCompound subTag = entityTag.getCompoundTag("SubData");
+					
+					if (subTag.hasKey("Amount")) {
+						float amount = subTag.getFloat("Amount");
+						
+						energy = (int)amount + rand.nextInt((int)((amount * 10) - amount));
+					}
+				}
+			}
 		}
 		
 		if (world.isRemote) {
@@ -88,6 +120,42 @@ public class TileEntityPowerChamber extends TileInventoryBase implements IEnergy
 				
 				if (previousNickname == null || !previousNickname.equals(nickname)) {
 					skin.updateSkin(nickname);
+				}
+			}
+		}
+		
+		for (EnumFacing facing : EnumFacing.VALUES) {
+			TileEntity te = this.world.getTileEntity(this.getPos().offset(facing));
+			boolean flag = false;
+			
+			if (te != null && !(te instanceof TileEntityPowerChamber)) {
+				if (te.hasCapability(ENERGY_HANDLER, facing.getOpposite()) && te.getCapability(ENERGY_HANDLER, facing.getOpposite()) instanceof IEnergyStorage)
+				{
+					IEnergyStorage store = te.getCapability(ENERGY_HANDLER, facing.getOpposite());
+					store.receiveEnergy(energy, false);
+					flag = true;
+				}
+			}
+			
+			if (te != null && !(te instanceof TileEntityPowerChamber) && !flag)
+			{
+				try {
+					Method m = te.getClass().getMethod("receiveEnergy", new Class[] { EnumFacing.class, int.class, boolean.class });
+					
+					if (m != null)
+					{
+						try {
+							Object o = m.invoke(te, facing.getOpposite(), energy, false);
+							if (o instanceof Integer)
+							{
+							}
+						} catch (IllegalAccessException e) {
+						} catch (IllegalArgumentException e) {
+						} catch (InvocationTargetException e) {
+						}
+					}
+				} catch (NoSuchMethodException e) {
+				} catch (SecurityException e) {
 				}
 			}
 		}
@@ -115,6 +183,8 @@ public class TileEntityPowerChamber extends TileInventoryBase implements IEnergy
 		super.readCustomNBT(compound);
 		
 		this.nickname = compound.getString("Nickname");
+		this.energy = compound.getInteger("Energy");
+		this.remainingTicks = compound.getInteger("RemainingTicks");
 	}
 	
 	@Override
@@ -122,6 +192,8 @@ public class TileEntityPowerChamber extends TileInventoryBase implements IEnergy
 		super.writeCustomNBT(compound);
 		
 		compound.setString("Nickname", nickname != null ? nickname : "");
+		compound.setInteger("Energy", energy);
+		compound.setInteger("RemainingTicks", remainingTicks);
 	}
 	
 	@Override
@@ -167,22 +239,22 @@ public class TileEntityPowerChamber extends TileInventoryBase implements IEnergy
 	
 	@Override
 	public int extractEnergy(int maxExtract, boolean simulate) {
-		return 0;
+		return energy;
 	}
 	
 	@Override
 	public int getEnergyStored() {
-		return 0;
+		return energy;
 	}
 	
 	@Override
 	public int getMaxEnergyStored() {
-		return 0;
+		return energy;
 	}
 	
 	@Override
 	public boolean canExtract() {
-		return false;
+		return isOccupied();
 	}
 	
 	@Override
