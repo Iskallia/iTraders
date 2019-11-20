@@ -54,7 +54,7 @@ public class ItemVendingMachine extends Item {
             EnumFacing enumFacing = EnumFacing.fromAngle(player.rotationYaw);
             BlockVendingMachine.placeVendingMachine(world, pos, enumFacing, InitBlock.VENDING_MACHINE, heldStack.getTagCompound());
 
-            SoundType soundType = block.getSoundType(blockstate, world, pos, player);
+            SoundType soundType = SoundType.STONE;
             world.playSound(player, pos, soundType.getPlaceSound(),
                     SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
 

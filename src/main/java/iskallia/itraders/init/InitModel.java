@@ -30,19 +30,19 @@ public class InitModel {
         registerSimpleItemModel(InitBlock.ITEM_GHOST_PEDESTAL, 0);
         registerSimpleItemModel(InitBlock.ITEM_MAGIC_ORE_BLOCK, 0);
         registerSimpleItemModel(InitItem.RAENS22_STICK, 0);
-        registerSimpleItemModel(InitItem.CARDBOARD_BOX, 0);
         registerSimpleItemModel(InitItem.ITEM_VENDING_MACHINE, 0);
 
         registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
         registerBlockModel(InitBlock.GHOST_PEDESTAL, 0);
         registerBlockModel(InitBlock.MAGIC_ORE_BLOCK, 0);
-        registerBlockModel(InitBlock.VENDING_MACHINE, 0);
+//        registerBlockModel(InitBlock.VENDING_MACHINE, 0); // Dis buddy is now placed with an item directly
 
         ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_TRADER, new TraderEggMesh(InitItem.SPAWN_EGG_TRADER));
         ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_FIGHTER, new FighterEggMesh(InitItem.SPAWN_EGG_FIGHTER));
         ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_MINER, new MinerEggMesh(InitItem.SPAWN_EGG_MINER));
         ModelLoader.setCustomMeshDefinition(InitItem.SKULL_NECKLACE, new SkullNeckMesh(InitItem.SKULL_NECKLACE));
         ModelLoader.setCustomMeshDefinition(InitItem.SUB_CARD, new SubCardMesh(InitItem.SUB_CARD));
+        ModelLoader.setCustomMeshDefinition(InitItem.CARDBOARD_BOX, new CardboardBoxMesh(InitItem.CARDBOARD_BOX));
     }
 
     public static void registerTileEntityRenderers() {

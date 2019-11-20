@@ -68,7 +68,7 @@ public class TESRVendingMachine extends TileEntitySpecialRenderer<TileEntityVend
                 ? tileEntity.getSkin().getLocationSkin()
                 : DefaultPlayerSkin.getDefaultSkinLegacy());
 
-        double scale = 0.050;
+        double scale = 0.055;
 
         if (dummyEntity != null) {
             GlStateManager.pushMatrix();
@@ -80,11 +80,18 @@ public class TESRVendingMachine extends TileEntitySpecialRenderer<TileEntityVend
             GlStateManager.translate(0, -scale * 125, 0);
             playerModel.bipedHead.render(1f);
             playerModel.bipedBody.render(1f);
-            playerModel.bipedRightArm.render(1f);
-            playerModel.bipedLeftArm.render(1f);
-            playerModel.bipedRightLeg.render(1f);
-            playerModel.bipedLeftLeg.render(1f);
+            playerModel.bipedLeftLeg.render(1.02f);
+            playerModel.bipedRightLeg.render(1.02f);
+            playerModel.bipedLeftArm.render(1.05f);
+            playerModel.bipedRightArm.render(1.05f);
+
+            playerModel.bipedBodyWear.render(1f);
             playerModel.bipedHeadwear.render(1f);
+            playerModel.bipedLeftLegwear.render(1.02f);
+            playerModel.bipedRightLegwear.render(1.02f);
+            playerModel.bipedLeftArmwear.render(1.05f);
+            GlStateManager.translate(0f, 0f, -11.05f); // No idea why right arm-wear isn't orienting correctly :/
+            playerModel.bipedRightArmwear.render(1.05f);
             GlStateManager.popMatrix();
         }
     }

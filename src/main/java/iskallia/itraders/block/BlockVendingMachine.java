@@ -98,25 +98,25 @@ public class BlockVendingMachine extends Block {
 
     @Override
     public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-        if (!world.isRemote) {
-            IBlockState north = world.getBlockState(pos.north());
-            IBlockState south = world.getBlockState(pos.south());
-            IBlockState west = world.getBlockState(pos.west());
-            IBlockState east = world.getBlockState(pos.east());
-            EnumFacing facing = state.getValue(FACING);
-
-            if (facing == EnumFacing.NORTH && north.isFullBlock() && !south.isFullBlock()) {
-                facing = EnumFacing.SOUTH;
-            } else if (facing == EnumFacing.SOUTH && south.isFullBlock() && !north.isFullBlock()) {
-                facing = EnumFacing.NORTH;
-            } else if (facing == EnumFacing.WEST && west.isFullBlock() && !east.isFullBlock()) {
-                facing = EnumFacing.EAST;
-            } else if (facing == EnumFacing.EAST && east.isFullBlock() && !west.isFullBlock()) {
-                facing = EnumFacing.WEST;
-            }
-
-            world.setBlockState(pos, state.withProperty(FACING, facing), 2);
-        }
+//        if (!world.isRemote) {
+//            IBlockState north = world.getBlockState(pos.north());
+//            IBlockState south = world.getBlockState(pos.south());
+//            IBlockState west = world.getBlockState(pos.west());
+//            IBlockState east = world.getBlockState(pos.east());
+//            EnumFacing facing = state.getValue(FACING);
+//
+//            if (facing == EnumFacing.NORTH && north.isFullBlock() && !south.isFullBlock()) {
+//                facing = EnumFacing.SOUTH;
+//            } else if (facing == EnumFacing.SOUTH && south.isFullBlock() && !north.isFullBlock()) {
+//                facing = EnumFacing.NORTH;
+//            } else if (facing == EnumFacing.WEST && west.isFullBlock() && !east.isFullBlock()) {
+//                facing = EnumFacing.EAST;
+//            } else if (facing == EnumFacing.EAST && east.isFullBlock() && !west.isFullBlock()) {
+//                facing = EnumFacing.WEST;
+//            }
+//
+//            world.setBlockState(pos, state.withProperty(FACING, facing), 2);
+//        }
     }
 
     @Override
