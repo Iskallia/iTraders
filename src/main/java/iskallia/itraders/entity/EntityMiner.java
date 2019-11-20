@@ -144,7 +144,11 @@ public class EntityMiner extends EntityCreature {
 			this.attackEntityFrom(DamageSource.FLY_INTO_WALL, Float.MAX_VALUE);
 		}
 		
-		if(this.ticksExisted >= 20 * 60 * 10) {
+		if(this.blocksMined >= this.miningDistance * 2) {
+			this.attackEntityFrom(DamageSource.FLY_INTO_WALL, Float.MAX_VALUE);
+		}
+		
+		if(this.ticksExisted >= 20 * 60 * 5) {
 			this.attackEntityFrom(DamageSource.STARVE, Float.MAX_VALUE);
 		}
 		
@@ -187,8 +191,15 @@ public class EntityMiner extends EntityCreature {
 		        for(int i = 0; i < this.minerInventory.getSlots(); i++) {
 		        	ItemStack stack = this.minerInventory.getStackInSlot(i).copy();
 		        	
-		        	if(!stack.isEmpty() && stack.getItem() == Item.getItemFromBlock(Blocks.COBBLESTONE)) {
-		        		this.world.setBlockState(target.down(), Blocks.COBBLESTONE.getDefaultState());
+		        	if(!stack.isEmpty()) {
+		        		if(stack.getItem() == Item.getItemFromBlock(Blocks.COBBLESTONE)) {
+		        			this.world.setBlockState(target.down(), Blocks.COBBLESTONE.getDefaultState());
+		        		} if(stack.getItem() == Item.getItemFromBlock(Blocks.STONE)) {
+		        			this.world.setBlockState(target.down(), Blocks.STONE.getDefaultState());
+		        		} else {
+		        			continue;
+		        		}
+		        		
 		        		this.world.playSound(null, target.down(), SoundType.STONE.getPlaceSound(), SoundCategory.BLOCKS, SoundType.STONE.getVolume(), SoundType.STONE.getPitch());
 		        		stack.setCount(stack.getCount() - 1);
 		        		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, stack.copy());
