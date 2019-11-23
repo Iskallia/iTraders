@@ -1,17 +1,7 @@
 package iskallia.itraders.init;
 
 import iskallia.itraders.Traders;
-import iskallia.itraders.item.ItemBit;
-import iskallia.itraders.item.ItemChamber;
-import iskallia.itraders.item.ItemCryoChamber;
-import iskallia.itraders.item.ItemEggPouch;
-import iskallia.itraders.item.ItemMagicOreDust;
-import iskallia.itraders.item.ItemPowerChamber;
-import iskallia.itraders.item.ItemSkullNeck;
-import iskallia.itraders.item.ItemSpawnEggFighter;
-import iskallia.itraders.item.ItemSpawnEggMiner;
-import iskallia.itraders.item.ItemSpawnEggTrader;
-import iskallia.itraders.item.ItemSubCard;
+import iskallia.itraders.item.*;
 import iskallia.itraders.tab.CreativeTabsITraders;
 import net.minecraft.item.Item;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -36,6 +26,8 @@ public class InitItem {
 	public static ItemSubCard SUB_CARD = new ItemSubCard("sub_card");
 	public static ItemCryoChamber CRYO_CHAMBER = new ItemCryoChamber("item_cryo_chamber");
 	public static ItemChamber POWER_CHAMBER = new ItemPowerChamber("item_power_chamber");
+
+	public static ItemBooster BOOSTER = new ItemBooster("booster");
 	
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		registerItem(BIT_100, registry);

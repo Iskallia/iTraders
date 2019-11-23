@@ -2,17 +2,8 @@
 package iskallia.itraders.init;
 
 import iskallia.itraders.Traders;
-import iskallia.itraders.block.BlockCryoChamber;
-import iskallia.itraders.block.BlockGhostPedestal;
-import iskallia.itraders.block.BlockGraveStone;
-import iskallia.itraders.block.BlockInfusionCauldron;
-import iskallia.itraders.block.BlockMagicOre;
-import iskallia.itraders.block.BlockPowerChamber;
-import iskallia.itraders.block.entity.TileEntityCryoChamber;
-import iskallia.itraders.block.entity.TileEntityGhostPedestal;
-import iskallia.itraders.block.entity.TileEntityGraveStone;
-import iskallia.itraders.block.entity.TileEntityInfusionCauldron;
-import iskallia.itraders.block.entity.TileEntityPowerChamber;
+import iskallia.itraders.block.*;
+import iskallia.itraders.block.entity.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -36,6 +27,9 @@ public class InitBlock {
 	
 	public static final BlockMagicOre MAGIC_ORE_BLOCK = new BlockMagicOre("magic_ore_block");
 	public static final ItemBlock ITEM_MAGIC_ORE_BLOCK = getItemBlock(MAGIC_ORE_BLOCK);
+
+	public static final BlockCubeChamber CUBE_CHAMBER = new BlockCubeChamber("cube_chamber");
+	public static final ItemBlock ITEM_CUBE_CHAMBER = getItemBlock(CUBE_CHAMBER);
 	
 	public static void registerBlocks(IForgeRegistry<Block> registry) {
 		registerBlock(GRAVE_STONE, registry);
@@ -44,6 +38,7 @@ public class InitBlock {
 		registerBlock(POWER_CHAMBER, registry);
 		registerBlock(GHOST_PEDESTAL, registry);
 		registerBlock(MAGIC_ORE_BLOCK, registry);
+		registerBlock(CUBE_CHAMBER, registry);
 	}
 	
 	public static void registerTileEntities() { // TODO: Eliminate redefinition of Resource Names
@@ -52,6 +47,7 @@ public class InitBlock {
 		GameRegistry.registerTileEntity(TileEntityCryoChamber.class, Traders.getResource("cryo_chamber"));
 		GameRegistry.registerTileEntity(TileEntityPowerChamber.class, Traders.getResource("power_chamber"));
 		GameRegistry.registerTileEntity(TileEntityGhostPedestal.class, Traders.getResource("ghost_pedestal"));
+		GameRegistry.registerTileEntity(TileEntityCubeChamber.class, Traders.getResource("cube_chamber"));
 	}
 	
 	public static void registerItemBlocks(IForgeRegistry<Item> registry) {
@@ -59,6 +55,7 @@ public class InitBlock {
 		registry.register(ITEM_GRAVE_STONE);
 		registry.register(ITEM_GHOST_PEDESTAL);
 		registry.register(ITEM_MAGIC_ORE_BLOCK);
+		registry.register(ITEM_CUBE_CHAMBER);
 	}
 	
 	/* -------------------------- */
