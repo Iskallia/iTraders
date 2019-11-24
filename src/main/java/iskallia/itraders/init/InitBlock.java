@@ -2,8 +2,19 @@
 package iskallia.itraders.init;
 
 import iskallia.itraders.Traders;
-import iskallia.itraders.block.*;
-import iskallia.itraders.block.entity.*;
+import iskallia.itraders.block.BlockCryoChamber;
+import iskallia.itraders.block.BlockCubeChamber;
+import iskallia.itraders.block.BlockGhostPedestal;
+import iskallia.itraders.block.BlockGraveStone;
+import iskallia.itraders.block.BlockInfusionCauldron;
+import iskallia.itraders.block.BlockMagicOre;
+import iskallia.itraders.block.BlockPowerChamber;
+import iskallia.itraders.block.entity.TileEntityCryoChamber;
+import iskallia.itraders.block.entity.TileEntityCubeChamber;
+import iskallia.itraders.block.entity.TileEntityGhostPedestal;
+import iskallia.itraders.block.entity.TileEntityGraveStone;
+import iskallia.itraders.block.entity.TileEntityInfusionCauldron;
+import iskallia.itraders.block.entity.TileEntityPowerChamber;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -27,7 +38,7 @@ public class InitBlock {
 	
 	public static final BlockMagicOre MAGIC_ORE_BLOCK = new BlockMagicOre("magic_ore_block");
 	public static final ItemBlock ITEM_MAGIC_ORE_BLOCK = getItemBlock(MAGIC_ORE_BLOCK);
-
+	
 	public static final BlockCubeChamber CUBE_CHAMBER = new BlockCubeChamber("cube_chamber");
 	public static final ItemBlock ITEM_CUBE_CHAMBER = getItemBlock(CUBE_CHAMBER);
 	

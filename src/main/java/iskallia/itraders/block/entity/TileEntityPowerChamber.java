@@ -1,9 +1,7 @@
 package iskallia.itraders.block.entity;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import iskallia.itraders.block.BlockDoublePartDirectional;
@@ -14,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class TileEntityPowerChamber extends TileInventoryBase implements IEnergyStorage {
@@ -112,6 +111,18 @@ public class TileEntityPowerChamber extends TileInventoryBase implements IEnergy
 					}
 				}
 			}
+			
+			for (EnumFacing facing : EnumFacing.VALUES) {
+				TileEntity te = this.world.getTileEntity(this.getPos().offset(facing));
+				
+				if (te != null && !(te instanceof TileEntityPowerChamber)) {
+					if (te.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
+						IEnergyStorage store = te.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
+						
+						store.receiveEnergy(energy, false);
+					}
+				}
+			}
 		}
 		
 		if (world.isRemote) {
@@ -120,42 +131,6 @@ public class TileEntityPowerChamber extends TileInventoryBase implements IEnergy
 				
 				if (previousNickname == null || !previousNickname.equals(nickname)) {
 					skin.updateSkin(nickname);
-				}
-			}
-		}
-		
-		for (EnumFacing facing : EnumFacing.VALUES) {
-			TileEntity te = this.world.getTileEntity(this.getPos().offset(facing));
-			boolean flag = false;
-			
-			if (te != null && !(te instanceof TileEntityPowerChamber)) {
-				if (te.hasCapability(ENERGY_HANDLER, facing.getOpposite()) && te.getCapability(ENERGY_HANDLER, facing.getOpposite()) instanceof IEnergyStorage)
-				{
-					IEnergyStorage store = te.getCapability(ENERGY_HANDLER, facing.getOpposite());
-					store.receiveEnergy(energy, false);
-					flag = true;
-				}
-			}
-			
-			if (te != null && !(te instanceof TileEntityPowerChamber) && !flag)
-			{
-				try {
-					Method m = te.getClass().getMethod("receiveEnergy", new Class[] { EnumFacing.class, int.class, boolean.class });
-					
-					if (m != null)
-					{
-						try {
-							Object o = m.invoke(te, facing.getOpposite(), energy, false);
-							if (o instanceof Integer)
-							{
-							}
-						} catch (IllegalAccessException e) {
-						} catch (IllegalArgumentException e) {
-						} catch (InvocationTargetException e) {
-						}
-					}
-				} catch (NoSuchMethodException e) {
-				} catch (SecurityException e) {
 				}
 			}
 		}
@@ -197,7 +172,7 @@ public class TileEntityPowerChamber extends TileInventoryBase implements IEnergy
 	}
 	
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
 		if (getBlockState().getValue(BlockDoublePartDirectional.PART) == BlockDoublePartDirectional.EnumPartType.TOP) {
 			TileEntity master = getWorld().getTileEntity(pos.down());
 			
@@ -205,10 +180,8 @@ public class TileEntityPowerChamber extends TileInventoryBase implements IEnergy
 		}
 		else
 		{
-			if (capability != null && capability.getName() == "net.minecraftforge.energy.IEnergyStorage")
-			{
+			if (capability == CapabilityEnergy.ENERGY)
 				return true;
-			}
 		}
 		
 		return super.hasCapability(capability, facing);
@@ -216,7 +189,7 @@ public class TileEntityPowerChamber extends TileInventoryBase implements IEnergy
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
 		if (getBlockState().getValue(BlockDoublePartDirectional.PART) == BlockDoublePartDirectional.EnumPartType.TOP) {
 			TileEntity master = getWorld().getTileEntity(pos.down());
 			
@@ -224,7 +197,7 @@ public class TileEntityPowerChamber extends TileInventoryBase implements IEnergy
 		}
 		else
 		{
-			if (capability != null && capability.getName() == "net.minecraftforge.energy.IEnergyStorage") {
+			if (capability == CapabilityEnergy.ENERGY) {
 				return (T) this;
 			}
 		}

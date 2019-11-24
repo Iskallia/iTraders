@@ -1,5 +1,7 @@
 package iskallia.itraders.block;
 
+import javax.annotation.Nullable;
+
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.entity.TileEntityCubeChamber;
 import iskallia.itraders.gui.GuiHandler;
@@ -17,51 +19,44 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 public class BlockCubeChamber extends Block {
-
-    public BlockCubeChamber(String name) {
-        super(Material.ROCK);
-
-        this.setUnlocalizedName(name);
-        this.setRegistryName(Traders.getResource(name));
-
-        this.setCreativeTab(InitItem.ITRADERS_TAB);
-        this.setHardness(2f);
-    }
-
-    @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        TileEntity tileEntity = world.getTileEntity(pos);
-
-        if (tileEntity instanceof TileEntityCubeChamber) { // TODO: Remove! Here for only debugging purposes :p
-            TileEntityCubeChamber cubeChamber = (TileEntityCubeChamber) tileEntity;
-            playerIn.openGui(Traders.getInstance(), GuiHandler.POWER_CHAMBER,
-                    world, pos.getX(), pos.getY(), pos.getZ());
-
-            if(playerIn.isSneaking()) {
-                cubeChamber.getEnergyStorage().receiveEnergy(10, false);
-            }
-        }
-
-        return super.onBlockActivated(world, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
-    }
-
-    @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return new ItemStack(InitBlock.ITEM_CUBE_CHAMBER);
-    }
-
-    @Override
-    public boolean hasTileEntity(IBlockState state) {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileEntityCubeChamber();
-    }
-
+	
+	public BlockCubeChamber(String name) {
+		super(Material.ROCK);
+		
+		this.setUnlocalizedName(name);
+		this.setRegistryName(Traders.getResource(name));
+		
+		this.setCreativeTab(InitItem.ITRADERS_TAB);
+		this.setHardness(2f);
+	}
+	
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+		
+		if (tileEntity instanceof TileEntityCubeChamber) { 
+			playerIn.openGui(Traders.getInstance(), GuiHandler.POWER_CHAMBER, world, pos.getX(), pos.getY(), pos.getZ());
+			
+			return true;
+		}
+		
+		return super.onBlockActivated(world, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+	}
+	
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		return new ItemStack(InitBlock.ITEM_CUBE_CHAMBER);
+	}
+	
+	@Override
+	public boolean hasTileEntity(IBlockState state) {
+		return true;
+	}
+	
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		return new TileEntityCubeChamber();
+	}
 }
