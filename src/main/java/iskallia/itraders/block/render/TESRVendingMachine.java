@@ -2,8 +2,6 @@ package iskallia.itraders.block.render;
 
 import iskallia.itraders.block.BlockVendingMachine;
 import iskallia.itraders.block.entity.TileEntityVendingMachine;
-import iskallia.itraders.init.InitConfig;
-import iskallia.itraders.util.math.MathHelper;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelPlayer;
@@ -12,10 +10,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 public class TESRVendingMachine extends TileEntitySpecialRenderer<TileEntityVendingMachine> {
@@ -31,7 +26,10 @@ public class TESRVendingMachine extends TileEntitySpecialRenderer<TileEntityVend
         if (!tileEntity.isOccupied())
             return;
 
-        IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
+        IBlockState state = tileEntity.getBlockState();
+
+        if (state.getProperties().get(BlockVendingMachine.PART) == null)
+            return; // Here to fix https://pastebin.com/UBtX8uz7 :V
 
         if (state.getValue(BlockVendingMachine.PART) == BlockVendingMachine.EnumPartType.TOP) {
 //            TileEntityVendingMachine teBottom = BlockVendingMachine.getTileEntity(
