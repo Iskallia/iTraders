@@ -2,6 +2,7 @@ package iskallia.itraders.block;
 
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.entity.TileEntityCubeChamber;
+import iskallia.itraders.gui.GuiHandler;
 import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
@@ -34,9 +35,14 @@ public class BlockCubeChamber extends Block {
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity tileEntity = world.getTileEntity(pos);
 
-        if(tileEntity instanceof TileEntityCubeChamber) { // TODO: Remove! Here for only debugging purposes :p
+        if (tileEntity instanceof TileEntityCubeChamber) { // TODO: Remove! Here for only debugging purposes :p
             TileEntityCubeChamber cubeChamber = (TileEntityCubeChamber) tileEntity;
-            System.out.println(cubeChamber.getEnergyStorage().getEnergyStored());
+            playerIn.openGui(Traders.getInstance(), GuiHandler.POWER_CHAMBER,
+                    world, pos.getX(), pos.getY(), pos.getZ());
+
+            if(playerIn.isSneaking()) {
+                cubeChamber.getEnergyStorage().receiveEnergy(10, false);
+            }
         }
 
         return super.onBlockActivated(world, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);

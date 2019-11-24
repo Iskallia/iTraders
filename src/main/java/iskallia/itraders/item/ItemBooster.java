@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 public class ItemBooster extends Item {
 
     public static double getSuccessRate(ItemStack boosterStack) {
-        if (boosterStack.getItem() != InitItem.BOOSTER)
+        if (boosterStack.getItem() != InitItem.BOOSTER_TIER_1)
             return 0.01; // 1% chance on any item other than Booster. (Including EMPTY)
 
         int tier = ((ItemBooster) boosterStack.getItem()).tier;

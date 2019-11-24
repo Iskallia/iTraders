@@ -27,8 +27,8 @@ public class InitItem {
 	public static ItemCryoChamber CRYO_CHAMBER = new ItemCryoChamber("item_cryo_chamber");
 	public static ItemChamber POWER_CHAMBER = new ItemPowerChamber("item_power_chamber");
 
-	public static ItemBooster BOOSTER = new ItemBooster("booster");
-	
+	public static ItemBooster BOOSTER_TIER_1 = new ItemBooster("booster", 1);
+
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		registerItem(BIT_100, registry);
 		registerItem(BIT_500, registry);
