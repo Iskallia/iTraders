@@ -26,9 +26,13 @@ public class InitItem {
 	public static ItemSubCard SUB_CARD = new ItemSubCard("sub_card");
 	public static ItemCryoChamber CRYO_CHAMBER = new ItemCryoChamber("item_cryo_chamber");
 	public static ItemChamber POWER_CHAMBER = new ItemPowerChamber("item_power_chamber");
-
-	public static ItemBooster BOOSTER_TIER_1 = new ItemBooster("booster", 1);
-
+	
+	public static ItemBooster BOOSTER_TIER_1 = new ItemBooster("booster_tier_1", 1);
+	public static ItemBooster BOOSTER_TIER_2 = new ItemBooster("booster_tier_2", 2);
+	public static ItemBooster BOOSTER_TIER_3 = new ItemBooster("booster_tier_3", 3);
+	public static ItemBooster BOOSTER_TIER_4 = new ItemBooster("booster_tier_4", 4);
+	public static ItemBooster BOOSTER_TIER_5 = new ItemBooster("booster_tier_5", 5);
+	
 	public static void registerItems(IForgeRegistry<Item> registry) {
 		registerItem(BIT_100, registry);
 		registerItem(BIT_500, registry);
@@ -45,6 +49,12 @@ public class InitItem {
 		registerItem(SKULL_NECKLACE, registry);
 		registerItem(MAGIC_ORE_DUST, registry);
 		registerItem(POWER_CHAMBER, registry);
+		
+		registerItem(BOOSTER_TIER_1, registry);
+		registerItem(BOOSTER_TIER_2, registry);
+		registerItem(BOOSTER_TIER_3, registry);
+		registerItem(BOOSTER_TIER_4, registry);
+		registerItem(BOOSTER_TIER_5, registry);
 	}
 	
 	private static void registerItem(Item item, IForgeRegistry<Item> registry) {

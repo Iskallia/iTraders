@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
+import iskallia.itraders.init.InitItem;
 import iskallia.itraders.item.ItemBooster;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,13 +29,15 @@ import net.minecraftforge.energy.EnergyStorage;
 public class TileEntityCubeChamber extends TileInventoryBase {
 	
 	// TODO: Extract to config <-- No rush on this tho. Can be postponed!
-	public static final int CAPACITY = 1000;
+	public static final int CAPACITY = 10000;
 	public static final int MAX_RECEIVE = 10;
 	
 	/* --------------------------------- */
 	
 	private EnergyStorage energyStorage = generateEnergyStorage();
-	// TODO: add all your state variables here.
+	private int remainingTicks = 0;
+	
+	public CubeChamberStates state = CubeChamberStates.IDLE;
 	
 	private EnergyStorage generateEnergyStorage() {
 		return new EnergyStorage(CAPACITY, MAX_RECEIVE, 0);
@@ -51,10 +54,21 @@ public class TileEntityCubeChamber extends TileInventoryBase {
 	}
 	
 	public boolean startPressed() {
-		// This method will be called from GUI button!
-		// TODO: attempt to start the cube generating process
-		// TODO: Consume 1 Booster once successfully started, but store the used booster
-		// for later!
+		// Start if it has something in slot 0
+		if (
+				this.getInventoryHandler().getStackInSlot(0) != ItemStack.EMPTY
+				&& this.state != CubeChamberStates.PROCESSING) {
+			// If there's a booster item, consume it
+			if (this.getInventoryHandler().getStackInSlot(1) != ItemStack.EMPTY) {
+				// TODO: Save the booster item for later
+				this.getInventoryHandler().getStackInSlot(1).shrink(1);
+			}
+			
+			this.remainingTicks = 100;
+			this.state = CubeChamberStates.PROCESSING;
+			return true;
+		}
+		
 		return false; // <-- Returns if it successfully started the process
 	}
 	
@@ -62,12 +76,24 @@ public class TileEntityCubeChamber extends TileInventoryBase {
 		// This method will be called once the "infusion" process is finished
 		
 		ItemStack eggStack = getInventoryHandler().getStackInSlot(0);
+		// Get it from the consumed one?
 		ItemStack boosterStack = getInventoryHandler().getStackInSlot(1);
+		
+		// Consume the egg
+		eggStack.shrink(1);
 		
 		double successChance = ItemBooster.getSuccessRate(boosterStack);
 		
-		// TODO: See if it will yield a Power Cube or Head
+		//See if it will yield a Power Cube or Head
+		if (successChance > rand.nextDouble()) {
+			// Yields a Power Cube
+		} else {
+			// Yields a Head
+		}
+		
 		// TODO: Put the result on output slot (inventory[2])
+		
+		this.state = CubeChamberStates.FINISHED;
 	}
 	
 	@Override
@@ -77,27 +103,40 @@ public class TileEntityCubeChamber extends TileInventoryBase {
 			@Nonnull
 			@Override
 			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-				// TODO: input item to proper slot. Remember, index 0 for input, index 1 for
-				// booster! :D
+				// If it's not the right item for the right slot, return the stack
+				if (!this.canInsertItem(slot, stack, stack))
+					return stack;
+				
 				return super.insertItem(slot, stack, simulate);
 			}
 			
 			@Nonnull
 			@Override
 			public ItemStack extractItem(int slot, int amount, boolean simulate) {
-				// TODO: extract output slot (inventory[2]) if not empty
-				return super.extractItem(slot, amount, simulate);
+				if (!this.canExtractItem(slot, amount, this.getStackInSlot(slot)))
+					return ItemStack.EMPTY;
+				
+				return this.getStackInSlot(slot);
 			}
 			
 			@Override
 			public boolean canInsertItem(int slot, ItemStack toAdd, @Nonnull ItemStack existing) {
-				// TODO: return true if a fighter egg OR a booster item
-				return super.canInsertItem(slot, toAdd, existing);
+				// Slot 0 for fighter egg
+				if (slot == 0 && existing.getItem() == InitItem.SPAWN_EGG_FIGHTER)
+					return true;
+				
+				// Slot 1 for Booster
+				if (slot == 1 && existing.getItem() instanceof ItemBooster)
+					return true;
+				
+				return false;
 			}
 			
 			@Override
 			public boolean canExtractItem(int slot, int amount, @Nonnull ItemStack existing) {
-				// TODO: return true if only and only inventory[2] is not empty
+				if (slot != 2 || this.getStackInSlot(2) == ItemStack.EMPTY)
+					return false;
+				
 				return super.canExtractItem(slot, amount, existing);
 			}
 		};
@@ -106,9 +145,15 @@ public class TileEntityCubeChamber extends TileInventoryBase {
 	@Override
 	public void update() {
 		if (!world.isRemote) {
-			// TODO: Your whole server tick update logic
+			if (this.remainingTicks > 0)
+				--remainingTicks;
 			
-			// TODO: Once the "Infusing" process is done, callback onInfusingFinished()
+			// Once the "Infusing" process is done, callback onInfusingFinished()
+			if (this.state == CubeChamberStates.PROCESSING && this.remainingTicks == 0) {
+				onInfusingFinished();
+			}
+			
+			this.markForUpdate();
 		}
 	}
 	
@@ -135,19 +180,29 @@ public class TileEntityCubeChamber extends TileInventoryBase {
 	
 	@Override
 	public void readCustomNBT(NBTTagCompound compound) {
-		// TODO: read the NBT and deserialize them into the fields you have here!
+		// Set saved energy in the energy storage, is ther a best way?
+		int savedEnergy = compound.getInteger("Energy");
 		
-		// Set saved energy in the energy storage How?
+		while (this.energyStorage.getEnergyStored() < savedEnergy) {
+			this.energyStorage.receiveEnergy(savedEnergy, false);
+		}
+		
+		this.remainingTicks = compound.getInteger("RemainingTicks");
 		
 		super.readCustomNBT(compound);
 	}
 	
 	@Override
 	public void writeCustomNBT(NBTTagCompound compound) {
-		// TODO: write all of the current state with the fields you have here!
-		
 		compound.setInteger("Energy", this.energyStorage.getEnergyStored());
+		compound.setInteger("RemainingTicks", this.remainingTicks);
 		
 		super.writeCustomNBT(compound);
 	}
+	
+	public enum CubeChamberStates {
+		IDLE, 
+		PROCESSING,
+		FINISHED
+	};
 }
