@@ -31,6 +31,7 @@ public class InitModel {
         registerSimpleItemModel(InitBlock.ITEM_MAGIC_ORE_BLOCK, 0);
         registerSimpleItemModel(InitItem.RAENS22_STICK, 0);
         registerSimpleItemModel(InitItem.ITEM_VENDING_MACHINE, 0);
+        registerSimpleItemModel(InitItem.ACCELERATION_BOTTLE, 0);
 
         registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
         registerBlockModel(InitBlock.GHOST_PEDESTAL, 0);
