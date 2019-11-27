@@ -9,7 +9,6 @@ import iskallia.itraders.init.InitItem;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
@@ -105,44 +104,47 @@ public class EventAnvil {
 	
 	@SubscribeEvent
 	public static void onAcceleratorCharge(AnvilUpdateEvent event) {
-		if(!event.getRight().hasDisplayName()) return;
-		
+		if (!event.getRight().hasDisplayName())
+			return;
 		String name = event.getRight().getDisplayName();
-		System.out.println(name);
-		
-		int duration = getDuration(event.getLeft(), event.getRight());
 
-		if(duration == 0)return;
-		
-		ItemStack left = event.getLeft();		
+		int duration = getDuration(event.getLeft(), event.getRight());
+		if (duration == 0)
+			return;
+
+		ItemStack left = event.getLeft();
 		ItemStack output = left.copy();
-		
-		if(!output.hasTagCompound()) output.setTagCompound(new NBTTagCompound());
-		
+
+		if (!output.hasTagCompound())
+			output.setTagCompound(new NBTTagCompound());
 		NBTTagCompound nbt = output.getTagCompound();
-		
-		
+
 		int subCount = nbt.getInteger("SubCount");
-		
-		//TODO: 10 needs to be configurable
-		if(subCount >= 10) return;
-		
+
+		if (!nbt.hasKey("SelectedSub"))
+			nbt.setInteger("SelectedSub", 0);
+
+		// TODO: 10 needs to be configurable
+		if (subCount >= 10)
+			return;
+
 		nbt.setInteger("SubCount", subCount + 1);
-		
-		if(!nbt.hasKey("SubList")) nbt.setTag("SubList", new NBTTagCompound());
-		
-		NBTTagCompound subList = nbt.getCompoundTag("SubList");
-		
-		subList.setInteger(name, duration);	
-		
+
+		if (!nbt.hasKey("SubList"))
+			nbt.setTag("SubList", new NBTTagList());
+		NBTTagList subList = nbt.getTagList("SubList", Constants.NBT.TAG_COMPOUND);
+
+		NBTTagCompound newSub = new NBTTagCompound();
+		newSub.setString("Name", name);
+		newSub.setInteger("Duration", duration);
+
+		subList.appendTag(newSub);
+
 		output.setTagCompound(nbt);
-		
-		System.out.println(output.getTagCompound().getInteger("SubCount"));
-		System.out.println(output.getTagCompound().getCompoundTag("SubList").getInteger(name));
-		
+
 		event.setOutput(output);
 		event.setCost(duration / 10);
-		event.setMaterialCost(1);		
+		event.setMaterialCost(1);
 	}
 
 	private static int getDuration(ItemStack left, ItemStack right) {
