@@ -103,6 +103,74 @@ public class EventAnvil {
 		event.setMaterialCost(Math.abs(amount));
 	}
 	
+	@SubscribeEvent
+	public static void onAcceleratorCharge(AnvilUpdateEvent event) {
+		if(!event.getRight().hasDisplayName()) return;
+		
+		String name = event.getRight().getDisplayName();
+		System.out.println(name);
+		
+		int duration = getDuration(event.getLeft(), event.getRight());
+
+		if(duration == 0)return;
+		
+		ItemStack left = event.getLeft();		
+		ItemStack output = left.copy();
+		
+		if(!output.hasTagCompound()) output.setTagCompound(new NBTTagCompound());
+		
+		NBTTagCompound nbt = output.getTagCompound();
+		
+		
+		int subCount = nbt.getInteger("SubCount");
+		
+		//TODO: 10 needs to be configurable
+		if(subCount >= 10) return;
+		
+		nbt.setInteger("SubCount", subCount + 1);
+		
+		if(!nbt.hasKey("SubList")) nbt.setTag("SubList", new NBTTagCompound());
+		
+		NBTTagCompound subList = nbt.getCompoundTag("SubList");
+		
+		subList.setInteger(name, duration);	
+		
+		output.setTagCompound(nbt);
+		
+		System.out.println(output.getTagCompound().getInteger("SubCount"));
+		System.out.println(output.getTagCompound().getCompoundTag("SubList").getInteger(name));
+		
+		event.setOutput(output);
+		event.setCost(duration / 10);
+		event.setMaterialCost(1);		
+	}
+
+	private static int getDuration(ItemStack left, ItemStack right) {
+		int duration = 0;
+		
+		if(left.getItem() != InitItem.ACCELERATION_BOTTLE)return duration;
+		if(right.getItem() != InitItem.SPAWN_EGG_FIGHTER)return duration;
+		
+		if(!right.hasTagCompound()) return duration;
+		
+		NBTTagCompound nbt = right.getTagCompound();
+		
+		if(!nbt.hasKey("EntityTag")) return duration;
+		
+		NBTTagCompound entityTag = nbt.getCompoundTag("EntityTag");
+		
+		if(!entityTag.hasKey("SubData")) return duration;
+		
+		NBTTagCompound subData = entityTag.getCompoundTag("SubData");
+		
+		int months = subData.getInteger("Months");
+		
+		//TODO: set 10 this configurable
+		duration = months * 10;
+				
+		return duration;
+	}
+
 	private static int getScalingAmount(ItemStack left, ItemStack right) {
 		if(!InitConfig.CONFIG_FIGHTER.CRAFTABLE_EGGS)return 0;
 		
