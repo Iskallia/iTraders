@@ -119,20 +119,17 @@ public class EventAnvil {
 			output.setTagCompound(new NBTTagCompound());
 		NBTTagCompound nbt = output.getTagCompound();
 
-		int subCount = nbt.getInteger("SubCount");
 
 		if (!nbt.hasKey("SelectedSub"))
 			nbt.setInteger("SelectedSub", 0);
 
-		// TODO: 10 needs to be configurable
-		if (subCount >= 10)
-			return;
-
-		nbt.setInteger("SubCount", subCount + 1);
 
 		if (!nbt.hasKey("SubList"))
 			nbt.setTag("SubList", new NBTTagList());
 		NBTTagList subList = nbt.getTagList("SubList", Constants.NBT.TAG_COMPOUND);
+		
+		//TODO: 10 needs to be configurable
+		if(subList.tagCount() >= 10) return;
 
 		NBTTagCompound newSub = new NBTTagCompound();
 		newSub.setString("Name", name);

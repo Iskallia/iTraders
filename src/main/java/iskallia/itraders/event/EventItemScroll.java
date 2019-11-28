@@ -30,6 +30,8 @@ public class EventItemScroll {
 				ItemAccelerationBottle bottle = (ItemAccelerationBottle) stack.getItem();
 
 				int subCount = bottle.getSubCount(stack);
+				
+				if(subCount == 0) return;
 
 				wheelStatus += event.getDwheel();
 				int scaledDelta = wheelStatus / 120;

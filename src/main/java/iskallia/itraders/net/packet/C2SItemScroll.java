@@ -45,11 +45,14 @@ public class C2SItemScroll implements IMessage {
 			ItemAccelerationBottle bottle = (ItemAccelerationBottle) stack.getItem();
 
 			bottle.setSelectedSubIndex(stack, message.index);
+			
+			String selectedSub = bottle.getSelectedSub(stack);
+			if(selectedSub == null) return null;
 
 			playerMP.connection.sendPacket(new SPacketTitle(SPacketTitle.Type.ACTIONBAR, 
 					new TextComponentString(TextFormatting.DARK_AQUA + "Selected Sub" + 
 											TextFormatting.WHITE + ": " + 
-											TextFormatting.YELLOW + bottle.getSelectedSub(stack))));
+											TextFormatting.YELLOW + selectedSub)));
 
 			return null;
 		}
