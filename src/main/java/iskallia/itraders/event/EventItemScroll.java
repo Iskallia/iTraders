@@ -1,7 +1,9 @@
 package iskallia.itraders.event;
 
 import iskallia.itraders.Traders;
+import iskallia.itraders.init.InitPacket;
 import iskallia.itraders.item.ItemAccelerationBottle;
+import iskallia.itraders.net.packet.C2SItemScroll;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.MouseEvent;
@@ -42,9 +44,8 @@ public class EventItemScroll {
 
 				bottle.setSelectedSubIndex(stack, newIndex);
 
-				System.out.println("New Value: " + newIndex);
-
-				// TODO: tell the server of the change.
+				
+				InitPacket.PIPELINE.sendToServer(new C2SItemScroll(newIndex));
 
 				event.setCanceled(true);
 			}

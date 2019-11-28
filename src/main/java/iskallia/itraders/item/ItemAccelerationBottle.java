@@ -93,4 +93,17 @@ public class ItemAccelerationBottle extends Item {
 		nbt.setInteger("SubCount", toSet);
 	}
 
+	public String getSelectedSub(ItemStack stack) {
+		NBTTagCompound nbt = stack.getTagCompound();
+		if(nbt == null) return null;
+		
+		NBTTagList subList = nbt.getTagList("SubList", Constants.NBT.TAG_COMPOUND);
+		if(subList == null) return null;
+		
+		int index = nbt.getInteger("SelectedSub");
+		
+		NBTTagCompound selectedSub = subList.getCompoundTagAt(index);
+		return selectedSub.getString("Name");
+	}
+
 }
