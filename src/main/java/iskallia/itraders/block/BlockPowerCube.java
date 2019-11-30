@@ -1,12 +1,19 @@
 package iskallia.itraders.block;
 
 import iskallia.itraders.Traders;
+import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.init.InitItem;
 import iskallia.itraders.item.ItemBooster;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /*
  * NBT Structure: {
@@ -23,10 +30,11 @@ public class BlockPowerCube extends Block {
         if(eggStack.getItem() != InitItem.SPAWN_EGG_FIGHTER)
             return ItemStack.EMPTY;
 
-        // TODO: Generate a random Power Cube
-        // Remember! This routine requires random Rarity & Decay stuff generation! ^^
+        NBTTagCompound cubeNBT = new NBTTagCompound();
+        cubeNBT.setString("Nickname", eggStack.getDisplayName());
+        // TODO: RNG-stuff
 
-        return ItemStack.EMPTY;
+        return new ItemStack(InitBlock.ITEM_POWER_CUBE, 1, 0, cubeNBT);
     }
 
     /* ------------------------------- */
@@ -41,6 +49,16 @@ public class BlockPowerCube extends Block {
         this.setHardness(2f);
     }
 
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+    }
 
+    /* ------------------------------- */
+
+    // TODO: Analyse
+//    public enum CubeRarity {
+//
+//    }
 
 }

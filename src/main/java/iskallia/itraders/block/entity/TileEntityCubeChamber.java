@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
+import iskallia.itraders.block.BlockPowerCube;
 import iskallia.itraders.capability.ModifiableEnergyStorage;
 import iskallia.itraders.init.InitItem;
 import iskallia.itraders.item.ItemBooster;
@@ -129,14 +130,13 @@ public class TileEntityCubeChamber extends TileInventoryBase {
 
         ItemStack eggStack = inventoryHandler.getStackInSlot(INPUT_SLOT);
 
-        // Consume the egg
-        eggStack.shrink(BOOSTER_SLOT);
-
         // Roll the dice for Head or Power Cube
         double chance = ItemBooster.getSuccessRate(boosterInUse); // TODO:
         System.out.println("Rolling on a chance of " + (chance * 100) + "%");
-        if (chance >= rand.nextDouble()) {
-            // Yields a Power Cube
+        if (rand.nextDouble() <= chance) {
+            System.out.println("Generating Power Cube");
+            ItemStack cubeStack = BlockPowerCube.generateRandomly(eggStack, boosterInUse);
+            inventoryHandler.setStackInSlot(OUTPUT_SLOT, cubeStack);
 
         } else {
             ItemStack skullStack = new ItemStack(Items.SKULL, 1, 3);
@@ -146,6 +146,8 @@ public class TileEntityCubeChamber extends TileInventoryBase {
             inventoryHandler.setStackInSlot(OUTPUT_SLOT, skullStack);
         }
 
+        // Consume the egg & reset booster in use
+        eggStack.shrink(BOOSTER_SLOT);
         this.boosterInUse = ItemStack.EMPTY;
     }
 

@@ -9,6 +9,7 @@ import iskallia.itraders.container.ContainerCubeChamber;
 import iskallia.itraders.init.InitPacket;
 import iskallia.itraders.net.packet.C2SCubeChamberStart;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiCommandBlock;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -45,6 +46,10 @@ public class GuiContainerCubeChamber extends GuiContainer {
         this.startButton = new GuiButton(0, startX + 115, startY + 56, this.fontRenderer.getStringWidth(startButtonText) + 10, 20, startButtonText);
     }
 
+    public void updateGui() {
+        this.startButton.enabled = canStartInfusion();
+    }
+
     /* ----------------------------- */
 
     @Override
@@ -59,39 +64,18 @@ public class GuiContainerCubeChamber extends GuiContainer {
     /* ----------------------------- */
 
     @Override
+    public void updateScreen() {
+        this.updateGui();
+        super.updateScreen();
+    }
+
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
-
-        int startX = (this.width - this.xSize) / 2;
-        int startY = (this.height - this.ySize) / 2;
-
-        // Draw Block's Name
-        String blockName = "Cube Chamber";
-        this.fontRenderer.drawString(blockName, startX + (this.xSize - this.fontRenderer.getStringWidth(blockName)) / 2, startY + 6, 4210752);
-
-        // Reset some GL States
-        GlStateManager.disableRescaleNormal();
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepth();
-
-        // Set button's state
-        this.startButton.enabled = canStartInfusion();
-
-        // Render button
-        this.startButton.drawButton(this.mc, mouseX, mouseY, partialTicks);
-
-        // Render hovering text of RF Indicator TODO: Extract to a new GUI component
-        if (mouseX > startX + 9 && mouseY > startY + 8 && mouseX < startX + 26 && mouseY < startY + 77) {
-            this.drawHoveringText("RF: " + this.cubeChamber.getEnergyStorage().getEnergyStored(), mouseX, mouseY + 10);
-        }
-
-        // TODO: Reset some GL color state before drawing string
-
-        // Render hovered tooltip
-        this.renderHoveredToolTip(mouseX, mouseY);
     }
+
+    /* ----------------------------- */
 
     protected boolean canStartInfusion() {
         if (cubeChamber.state == TileEntityCubeChamber.CubeChamberStates.PROCESSING)
@@ -110,11 +94,9 @@ public class GuiContainerCubeChamber extends GuiContainer {
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
-    }
 
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+        int startX = (this.width - this.xSize) / 2;
+        int startY = (this.height - this.ySize) / 2;
 
         // Bind GUI Sprite
         this.mc.getTextureManager().bindTexture(CUBE_CHAMBER_GUI_TEXTURE);
@@ -124,21 +106,49 @@ public class GuiContainerCubeChamber extends GuiContainer {
         if (cubeChamber.state == TileEntityCubeChamber.CubeChamberStates.PROCESSING) {
             int infusionScaled = 24 - getInfusionScaled(24);
             this.drawTexturedModalRect(
-                    93, 30, // X, Y
+                    startX + 93, startY + 30, // X, Y
                     176, 2, // U, V
                     infusionScaled, 17 // W, H
             );
         }
 
-
         // Render RF Indicator TODO: Extract to a new GUI component
         int powerScaled = 69 - getPowerScaled(69);
+//        this.drawTexturedModalRect(
+//                startX + 9, startY + 8 + powerScaled,
+//                178, 22 + powerScaled,
+//                17, 69 - powerScaled
+//        );
         this.drawTexturedModalRect(
-                9, 8 + powerScaled,
-                178, 22 + powerScaled,
-                17, 69 - powerScaled
+                startX + 9, startY + 8 + powerScaled, // X, Y
+                178, 22 + powerScaled, // U, V
+                17, 69 - powerScaled // W, H
         );
-        this.fontRenderer.drawString("RF", 12, 67, 0x404040);
+        this.fontRenderer.drawString("RF", startX + 12, startY + 67, 0x404040);
+
+        // Draw Block's Name
+        String blockName = "Cube Chamber";
+        this.fontRenderer.drawString(blockName, startX + (this.xSize - this.fontRenderer.getStringWidth(blockName)) / 2, startY + 6, 4210752);
+
+        // Render button
+        this.startButton.drawButton(this.mc, mouseX, mouseY, partialTicks);
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+
+        int startX = (this.width - this.xSize) / 2;
+        int startY = (this.height - this.ySize) / 2;
+
+        // Render hovering text of RF Indicator TODO: Extract to a new GUI component
+        if (mouseX > startX + 9 && mouseY > startY + 8 && mouseX < startX + 26 && mouseY < startY + 77) {
+            this.drawHoveringText("RF: " + this.cubeChamber.getEnergyStorage().getEnergyStored(),
+                    mouseX - startX, mouseY - startY);
+        }
+
+        // Render hovered tooltip
+        this.renderHoveredToolTip(mouseX - startX, mouseY - startY);
     }
 
     /* ----------------------------- */
