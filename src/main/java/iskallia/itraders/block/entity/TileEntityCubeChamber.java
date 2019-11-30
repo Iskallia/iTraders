@@ -133,7 +133,7 @@ public class TileEntityCubeChamber extends TileInventoryBase {
         eggStack.shrink(BOOSTER_SLOT);
 
         // Roll the dice for Head or Power Cube
-        double chance = ItemBooster.getSuccessRate(boosterInUse);
+        double chance = ItemBooster.getSuccessRate(boosterInUse); // TODO:
         System.out.println("Rolling on a chance of " + (chance * 100) + "%");
         if (chance >= rand.nextDouble()) {
             // Yields a Power Cube
@@ -145,6 +145,8 @@ public class TileEntityCubeChamber extends TileInventoryBase {
             skullStack.setTagCompound(stackNBT);
             inventoryHandler.setStackInSlot(OUTPUT_SLOT, skullStack);
         }
+
+        this.boosterInUse = ItemStack.EMPTY;
     }
 
     @Override

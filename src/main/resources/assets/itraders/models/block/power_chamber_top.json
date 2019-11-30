@@ -1,18 +1,18 @@
 {
   "parent": "block/block",
   "textures": {
-    "particle": "itraders:blocks/power_chamber_top",
-    "down": "itraders:blocks/cryo_chamber_full",
-    "north": "itraders:blocks/power_chamber_top",
-    "east": "itraders:blocks/power_chamber_top",
-    "south": "itraders:blocks/power_chamber_top",
-    "west": "itraders:blocks/power_chamber_top"
+    "particle": "itraders:blocks/power_chamber_top_side",
+    "up": "itraders:blocks/power_chamber_top",
+    "north": "itraders:blocks/power_chamber_top_side",
+    "east": "itraders:blocks/power_chamber_top_side",
+    "south": "itraders:blocks/power_chamber_top_side",
+    "west": "itraders:blocks/power_chamber_top_side"
   },
   "elements": [
     {   "from": [ 0, 0, 0 ],
       "to": [ 16, 16, 16 ],
       "faces": {
-        "down":  { "texture": "#down", "cullface": "down" },
+        "up":  { "texture": "#up", "cullface": "down" },
         "north": { "texture": "#north", "cullface": "north" },
         "south": { "texture": "#south", "cullface": "south" },
         "west":  { "texture": "#west", "cullface": "west" },
