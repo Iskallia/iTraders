@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "itraders:blocks/power_cube_common"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "_comment": "TODO: Map states to rarity models",
+    "normal":  { "model": "itraders:power_cube_common" }
+  }
+}

@@ -32,6 +32,11 @@ tile.magic_ore_block.name=Magic Ore Block
 tile.cube_chamber.name=Cube Chamber
 tile.power_cube.name=Power Cube
 
+itraders.cube.rarity.common.name=Common
+itraders.cube.rarity.rare.name=Rare
+itraders.cube.rarity.epic.name=Epic
+itraders.cube.rarity.mega.name=Mega
+
 itraders.card.rarity.common.name=
 itraders.card.rarity.rare.name=Rare
 itraders.card.rarity.legendary.name=Legendary

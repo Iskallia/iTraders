@@ -37,7 +37,7 @@ public class InitBlock {
     public static final ItemBlock ITEM_CUBE_CHAMBER = getItemBlock(CUBE_CHAMBER);
 
     public static final BlockPowerCube POWER_CUBE = new BlockPowerCube("power_cube");
-    public static final ItemBlock ITEM_POWER_CUBE = getItemBlock(POWER_CUBE);
+    public static final ItemBlock ITEM_POWER_CUBE = getItemBlock(POWER_CUBE, 1);
 
     public static void registerBlocks(IForgeRegistry<Block> registry) {
         registerBlock(GRAVE_STONE, registry);
@@ -75,6 +75,10 @@ public class InitBlock {
     }
 
     private static ItemBlock getItemBlock(Block block) {
+        return getItemBlock(block, 64);
+    }
+
+    private static ItemBlock getItemBlock(Block block, int maxStackSize) {
         ItemBlock itemBlock = new ItemBlock(block);
 
         if (block.getRegistryName() == null)

@@ -114,11 +114,6 @@ public class GuiContainerCubeChamber extends GuiContainer {
 
         // Render RF Indicator TODO: Extract to a new GUI component
         int powerScaled = 69 - getPowerScaled(69);
-//        this.drawTexturedModalRect(
-//                startX + 9, startY + 8 + powerScaled,
-//                178, 22 + powerScaled,
-//                17, 69 - powerScaled
-//        );
         this.drawTexturedModalRect(
                 startX + 9, startY + 8 + powerScaled, // X, Y
                 178, 22 + powerScaled, // U, V

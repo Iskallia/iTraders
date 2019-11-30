@@ -135,7 +135,7 @@ public class TileEntityCubeChamber extends TileInventoryBase {
         System.out.println("Rolling on a chance of " + (chance * 100) + "%");
         if (rand.nextDouble() <= chance) {
             System.out.println("Generating Power Cube");
-            ItemStack cubeStack = BlockPowerCube.generateRandomly(eggStack, boosterInUse);
+            ItemStack cubeStack = BlockPowerCube.generateRandomly(eggStack);
             inventoryHandler.setStackInSlot(OUTPUT_SLOT, cubeStack);
 
         } else {
