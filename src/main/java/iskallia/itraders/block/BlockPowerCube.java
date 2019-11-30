@@ -3,14 +3,18 @@ package iskallia.itraders.block;
 import iskallia.itraders.Traders;
 import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.init.InitItem;
+import iskallia.itraders.item.ItemSpawnEggFighter;
+import iskallia.itraders.util.math.Randomizer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -30,12 +34,22 @@ public class BlockPowerCube extends Block {
         if (eggStack.getItem() != InitItem.SPAWN_EGG_FIGHTER)
             return ItemStack.EMPTY;
 
+        NBTTagCompound eggNBT = eggStack.getTagCompound();
+        int months = Math.max(InitItem.SPAWN_EGG_FIGHTER.getMonths(eggStack), 1);
+
         ItemStack cubeStack = new ItemStack(InitBlock.ITEM_POWER_CUBE, 1, 0);
 
         NBTTagCompound cubeNBT = new NBTTagCompound();
         cubeNBT.setString("Nickname", eggStack.getDisplayName());
         cubeNBT.setInteger("Rarity", CubeRarity.randomRarity().ordinal());
-        // TODO: RNG-stuff
+        cubeNBT.setInteger("Multiplier", Randomizer.randomInt(1, 7));
+        cubeNBT.setInteger("BaseRFRate", Randomizer.randomInt(10, 100));
+
+        NBTTagCompound decayNBT = new NBTTagCompound();
+        int decayTicks = Randomizer.randomInt(100, 1000) * months;
+        decayNBT.setInteger("RemainingTicks", decayTicks);
+        decayNBT.setInteger("MaxTicks", decayTicks);
+        cubeNBT.setTag("Decay", decayNBT);
 
         cubeStack.setTagCompound(cubeNBT);
 
@@ -69,6 +83,19 @@ public class BlockPowerCube extends Block {
                 + TextFormatting.GRAY + rarity.translation());
         tooltip.add(rarityColor + "Nickname: "
                 + TextFormatting.GRAY + stackNBT.getString("Nickname"));
+        tooltip.add(rarityColor + "Multiplier: "
+                + TextFormatting.GRAY + stackNBT.getInteger("Multiplier"));
+        tooltip.add(rarityColor + "Base RF/tick: "
+                + TextFormatting.GRAY + stackNBT.getInteger("BaseRFRate"));
+
+        if (stackNBT.hasKey("Decay", Constants.NBT.TAG_COMPOUND)) {
+            tooltip.add("");
+
+            NBTTagCompound decayNBT = stackNBT.getCompoundTag("Decay");
+            tooltip.add(rarityColor + "Decay: "
+                    + TextFormatting.GRAY + decayNBT.getInteger("RemainingTicks")
+                    + "/" + decayNBT.getInteger("MaxTicks"));
+        }
 
     }
 
