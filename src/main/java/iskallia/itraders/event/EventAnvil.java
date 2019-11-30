@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import iskallia.itraders.Traders;
 import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitItem;
+import iskallia.itraders.item.ItemAccelerationBottle.NBTConstants;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -108,8 +109,8 @@ public class EventAnvil {
 			return;
 		String name = event.getRight().getDisplayName();
 
-		int duration = getDuration(event.getLeft(), event.getRight());
-		if (duration == 0)
+		int uses = getDuration(event.getLeft(), event.getRight());
+		if (uses == 0)
 			return;
 
 		ItemStack left = event.getLeft();
@@ -120,54 +121,54 @@ public class EventAnvil {
 		NBTTagCompound nbt = output.getTagCompound();
 
 
-		if (!nbt.hasKey("SelectedSub"))
-			nbt.setInteger("SelectedSub", 0);
+		if (!nbt.hasKey(NBTConstants.SELECTED_SUB_INDEX))
+			nbt.setInteger(NBTConstants.SELECTED_SUB_INDEX, 0);
 
 
-		if (!nbt.hasKey("SubList"))
-			nbt.setTag("SubList", new NBTTagList());
-		NBTTagList subList = nbt.getTagList("SubList", Constants.NBT.TAG_COMPOUND);
+		if (!nbt.hasKey(NBTConstants.SUB_LIST))
+			nbt.setTag(NBTConstants.SUB_LIST, new NBTTagList());
+		NBTTagList subList = nbt.getTagList(NBTConstants.SUB_LIST, Constants.NBT.TAG_COMPOUND);
 		
 		//TODO: 10 needs to be configurable
 		if(subList.tagCount() >= 10) return;
 
 		NBTTagCompound newSub = new NBTTagCompound();
-		newSub.setString("Name", name);
-		newSub.setInteger("Duration", duration);
+		newSub.setString(NBTConstants.NAME, name);
+		newSub.setInteger(NBTConstants.USES, uses);
 
 		subList.appendTag(newSub);
 
 		output.setTagCompound(nbt);
 
 		event.setOutput(output);
-		event.setCost(duration / 10);
+		event.setCost(uses / 10);
 		event.setMaterialCost(1);
 	}
 
 	private static int getDuration(ItemStack left, ItemStack right) {
-		int duration = 0;
-		
-		if(left.getItem() != InitItem.ACCELERATION_BOTTLE)return duration;
-		if(right.getItem() != InitItem.SPAWN_EGG_FIGHTER)return duration;
-		
-		if(!right.hasTagCompound()) return duration;
-		
+
+		if (left.getItem() != InitItem.ACCELERATION_BOTTLE)
+			return 0;
+		if (right.getItem() != InitItem.SPAWN_EGG_FIGHTER)
+			return 0;
+
+		if (!right.hasTagCompound())
+			return 0;
+
 		NBTTagCompound nbt = right.getTagCompound();
-		
-		if(!nbt.hasKey("EntityTag")) return duration;
-		
+
+		if (!nbt.hasKey("EntityTag"))
+			return 0;
+
 		NBTTagCompound entityTag = nbt.getCompoundTag("EntityTag");
-		
-		if(!entityTag.hasKey("SubData")) return duration;
-		
+
+		if (!entityTag.hasKey("SubData"))
+			return 0;
+
 		NBTTagCompound subData = entityTag.getCompoundTag("SubData");
-		
-		int months = subData.getInteger("Months");
-		
-		//TODO: set 10 this configurable
-		duration = months * 10;
-				
-		return duration;
+
+		return subData.getInteger("Months");
+
 	}
 
 	private static int getScalingAmount(ItemStack left, ItemStack right) {

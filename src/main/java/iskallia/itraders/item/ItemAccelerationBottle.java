@@ -39,20 +39,25 @@ public class ItemAccelerationBottle extends Item {
 			return EnumActionResult.PASS;
 
 		NBTTagCompound nbt = stack.getTagCompound();
-		int selectedSubIndex = nbt.getInteger("SelectedSub");
+		int selectedSubIndex = nbt.getInteger(NBTConstants.SELECTED_SUB_INDEX);
 
-		NBTTagList subList = nbt.getTagList("SubList", Constants.NBT.TAG_COMPOUND);
-		if(subList.hasNoTags()) return EnumActionResult.PASS;
-		
+		NBTTagList subList = nbt.getTagList(NBTConstants.SUB_LIST, Constants.NBT.TAG_COMPOUND);
+		if (subList.hasNoTags())
+			return EnumActionResult.PASS;
+
 		NBTTagCompound selectedSub = subList.getCompoundTagAt(selectedSubIndex);
 
-		String name = selectedSub.getString("Name");
-		int duration = selectedSub.getInteger("Duration");
+		String name = selectedSub.getString(NBTConstants.NAME);
+		int uses = selectedSub.getInteger(NBTConstants.USES);
 
 		// TODO: use the sub for stuff
-		player.sendMessage(new TextComponentString(name + ": " + duration));
+		player.sendMessage(new TextComponentString(name + " - Uses Before: " + uses));
+		if (uses > 1)
+			selectedSub.setInteger(NBTConstants.USES, uses - 1);
+		else
+			subList.removeTag(selectedSubIndex);
 
-		subList.removeTag(selectedSubIndex);
+		player.sendMessage(new TextComponentString(name + " - Uses Before: " + uses));
 
 		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 	}
@@ -61,36 +66,33 @@ public class ItemAccelerationBottle extends Item {
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
 		NBTTagCompound stackNBT = stack.getTagCompound();
 
-		if (stackNBT == null || !stackNBT.hasKey("SubList")) {
+		if (stackNBT == null || !stackNBT.hasKey(NBTConstants.SUB_LIST)) {
 			tooltip.add(TextFormatting.GRAY + "" + TextFormatting.ITALIC + "This item has no data");
 			return;
 		}
 
-		int selectedSubIndex = stackNBT.getInteger("SelectedSub");
+		int selectedSubIndex = stackNBT.getInteger(NBTConstants.SELECTED_SUB_INDEX);
 
-		NBTTagList subList = stackNBT.getTagList("SubList", Constants.NBT.TAG_COMPOUND);
+		NBTTagList subList = stackNBT.getTagList(NBTConstants.SUB_LIST, Constants.NBT.TAG_COMPOUND);
 
 		if (subList.hasNoTags()) {
 			tooltip.add(TextFormatting.GRAY + "" + TextFormatting.ITALIC + "There are no subs contained.");
 			return;
 		}
-		
+
 		int subCount = subList.tagCount();
 
 		NBTTagCompound selectedSub = subList.getCompoundTagAt(selectedSubIndex);
 
-		String name = selectedSub.getString("Name");
-		int duration = selectedSub.getInteger("Duration");
+		String name = selectedSub.getString(NBTConstants.NAME);
+		int uses = selectedSub.getInteger(NBTConstants.USES);
 
-		int storedSeconds = duration;
-
-		int minutes = (storedSeconds % 3600) / 60;
-		int seconds = storedSeconds % 60;
+		int storedSeconds = uses;
 
 		tooltip.add(TextFormatting.DARK_AQUA + "Sub Count" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + subCount + "/10");
 		tooltip.add(" ");
 		tooltip.add(TextFormatting.DARK_AQUA + "Selected Sub" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + name);
-		tooltip.add(TextFormatting.DARK_AQUA + "Duration" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + minutes + "m " + seconds + "s");
+		tooltip.add(TextFormatting.DARK_AQUA + "Uses" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + uses);
 
 		super.addInformation(stack, world, tooltip, flagIn);
 	}
@@ -100,20 +102,20 @@ public class ItemAccelerationBottle extends Item {
 			return 0;
 
 		NBTTagCompound nbt = stack.getTagCompound();
-		return nbt.getInteger("SelectedSub");
+		return nbt.getInteger(NBTConstants.SELECTED_SUB_INDEX);
 	}
 
 	public int getSubCount(ItemStack stack) {
 		if (!stack.hasTagCompound())
 			return 0;
 		NBTTagCompound nbt = stack.getTagCompound();
-		NBTTagList subList = nbt.getTagList("SubList", Constants.NBT.TAG_COMPOUND);
+		NBTTagList subList = nbt.getTagList(NBTConstants.SUB_LIST, Constants.NBT.TAG_COMPOUND);
 		return subList.tagCount();
 	}
 
 	public void setSelectedSubIndex(ItemStack stack, int toSet) {
 		NBTTagCompound nbt = stack.getTagCompound();
-		nbt.setInteger("SelectedSub", toSet);
+		nbt.setInteger(NBTConstants.SELECTED_SUB_INDEX, toSet);
 	}
 
 	public String getSelectedSub(ItemStack stack) {
@@ -121,14 +123,23 @@ public class ItemAccelerationBottle extends Item {
 		if (nbt == null)
 			return null;
 
-		NBTTagList subList = nbt.getTagList("SubList", Constants.NBT.TAG_COMPOUND);
+		NBTTagList subList = nbt.getTagList(NBTConstants.SUB_LIST, Constants.NBT.TAG_COMPOUND);
 		if (subList == null)
 			return null;
 
-		int index = nbt.getInteger("SelectedSub");
+		int index = nbt.getInteger(NBTConstants.SELECTED_SUB_INDEX);
 
 		NBTTagCompound selectedSub = subList.getCompoundTagAt(index);
-		return selectedSub.getString("Name");
+		return selectedSub.getString(NBTConstants.NAME);
+	}
+
+	public class NBTConstants {
+
+		public static final String SELECTED_SUB_INDEX = "SelectedSubIndex";
+		public static final String SUB_LIST = "SubList";
+		public static final String NAME = "Name";
+		public static final String USES = "Uses";
+
 	}
 
 }
