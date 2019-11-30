@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
+import iskallia.itraders.capability.ModifiableEnergyStorage;
 import iskallia.itraders.init.InitItem;
 import iskallia.itraders.item.ItemBooster;
 import net.minecraft.init.Items;
@@ -46,10 +47,10 @@ public class TileEntityCubeChamber extends TileInventoryBase {
     public CubeChamberStates state = CubeChamberStates.IDLE;
     private int remainingTicks = 0;
     private ItemStack boosterInUse = ItemStack.EMPTY;
-    private EnergyStorage energyStorage = generateEnergyStorage();
+    private ModifiableEnergyStorage energyStorage = generateEnergyStorage();
 
-    private EnergyStorage generateEnergyStorage() {
-        return new EnergyStorage(CAPACITY, MAX_RECEIVE, 0) {
+    private ModifiableEnergyStorage generateEnergyStorage() {
+        return new ModifiableEnergyStorage(CAPACITY, MAX_RECEIVE, 0) {
             @Override
             public int receiveEnergy(int maxReceive, boolean simulate) {
                 int received = super.receiveEnergy(maxReceive, simulate);
@@ -68,7 +69,7 @@ public class TileEntityCubeChamber extends TileInventoryBase {
         };
     }
 
-    public EnergyStorage getEnergyStorage() {
+    public ModifiableEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
 
@@ -216,7 +217,9 @@ public class TileEntityCubeChamber extends TileInventoryBase {
         if (currentEnergy < ENERGY_USAGE_PER_TICK)
             return false;
 
-        energyStorage.extractEnergy(ENERGY_USAGE_PER_TICK, false);
+        int extracted = energyStorage.voidEnergy(ENERGY_USAGE_PER_TICK, false);
+        System.out.println("Extracted " + extracted + " RF. "
+                + "Remaining " + energyStorage.getEnergyStored() + " RF.");
         remainingTicks--;
         return true;
     }
@@ -244,14 +247,17 @@ public class TileEntityCubeChamber extends TileInventoryBase {
 
     @Override
     public void readCustomNBT(NBTTagCompound compound) {
+        System.out.println("Updated NBT with " + compound);
+
         this.state = CubeChamberStates.values()[compound.getInteger("State")];
         this.remainingTicks = compound.getInteger("RemainingTicks");
+        this.energyStorage.setEnergy(compound.getInteger("Energy"));
 
-        // TODO: Refactor to receive clamped value
-        int savedEnergy = compound.getInteger("Energy");
-        while (this.energyStorage.getEnergyStored() < savedEnergy) {
-            this.energyStorage.receiveEnergy(savedEnergy, false);
-        }
+//        // TODO: Refactor to receive clamped value
+//        int savedEnergy = compound.getInteger("Energy");
+//        while (this.energyStorage.getEnergyStored() < savedEnergy) {
+//            this.energyStorage.receiveEnergy(savedEnergy, false);
+//        }
 
         super.readCustomNBT(compound);
     }
