@@ -17,6 +17,11 @@ item.skull_neck.name=Skull Necklace
 item.magic_ore_dust.name=Magic Ore Dust
 item.item_cryo_chamber.name=Cryo Chamber
 item.item_power_chamber.name=Power Chamber
+item.booster_tier_1.name=Booster Tier 1
+item.booster_tier_2.name=Booster Tier 2
+item.booster_tier_3.name=Booster Tier 3
+item.booster_tier_4.name=Booster Tier 4
+item.booster_tier_5.name=Booster Tier 5
 
 tile.infusion_cauldron.name=Infusion Cauldron
 tile.grave_stone.name=Grave Stone
@@ -24,6 +29,8 @@ tile.ghost_pedestal.name=Ghost Pedestal
 tile.stone.andesite.name=Andersite
 tile.stone.andesiteSmooth.name=Polished Andersite
 tile.magic_ore_block.name=Magic Ore Block
+tile.cube_chamber.name=Cube Chamber
+tile.power_cube.name=Power Cube
 
 itraders.card.rarity.common.name=
 itraders.card.rarity.rare.name=Rare

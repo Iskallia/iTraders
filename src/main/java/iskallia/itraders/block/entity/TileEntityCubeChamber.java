@@ -39,8 +39,8 @@ public class TileEntityCubeChamber extends TileInventoryBase {
     // TODO: Extract to config <-- No rush on this tho. Can be postponed!
     public static final int CAPACITY = 10000;
     public static final int MAX_RECEIVE = 10;
-    public static final int ENERGY_USAGE_PER_TICK = 100;
-    public static final int REQUIRED_PROCESS_TICKS = 100;
+    public static final int ENERGY_USAGE_PER_TICK = 10;
+    public static final int REQUIRED_PROCESS_TICKS = 20;
 
     /* --------------------------------- */
 
@@ -123,19 +123,27 @@ public class TileEntityCubeChamber extends TileInventoryBase {
      * (A.k.a when state == PROCESSING && remainingTicks <= 0)
      */
     private void onInfusingFinished() {
-        ItemStack eggStack = getInventoryHandler().getStackInSlot(0);
-        ItemStack boosterStack = getInventoryHandler().getStackInSlot(BOOSTER_SLOT);
+        ItemHandlerTile inventoryHandler = getInventoryHandler();
+
+        assert inventoryHandler.getStackInSlot(OUTPUT_SLOT).isEmpty();
+
+        ItemStack eggStack = inventoryHandler.getStackInSlot(INPUT_SLOT);
 
         // Consume the egg
         eggStack.shrink(BOOSTER_SLOT);
 
         // Roll the dice for Head or Power Cube
-        if (ItemBooster.getSuccessRate(boosterStack) >= rand.nextDouble()) {
+        double chance = ItemBooster.getSuccessRate(boosterInUse);
+        System.out.println("Rolling on a chance of " + (chance * 100) + "%");
+        if (chance >= rand.nextDouble()) {
             // Yields a Power Cube
 
         } else {
-            // Yields a Head
-
+            ItemStack skullStack = new ItemStack(Items.SKULL, 1, 3);
+            NBTTagCompound stackNBT = new NBTTagCompound();
+            stackNBT.setString("SkullOwner", eggStack.getDisplayName());
+            skullStack.setTagCompound(stackNBT);
+            inventoryHandler.setStackInSlot(OUTPUT_SLOT, skullStack);
         }
     }
 
@@ -218,8 +226,6 @@ public class TileEntityCubeChamber extends TileInventoryBase {
             return false;
 
         int extracted = energyStorage.voidEnergy(ENERGY_USAGE_PER_TICK, false);
-        System.out.println("Extracted " + extracted + " RF. "
-                + "Remaining " + energyStorage.getEnergyStored() + " RF.");
         remainingTicks--;
         return true;
     }
@@ -247,17 +253,10 @@ public class TileEntityCubeChamber extends TileInventoryBase {
 
     @Override
     public void readCustomNBT(NBTTagCompound compound) {
-        System.out.println("Updated NBT with " + compound);
-
         this.state = CubeChamberStates.values()[compound.getInteger("State")];
         this.remainingTicks = compound.getInteger("RemainingTicks");
         this.energyStorage.setEnergy(compound.getInteger("Energy"));
-
-//        // TODO: Refactor to receive clamped value
-//        int savedEnergy = compound.getInteger("Energy");
-//        while (this.energyStorage.getEnergyStored() < savedEnergy) {
-//            this.energyStorage.receiveEnergy(savedEnergy, false);
-//        }
+        this.boosterInUse = new ItemStack(compound.getCompoundTag("BoosterNBT"));
 
         super.readCustomNBT(compound);
     }
@@ -267,6 +266,7 @@ public class TileEntityCubeChamber extends TileInventoryBase {
         compound.setInteger("State", this.state.ordinal());
         compound.setInteger("RemainingTicks", this.remainingTicks);
         compound.setInteger("Energy", this.energyStorage.getEnergyStored());
+        compound.setTag("BoosterNBT", this.boosterInUse.writeToNBT(new NBTTagCompound())); // TODO: Optimize (?)
 
         super.writeCustomNBT(compound);
     }
