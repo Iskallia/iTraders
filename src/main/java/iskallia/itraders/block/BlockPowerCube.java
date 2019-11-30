@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
  */
 public class BlockPowerCube extends Block {
 
-    public static ItemStack generateRandomly(ItemStack eggStack) {
+    public static ItemStack generateRandomly(ItemStack eggStack, ItemStack boosterStack) {
         if(eggStack.getItem() != InitItem.SPAWN_EGG_FIGHTER)
             return ItemStack.EMPTY;
 

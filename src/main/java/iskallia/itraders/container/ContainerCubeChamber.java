@@ -8,6 +8,7 @@ import net.minecraft.inventory.ContainerFurnace;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -26,7 +27,8 @@ public class ContainerCubeChamber extends Container {
         this.cubeChamber = cubeChamber;
 
         this.inventoryPlayer = player.inventory;
-        this.inventoryCubeChamber = cubeChamber.getInventoryHandler();
+        this.inventoryCubeChamber = cubeChamber.getCapability(
+                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, player.getHorizontalFacing());
 
         this.addSlotToContainer(new SlotItemHandler(this.inventoryCubeChamber, 0, 65, 30)); // 0 = Input
         this.addSlotToContainer(new SlotItemHandler(this.inventoryCubeChamber, 1, 43, 30)); // 1 = Booster
@@ -74,6 +76,7 @@ public class ContainerCubeChamber extends Container {
 
         return stack;
     }
+
 
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {

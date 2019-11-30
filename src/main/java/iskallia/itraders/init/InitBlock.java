@@ -2,13 +2,7 @@
 package iskallia.itraders.init;
 
 import iskallia.itraders.Traders;
-import iskallia.itraders.block.BlockCryoChamber;
-import iskallia.itraders.block.BlockCubeChamber;
-import iskallia.itraders.block.BlockGhostPedestal;
-import iskallia.itraders.block.BlockGraveStone;
-import iskallia.itraders.block.BlockInfusionCauldron;
-import iskallia.itraders.block.BlockMagicOre;
-import iskallia.itraders.block.BlockPowerChamber;
+import iskallia.itraders.block.*;
 import iskallia.itraders.block.entity.TileEntityCryoChamber;
 import iskallia.itraders.block.entity.TileEntityCubeChamber;
 import iskallia.itraders.block.entity.TileEntityGhostPedestal;
@@ -41,6 +35,9 @@ public class InitBlock {
 	
 	public static final BlockCubeChamber CUBE_CHAMBER = new BlockCubeChamber("cube_chamber");
 	public static final ItemBlock ITEM_CUBE_CHAMBER = getItemBlock(CUBE_CHAMBER);
+
+	public static final BlockPowerCube POWER_CUBE = new BlockPowerCube("power_cube");
+	public static final ItemBlock ITEM_POWER_CUBE = getItemBlock(POWER_CUBE);
 	
 	public static void registerBlocks(IForgeRegistry<Block> registry) {
 		registerBlock(GRAVE_STONE, registry);
@@ -50,6 +47,7 @@ public class InitBlock {
 		registerBlock(GHOST_PEDESTAL, registry);
 		registerBlock(MAGIC_ORE_BLOCK, registry);
 		registerBlock(CUBE_CHAMBER, registry);
+		registerBlock(POWER_CUBE, registry);
 	}
 	
 	public static void registerTileEntities() { // TODO: Eliminate redefinition of Resource Names
@@ -67,6 +65,7 @@ public class InitBlock {
 		registry.register(ITEM_GHOST_PEDESTAL);
 		registry.register(ITEM_MAGIC_ORE_BLOCK);
 		registry.register(ITEM_CUBE_CHAMBER);
+		registry.register(ITEM_POWER_CUBE);
 	}
 	
 	/* -------------------------- */

@@ -6,12 +6,15 @@ import javax.annotation.Nullable;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import iskallia.itraders.init.InitItem;
 import iskallia.itraders.item.ItemBooster;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /*
  * Inventory Slots:
@@ -27,182 +30,244 @@ import net.minecraftforge.energy.EnergyStorage;
  *      * Create & put a head item for associated subscriber on output slot
  */
 public class TileEntityCubeChamber extends TileInventoryBase {
-	
-	// TODO: Extract to config <-- No rush on this tho. Can be postponed!
-	public static final int CAPACITY = 10000;
-	public static final int MAX_RECEIVE = 10;
-	
-	/* --------------------------------- */
-	
-	private EnergyStorage energyStorage = generateEnergyStorage();
-	private int remainingTicks = 0;
-	
-	public CubeChamberStates state = CubeChamberStates.IDLE;
-	
-	private EnergyStorage generateEnergyStorage() {
-		return new EnergyStorage(CAPACITY, MAX_RECEIVE, 0);
-	}
-	
-	public EnergyStorage getEnergyStorage() {
-		return energyStorage;
-	}
-	
-	/* --------------------------------- */
-	
-	public TileEntityCubeChamber() {
-		super(3); // 0: input, 1: booster, 2: output
-	}
-	
-	public boolean startPressed() {
-		// Start if it has something in slot 0
-		if (
-				this.getInventoryHandler().getStackInSlot(0) != ItemStack.EMPTY
-				&& this.state != CubeChamberStates.PROCESSING) {
-			// If there's a booster item, consume it
-			if (this.getInventoryHandler().getStackInSlot(1) != ItemStack.EMPTY) {
-				// TODO: Save the booster item for later
-				this.getInventoryHandler().getStackInSlot(1).shrink(1);
-			}
-			
-			this.remainingTicks = 100;
-			this.state = CubeChamberStates.PROCESSING;
-			return true;
-		}
-		
-		return false; // <-- Returns if it successfully started the process
-	}
-	
-	private void onInfusingFinished() {
-		// This method will be called once the "infusion" process is finished
-		
-		ItemStack eggStack = getInventoryHandler().getStackInSlot(0);
-		// Get it from the consumed one?
-		ItemStack boosterStack = getInventoryHandler().getStackInSlot(1);
-		
-		// Consume the egg
-		eggStack.shrink(1);
-		
-		double successChance = ItemBooster.getSuccessRate(boosterStack);
-		
-		//See if it will yield a Power Cube or Head
-		if (successChance > rand.nextDouble()) {
-			// Yields a Power Cube
-		} else {
-			// Yields a Head
-		}
-		
-		// TODO: Put the result on output slot (inventory[2])
-		
-		this.state = CubeChamberStates.FINISHED;
-	}
-	
-	@Override
-	protected ItemHandlerTile createNewItemHandler() {
-		// (?) You can see TileEntityCryoChamber::createNewItemHandler for reference! ^^
-		return new ItemHandlerTileFiltered(this) {
-			@Nonnull
-			@Override
-			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-				// If it's not the right item for the right slot, return the stack
-				if (!this.canInsertItem(slot, stack, stack))
-					return stack;
-				
-				return super.insertItem(slot, stack, simulate);
-			}
-			
-			@Nonnull
-			@Override
-			public ItemStack extractItem(int slot, int amount, boolean simulate) {
-				if (!this.canExtractItem(slot, amount, this.getStackInSlot(slot)))
-					return ItemStack.EMPTY;
-				
-				return this.getStackInSlot(slot);
-			}
-			
-			@Override
-			public boolean canInsertItem(int slot, ItemStack toAdd, @Nonnull ItemStack existing) {
-				// Slot 0 for fighter egg
-				if (slot == 0 && existing.getItem() == InitItem.SPAWN_EGG_FIGHTER)
-					return true;
-				
-				// Slot 1 for Booster
-				if (slot == 1 && existing.getItem() instanceof ItemBooster)
-					return true;
-				
-				return false;
-			}
-			
-			@Override
-			public boolean canExtractItem(int slot, int amount, @Nonnull ItemStack existing) {
-				if (slot != 2 || this.getStackInSlot(2) == ItemStack.EMPTY)
-					return false;
-				
-				return super.canExtractItem(slot, amount, existing);
-			}
-		};
-	}
-	
-	@Override
-	public void update() {
-		if (!world.isRemote) {
-			if (this.remainingTicks > 0)
-				--remainingTicks;
-			
-			// Once the "Infusing" process is done, callback onInfusingFinished()
-			if (this.state == CubeChamberStates.PROCESSING && this.remainingTicks == 0) {
-				onInfusingFinished();
-			}
-			
-			this.markForUpdate();
-		}
-	}
-	
-	/* --------------------------------- */
-	
-	@Override
-	public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-		if (capability == CapabilityEnergy.ENERGY)
-			return true;
-		
-		return super.hasCapability(capability, facing);
-	}
-	
-	@Nullable
-	@Override
-	public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-		if (capability == CapabilityEnergy.ENERGY)
-			return CapabilityEnergy.ENERGY.cast(energyStorage);
 
-		return super.getCapability(capability, facing);
-	}
-	
-	/* --------------------------------- */
-	
-	@Override
-	public void readCustomNBT(NBTTagCompound compound) {
-		// Set saved energy in the energy storage, is ther a best way?
-		int savedEnergy = compound.getInteger("Energy");
-		
-		while (this.energyStorage.getEnergyStored() < savedEnergy) {
-			this.energyStorage.receiveEnergy(savedEnergy, false);
-		}
-		
-		this.remainingTicks = compound.getInteger("RemainingTicks");
-		
-		super.readCustomNBT(compound);
-	}
-	
-	@Override
-	public void writeCustomNBT(NBTTagCompound compound) {
-		compound.setInteger("Energy", this.energyStorage.getEnergyStored());
-		compound.setInteger("RemainingTicks", this.remainingTicks);
-		
-		super.writeCustomNBT(compound);
-	}
-	
-	public enum CubeChamberStates {
-		IDLE, 
-		PROCESSING,
-		FINISHED
-	};
+    public static final int INPUT_SLOT = 0;
+    public static final int BOOSTER_SLOT = 1;
+    public static final int OUTPUT_SLOT = 2;
+
+    // TODO: Extract to config <-- No rush on this tho. Can be postponed!
+    public static final int CAPACITY = 10000;
+    public static final int MAX_RECEIVE = 10;
+    public static final int ENERGY_USAGE_PER_TICK = 100;
+    public static final int REQUIRED_PROCESS_TICKS = 100;
+
+    /* --------------------------------- */
+
+    public CubeChamberStates state = CubeChamberStates.IDLE;
+    private int remainingTicks = 0;
+    private ItemStack boosterInUse = ItemStack.EMPTY;
+    private EnergyStorage energyStorage = generateEnergyStorage();
+
+    private EnergyStorage generateEnergyStorage() {
+        return new EnergyStorage(CAPACITY, MAX_RECEIVE, 0) {
+            @Override
+            public int receiveEnergy(int maxReceive, boolean simulate) {
+                int received = super.receiveEnergy(maxReceive, simulate);
+                if (received != 0 && world != null)
+                    markForUpdate(); // Hook dirty marking :p
+                return received;
+            }
+
+            @Override
+            public int extractEnergy(int maxExtract, boolean simulate) {
+                int extracted = super.extractEnergy(maxExtract, simulate);
+                if (extracted != 0 && world != null)
+                    markForUpdate(); // Hook dirty marking :p
+                return extracted;
+            }
+        };
+    }
+
+    public EnergyStorage getEnergyStorage() {
+        return energyStorage;
+    }
+
+    public int getRemainingTicks() {
+        return remainingTicks;
+    }
+
+    /* --------------------------------- */
+
+    public TileEntityCubeChamber() {
+        super(3); // 0: input, 1: booster, 2: output
+    }
+
+    /**
+     * Called by the "Infuse" button on GUI
+     * in order to begin the infusion process.
+     *
+     * @return whether started infusion successfully or not
+     */
+    public boolean startPressed() {
+        ItemHandlerTile inventoryHandler = this.getInventoryHandler();
+
+        // No input, stop here
+        if (inventoryHandler.getStackInSlot(INPUT_SLOT) == ItemStack.EMPTY)
+            return false;
+
+        // Output slot is occupied, cannot
+        if (inventoryHandler.getStackInSlot(OUTPUT_SLOT) != ItemStack.EMPTY)
+            return false;
+
+        // Cannot restart an on-going infusion
+        if (state == CubeChamberStates.PROCESSING)
+            return false;
+
+        // Consume booster no matter what
+        ItemStack boosterStack = inventoryHandler.getStackInSlot(BOOSTER_SLOT);
+        if (boosterStack != ItemStack.EMPTY) {
+            this.boosterInUse = boosterStack.copy();
+            boosterStack.shrink(1);
+        }
+
+        this.remainingTicks = REQUIRED_PROCESS_TICKS;
+        this.state = CubeChamberStates.PROCESSING;
+        this.markForUpdate();
+        return true;
+    }
+
+    /**
+     * Called on the SERVER-side once
+     * the infusion process finished <br />
+     * (A.k.a when state == PROCESSING && remainingTicks <= 0)
+     */
+    private void onInfusingFinished() {
+        ItemStack eggStack = getInventoryHandler().getStackInSlot(0);
+        ItemStack boosterStack = getInventoryHandler().getStackInSlot(BOOSTER_SLOT);
+
+        // Consume the egg
+        eggStack.shrink(BOOSTER_SLOT);
+
+        // Roll the dice for Head or Power Cube
+        if (ItemBooster.getSuccessRate(boosterStack) >= rand.nextDouble()) {
+            // Yields a Power Cube
+
+        } else {
+            // Yields a Head
+
+        }
+    }
+
+    @Override
+    protected ItemHandlerTile createNewItemHandler() {
+        return new ItemHandlerTileFiltered(this) {
+            @Nonnull
+            @Override
+            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+                // If it's not the right item for the right slot, return the stack
+//                if (!this.canInsertItem(slot, stack, stack))
+//                    return stack;
+
+                return super.insertItem(slot, stack, simulate);
+            }
+
+            @Nonnull
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+//                if (!this.canExtractItem(slot, amount, this.getStackInSlot(slot)))
+//                    return ItemStack.EMPTY;
+
+                return super.extractItem(slot, amount, simulate);
+            }
+
+            @Override
+            public boolean canInsertItem(int slot, ItemStack toAdd, @Nonnull ItemStack existing) {
+                if (state == CubeChamberStates.PROCESSING)
+                    return false;
+
+                // Slot 0 for fighter egg
+                if (slot == 0 && toAdd.getItem() == InitItem.SPAWN_EGG_FIGHTER)
+                    return true;
+
+                // Slot 1 for Booster
+                if (slot == 1 && toAdd.getItem() instanceof ItemBooster)
+                    return true;
+
+                return false;
+            }
+
+            @Override
+            public boolean canExtractItem(int slot, int amount, @Nonnull ItemStack existing) {
+//                if (slot != 2 || this.getStackInSlot(2) == ItemStack.EMPTY)
+//                    return false;
+                if (state == CubeChamberStates.PROCESSING)
+                    return false;
+
+                return super.canExtractItem(slot, amount, existing);
+            }
+        };
+    }
+
+    @Override
+    public void update() {
+        if (!world.isRemote) {
+            if (state == CubeChamberStates.PROCESSING) {
+                if (remainingTicks <= 0) { // No ticks remaining
+                    onInfusingFinished();
+                    state = CubeChamberStates.IDLE;
+                    markForUpdate();
+
+                } else if (processInfusion()) { // Try infusing for this tick
+                    markForUpdate();
+                }
+            }
+        }
+    }
+
+    /**
+     * Performs 1 tick of "Infusion"
+     *
+     * @return whether performed successfully or not
+     */
+    public boolean processInfusion() {
+        int currentEnergy = energyStorage.getEnergyStored();
+
+        // Does not have enough energy for this tick
+        if (currentEnergy < ENERGY_USAGE_PER_TICK)
+            return false;
+
+        energyStorage.extractEnergy(ENERGY_USAGE_PER_TICK, false);
+        remainingTicks--;
+        return true;
+    }
+
+    /* --------------------------------- */
+
+    @Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY)
+            return true;
+
+        return super.hasCapability(capability, facing);
+    }
+
+    @Nullable
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY)
+            return CapabilityEnergy.ENERGY.cast(energyStorage);
+
+        return super.getCapability(capability, facing);
+    }
+
+    /* --------------------------------- */
+
+    @Override
+    public void readCustomNBT(NBTTagCompound compound) {
+        this.state = CubeChamberStates.values()[compound.getInteger("State")];
+        this.remainingTicks = compound.getInteger("RemainingTicks");
+
+        // TODO: Refactor to receive clamped value
+        int savedEnergy = compound.getInteger("Energy");
+        while (this.energyStorage.getEnergyStored() < savedEnergy) {
+            this.energyStorage.receiveEnergy(savedEnergy, false);
+        }
+
+        super.readCustomNBT(compound);
+    }
+
+    @Override
+    public void writeCustomNBT(NBTTagCompound compound) {
+        compound.setInteger("State", this.state.ordinal());
+        compound.setInteger("RemainingTicks", this.remainingTicks);
+        compound.setInteger("Energy", this.energyStorage.getEnergyStored());
+
+        super.writeCustomNBT(compound);
+    }
+
+    public enum CubeChamberStates {
+        IDLE,
+        PROCESSING
+    }
+
 }
