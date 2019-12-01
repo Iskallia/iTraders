@@ -8,6 +8,7 @@ import iskallia.itraders.gui.GuiHandler;
 import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockCubeChamber extends Block {
@@ -45,6 +47,27 @@ public class BlockCubeChamber extends Block {
 
         this.setCreativeTab(InitItem.ITRADERS_TAB);
         this.setHardness(2f);
+    }
+
+    @Override
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        super.neighborChanged(state, world, pos, blockIn, fromPos);
+
+        if (!world.isRemote) {
+            TileEntityCubeChamber cubeChamber = getTileEntity(world, pos);
+
+            if (cubeChamber != null) {
+                boolean previousState = cubeChamber.getReceivedRedstoneSignal();
+                boolean redstonePowered = world.isBlockPowered(pos);
+
+                if (redstonePowered != previousState) { // State chanced
+                    if (redstonePowered && cubeChamber.canStartInfusion())
+                        cubeChamber.startPressed();
+
+                    cubeChamber.onRedstoneSignalChanged();
+                }
+            }
+        }
     }
 
     @Override

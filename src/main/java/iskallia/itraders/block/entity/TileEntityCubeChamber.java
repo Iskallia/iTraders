@@ -46,6 +46,8 @@ public class TileEntityCubeChamber extends TileInventoryBase {
 
     /* --------------------------------- */
 
+    private boolean receivedRedstoneSignal = false;
+
     public CubeChamberStates state = CubeChamberStates.IDLE;
     private int remainingTicks = 0;
     private ItemStack boosterInUse = ItemStack.EMPTY;
@@ -80,6 +82,10 @@ public class TileEntityCubeChamber extends TileInventoryBase {
         return outputHandler;
     }
 
+    public boolean getReceivedRedstoneSignal() {
+        return receivedRedstoneSignal;
+    }
+
     public int getRemainingTicks() {
         return remainingTicks;
     }
@@ -91,6 +97,20 @@ public class TileEntityCubeChamber extends TileInventoryBase {
                 EnumFacing.EAST, EnumFacing.WEST,
                 EnumFacing.SOUTH, EnumFacing.NORTH,
                 EnumFacing.UP);
+    }
+
+    public boolean canStartInfusion() {
+        if (state == TileEntityCubeChamber.CubeChamberStates.PROCESSING)
+            return false;
+
+        ItemStack eggStack = getInventoryHandler().getStackInSlot(INPUT_SLOT);
+        ItemStack outputStack = getOutputHandler().getStackInSlot(OUTPUT_SLOT);
+
+        return !eggStack.isEmpty() && outputStack.isEmpty();
+    }
+
+    public void onRedstoneSignalChanged() {
+        receivedRedstoneSignal = !receivedRedstoneSignal;
     }
 
     /**
@@ -272,6 +292,7 @@ public class TileEntityCubeChamber extends TileInventoryBase {
         this.remainingTicks = compound.getInteger("RemainingTicks");
         this.energyStorage.setEnergy(compound.getInteger("Energy"));
         this.boosterInUse = new ItemStack(compound.getCompoundTag("BoosterNBT"));
+        this.receivedRedstoneSignal = compound.getBoolean("SignalReceived");
 
         super.readCustomNBT(compound);
     }
@@ -282,6 +303,7 @@ public class TileEntityCubeChamber extends TileInventoryBase {
         compound.setInteger("RemainingTicks", this.remainingTicks);
         compound.setInteger("Energy", this.energyStorage.getEnergyStored());
         compound.setTag("BoosterNBT", this.boosterInUse.writeToNBT(new NBTTagCompound())); // TODO: Optimize (?)
+        compound.setBoolean("SignalReceived", this.receivedRedstoneSignal);
 
         super.writeCustomNBT(compound);
     }

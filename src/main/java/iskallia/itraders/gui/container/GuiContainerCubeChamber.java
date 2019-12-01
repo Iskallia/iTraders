@@ -54,7 +54,7 @@ public class GuiContainerCubeChamber extends GuiContainer {
     }
 
     public void updateGui() {
-        this.startButton.enabled = canStartInfusion();
+        this.startButton.enabled = cubeChamber.canStartInfusion();
     }
 
     /* ----------------------------- */
@@ -83,16 +83,6 @@ public class GuiContainerCubeChamber extends GuiContainer {
     }
 
     /* ----------------------------- */
-
-    protected boolean canStartInfusion() {
-        if (cubeChamber.state == TileEntityCubeChamber.CubeChamberStates.PROCESSING)
-            return false;
-
-        ItemStack eggStack = cubeChamber.getInventoryHandler().getStackInSlot(0);
-        ItemStack outputStack = cubeChamber.getOutputHandler().getStackInSlot(2);
-
-        return !eggStack.isEmpty() && outputStack.isEmpty();
-    }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
