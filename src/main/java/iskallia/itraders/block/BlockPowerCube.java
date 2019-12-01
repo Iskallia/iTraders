@@ -1,11 +1,13 @@
 package iskallia.itraders.block;
 
 import iskallia.itraders.Traders;
+import iskallia.itraders.block.entity.TileEntityPowerCube;
 import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.init.InitItem;
 import iskallia.itraders.item.ItemSpawnEggFighter;
 import iskallia.itraders.util.math.Randomizer;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockGlass;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
@@ -14,8 +16,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
@@ -27,15 +32,17 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 
 /*
  * NBT Structure: {
  *     Nickname: "iGoodie", // Nickname of the subscriber
- *     Months: 3, // Months of subscription
- *
  *     Rarity: 1, // Enum ordinal of the Rarity
+ *     Multiplier: 7 // Bw 1-7
+ *     BaseRFRate: 23 // Base RF rate
  *     Decay: { RemainingTicks: 100, MaxTicks: 300 } // 100/300 of use time remaining
  * }
  */
@@ -130,8 +137,37 @@ public class BlockPowerCube extends Block {
             CubeRarity rarity = CubeRarity.values()[stackNBT.getInteger("Rarity")];
             world.setBlockState(pos, state.withProperty(RARITY, rarity));
         }
+
+        TileEntityPowerCube powerCube = TileEntityPowerCube.getTileEntity(world, pos);
+
+        if (powerCube != null && stackNBT != null) {
+            powerCube.readCustomNBT(stackNBT);
+        }
     }
 
+    @Override
+    public void breakBlock(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        ItemStack cubeStack = new ItemStack(InitBlock.ITEM_POWER_CUBE);
+
+        TileEntityPowerCube powerCube = TileEntityPowerCube.getTileEntity(world, pos);
+
+        if (powerCube != null) {
+            NBTTagCompound cubeNBT = new NBTTagCompound();
+            powerCube.writeCustomNBT(cubeNBT);
+            cubeStack.setTagCompound(cubeNBT);
+        }
+
+        InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), cubeStack);
+
+        super.breakBlock(world, pos, state);
+    }
+
+    @Override
+    public int quantityDropped(IBlockState state, int fortune, @Nonnull Random random) {
+        return 0;
+    }
+
+    @Nonnull
     @Override
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.TRANSLUCENT;
@@ -145,6 +181,17 @@ public class BlockPowerCube extends Block {
     @Override
     public boolean isFullCube(IBlockState state) {
         return true;
+    }
+
+    @Override
+    public boolean hasTileEntity(IBlockState state) {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
+        return new TileEntityPowerCube();
     }
 
     @Override
@@ -214,6 +261,7 @@ public class BlockPowerCube extends Block {
             return I18n.format("itraders.cube.rarity." + i18nKey + ".name");
         }
 
+        @Nonnull
         @Override
         public String getName() {
             return i18nKey;

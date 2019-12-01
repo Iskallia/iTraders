@@ -3,12 +3,7 @@ package iskallia.itraders.init;
 
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.*;
-import iskallia.itraders.block.entity.TileEntityCryoChamber;
-import iskallia.itraders.block.entity.TileEntityCubeChamber;
-import iskallia.itraders.block.entity.TileEntityGhostPedestal;
-import iskallia.itraders.block.entity.TileEntityGraveStone;
-import iskallia.itraders.block.entity.TileEntityInfusionCauldron;
-import iskallia.itraders.block.entity.TileEntityPowerChamber;
+import iskallia.itraders.block.entity.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -57,6 +52,7 @@ public class InitBlock {
         GameRegistry.registerTileEntity(TileEntityPowerChamber.class, Traders.getResource("power_chamber"));
         GameRegistry.registerTileEntity(TileEntityGhostPedestal.class, Traders.getResource("ghost_pedestal"));
         GameRegistry.registerTileEntity(TileEntityCubeChamber.class, Traders.getResource("cube_chamber"));
+        GameRegistry.registerTileEntity(TileEntityPowerCube.class, Traders.getResource("power_cube"));
     }
 
     public static void registerItemBlocks(IForgeRegistry<Item> registry) {
