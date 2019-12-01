@@ -4,10 +4,8 @@ import iskallia.itraders.Traders;
 import iskallia.itraders.block.entity.TileEntityCryoChamber;
 import iskallia.itraders.block.entity.TileEntityGraveStone;
 import iskallia.itraders.block.entity.TileEntityPowerChamber;
-import iskallia.itraders.block.render.PowerCubeMesh;
-import iskallia.itraders.block.render.TESRCryoChamber;
-import iskallia.itraders.block.render.TESRGraveStone;
-import iskallia.itraders.block.render.TESRPowerChamber;
+import iskallia.itraders.block.entity.TileEntityPowerCube;
+import iskallia.itraders.block.render.*;
 import iskallia.itraders.item.mesh.FighterEggMesh;
 import iskallia.itraders.item.mesh.MinerEggMesh;
 import iskallia.itraders.item.mesh.SkullNeckMesh;
@@ -53,6 +51,7 @@ public class InitModel {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGraveStone.class, new TESRGraveStone());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCryoChamber.class, new TESRCryoChamber());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPowerChamber.class, new TESRPowerChamber());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPowerCube.class, new TESRPowerCube());
     }
 
     /* ---------------------------------- */

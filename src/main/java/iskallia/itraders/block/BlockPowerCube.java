@@ -41,9 +41,11 @@ import java.util.Random;
  * NBT Structure: {
  *     Nickname: "iGoodie", // Nickname of the subscriber
  *     Rarity: 1, // Enum ordinal of the Rarity
- *     Multiplier: 7 // Bw 1-7
  *     BaseRFRate: 23 // Base RF rate
+ *
  *     Decay: { RemainingTicks: 100, MaxTicks: 300 } // 100/300 of use time remaining
+ *
+ *     FighterRot: 90 // Rotation in degrees
  * }
  */
 public class BlockPowerCube extends Block {
@@ -67,11 +69,10 @@ public class BlockPowerCube extends Block {
         NBTTagCompound cubeNBT = new NBTTagCompound();
         cubeNBT.setString("Nickname", eggStack.getDisplayName());
         cubeNBT.setInteger("Rarity", CubeRarity.randomRarity().ordinal());
-        cubeNBT.setInteger("Multiplier", Randomizer.randomInt(1, 7));
-        cubeNBT.setInteger("BaseRFRate", Randomizer.randomInt(10, 100));
+        cubeNBT.setInteger("BaseRFRate", Randomizer.randomInt(100, 1000) * months);
 
         NBTTagCompound decayNBT = new NBTTagCompound();
-        int decayTicks = Randomizer.randomInt(100, 1000) * months;
+        int decayTicks = Randomizer.randomInt(100, 1000) * months; // TODO: Decide the formula later
         decayNBT.setInteger("RemainingTicks", decayTicks);
         decayNBT.setInteger("MaxTicks", decayTicks);
         cubeNBT.setTag("Decay", decayNBT);
@@ -142,6 +143,7 @@ public class BlockPowerCube extends Block {
 
         if (powerCube != null && stackNBT != null) {
             powerCube.readCustomNBT(stackNBT);
+            powerCube.setFighterRotation(180f + placer.getRotationYawHead());
         }
     }
 
@@ -203,16 +205,17 @@ public class BlockPowerCube extends Block {
         if (stackNBT == null) return;
 
         CubeRarity rarity = CubeRarity.values()[stackNBT.getInteger("Rarity")];
+        int baseRFRate = stackNBT.getInteger("BaseRFRate");
 
         TextFormatting rarityColor = rarity.color;
         tooltip.add(rarityColor + "Rarity: "
                 + TextFormatting.GRAY + rarity.translation());
         tooltip.add(rarityColor + "Nickname: "
                 + TextFormatting.GRAY + stackNBT.getString("Nickname"));
-        tooltip.add(rarityColor + "Multiplier: "
-                + TextFormatting.GRAY + stackNBT.getInteger("Multiplier"));
-        tooltip.add(rarityColor + "Base RF/tick: "
-                + TextFormatting.GRAY + stackNBT.getInteger("BaseRFRate"));
+
+        tooltip.add("");
+
+        tooltip.add(rarityColor + "" + (rarity.getMultiplier() * baseRFRate) + " RF/tick");
 
         if (stackNBT.hasKey("Decay", Constants.NBT.TAG_COMPOUND)) {
             tooltip.add("");
@@ -229,10 +232,10 @@ public class BlockPowerCube extends Block {
 
     public enum CubeRarity implements IStringSerializable {
 
-        COMMON(0.7, "common", TextFormatting.AQUA),
-        RARE(0.15, "rare", TextFormatting.GOLD),
-        EPIC(0.10, "epic", TextFormatting.LIGHT_PURPLE),
-        MEGA(0.5, "mega", TextFormatting.GREEN);
+        COMMON(0.7, 1, "common", TextFormatting.AQUA),
+        RARE(0.15, 2, "rare", TextFormatting.GOLD),
+        EPIC(0.10, 4, "epic", TextFormatting.LIGHT_PURPLE),
+        MEGA(0.5, 7, "mega", TextFormatting.GREEN);
 
         public static CubeRarity randomRarity() {
             double random = Math.random();
@@ -248,12 +251,14 @@ public class BlockPowerCube extends Block {
         }
 
         private double chance;
+        private int multiplier;
         private TextFormatting color;
         private String i18nKey;
 
-        CubeRarity(double chance, String i18nKey, TextFormatting color) {
+        CubeRarity(double chance, int multiplier, String i18nKey, TextFormatting color) {
             this.chance = chance;
             this.i18nKey = i18nKey;
+            this.multiplier = multiplier;
             this.color = color;
         }
 
@@ -265,6 +270,14 @@ public class BlockPowerCube extends Block {
         @Override
         public String getName() {
             return i18nKey;
+        }
+
+        public int getMultiplier() {
+            return multiplier;
+        }
+
+        public double getChance() {
+            return chance;
         }
 
     }
