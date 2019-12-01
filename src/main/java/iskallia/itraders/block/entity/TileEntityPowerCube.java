@@ -1,18 +1,21 @@
 package iskallia.itraders.block.entity;
 
+import hellfirepvp.astralsorcery.client.effect.EffectHelper;
+import hellfirepvp.astralsorcery.client.effect.fx.EntityFXFacingParticle;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntitySynchronized;
 import iskallia.itraders.block.BlockPowerCube;
+import iskallia.itraders.util.math.Randomizer;
 import iskallia.itraders.util.profile.SkinProfile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import java.awt.Color;
 
 /*
  * NBT Structure: {
@@ -104,6 +107,31 @@ public class TileEntityPowerCube extends TileEntitySynchronized implements ITick
         String latestNickname = skin.getLatestNickname();
         if (latestNickname == null || !latestNickname.equals(nickname)) {
             skin.updateSkin(nickname);
+        }
+
+        if (Randomizer.randomIntEx(5) == 0) {
+            EntityFXFacingParticle p = EffectHelper.genericFlareParticle(
+                    pos.getX() + Randomizer.randomDouble(),
+                    pos.getY() + Randomizer.randomDouble(),
+                    pos.getZ() + Randomizer.randomDouble()
+            );
+            p.motion(0, Randomizer.randomDouble() * 0.05, 0);
+            p.scale(0.2f);
+
+            switch (rarity) {
+                case RARE:
+                    p.setColor(new Color(0xFF_FDE802));
+                    break;
+                case EPIC:
+                    p.setColor(new Color(0xFF_DE2CD8));
+                    break;
+                case MEGA:
+                    p.setColor(new Color(0xFF_85FA0F));
+                    break;
+                default:
+                    p.setColor(new Color(0xFF_EBEBEB));
+                    break;
+            }
         }
     }
 
