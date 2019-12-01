@@ -24,13 +24,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
  *  0 - Input item: Only eggs
  *  1 - Booster item
  *  2 - Output item
- *
- * TODO Features:
- *  - Once started go into "Infusing" state
- *  - Stay in "Infusing" state for 5 seconds
- *  - Then by chance (modified by the Booster item as well) do one of following:
- *      * Generate & put "Power Cube" on output slot
- *      * Create & put a head item for associated subscriber on output slot
  */
 public class TileEntityCubeChamber extends TileInventoryBase {
 

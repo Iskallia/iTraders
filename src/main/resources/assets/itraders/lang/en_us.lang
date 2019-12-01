@@ -15,6 +15,7 @@ item.egg_pouch.name=Egg Pouch
 item.sub_card.name=[WIP] SubCard
 item.skull_neck.name=Skull Necklace
 item.magic_ore_dust.name=Magic Ore Dust
+item.magic_crystal.name=Magic Crystal
 item.item_cryo_chamber.name=Cryo Chamber
 item.item_power_chamber.name=Power Chamber
 item.booster_tier_1.name=Booster Tier 1

@@ -34,6 +34,12 @@ public class InitModel {
         registerSimpleItemModel(InitItem.POWER_CHAMBER, 0);
         registerSimpleItemModel(InitBlock.ITEM_GHOST_PEDESTAL, 0);
         registerSimpleItemModel(InitBlock.ITEM_MAGIC_ORE_BLOCK, 0);
+        registerSimpleItemModel(InitItem.BOOSTER_TIER_1, 0);
+        registerSimpleItemModel(InitItem.BOOSTER_TIER_2, 0);
+        registerSimpleItemModel(InitItem.BOOSTER_TIER_3, 0);
+        registerSimpleItemModel(InitItem.BOOSTER_TIER_4, 0);
+        registerSimpleItemModel(InitItem.BOOSTER_TIER_5, 0);
+        registerSimpleItemModel(InitItem.MAGIC_CRYSTAL, 0);
 
         registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
         registerBlockModel(InitBlock.GHOST_PEDESTAL, 0);
