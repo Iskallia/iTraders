@@ -171,8 +171,11 @@ public class GuiContainerCubeChamber extends GuiContainer {
         // Render hovering text of RF Indicator
         if (mouseX > startX + 9 && mouseY > startY + 8
                 && mouseX < startX + 26 && mouseY < startY + 77) {
-            this.drawHoveringText(this.cubeChamber.getEnergyStorage().getEnergyStored() + " RF",
-                    mouseX - startX, mouseY - startY);
+            List<String> tooltipLines = new LinkedList<>();
+            tooltipLines.add(TextFormatting.RED + "" + this.cubeChamber.getEnergyStorage().getEnergyStored() + " RF");
+            tooltipLines.add("");
+            tooltipLines.add(TextFormatting.BLUE + "Accepts: " + TileEntityCubeChamber.MAX_RECEIVE + " RF/tick");
+            this.drawHoveringText(tooltipLines, mouseX - startX, mouseY - startY);
         }
 
         // Render hovering text of Chance Indicator
@@ -186,6 +189,14 @@ public class GuiContainerCubeChamber extends GuiContainer {
             tooltipLines.add(TextFormatting.RED + "Infusion Failure Rate: " + (int) (100 - 100 * successRate) + "%");
 
             this.drawHoveringText(tooltipLines, mouseX - startX, mouseY - startY);
+        }
+
+        // Render hovering text of Progress Indicator
+        if (mouseX > startX + 94 && mouseY > startY + 21
+                && mouseX < startX + 115 && mouseY < startY + 35) {
+            this.drawHoveringText(TextFormatting.BLUE + "Infusion consumes "
+                            + TileEntityCubeChamber.ENERGY_USAGE_PER_TICK + " RF/tick",
+                    mouseX - startX, mouseY - startY);
         }
 
         // Render hovered tooltip
