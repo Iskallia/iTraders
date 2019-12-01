@@ -1,12 +1,15 @@
 package iskallia.itraders.gui.container;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.BlockCubeChamber;
 import iskallia.itraders.block.entity.TileEntityCubeChamber;
 import iskallia.itraders.container.ContainerCubeChamber;
 import iskallia.itraders.init.InitPacket;
+import iskallia.itraders.item.ItemBooster;
 import iskallia.itraders.net.packet.C2SCubeChamberStart;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCommandBlock;
@@ -16,6 +19,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,7 +47,10 @@ public class GuiContainerCubeChamber extends GuiContainer {
 
         // Start button
         String startButtonText = "Infuse";
-        this.startButton = new GuiButton(0, startX + 115, startY + 56, this.fontRenderer.getStringWidth(startButtonText) + 10, 20, startButtonText);
+        this.startButton = new GuiButton(0,
+                startX + 115, startY + 53,
+                this.fontRenderer.getStringWidth(startButtonText) + 10, 20,
+                startButtonText);
     }
 
     public void updateGui() {
@@ -98,32 +105,57 @@ public class GuiContainerCubeChamber extends GuiContainer {
         int startX = (this.width - this.xSize) / 2;
         int startY = (this.height - this.ySize) / 2;
 
-        // Bind GUI Sprite
-        this.mc.getTextureManager().bindTexture(CUBE_CHAMBER_GUI_TEXTURE);
-
         // TODO: (93,30) -> (176,2)
         // Render current infusion progress, if still processing
+        this.mc.getTextureManager().bindTexture(CUBE_CHAMBER_GUI_TEXTURE);
         if (cubeChamber.state == TileEntityCubeChamber.CubeChamberStates.PROCESSING) {
             int infusionScaled = 24 - getInfusionScaled(24);
             this.drawTexturedModalRect(
-                    startX + 93, startY + 30, // X, Y
+                    startX + 93, startY + 21, // X, Y
                     176, 2, // U, V
                     infusionScaled, 17 // W, H
             );
         }
 
+        // Render Chance Indicator
+        ItemStack boosterStack = cubeChamber.getInventoryHandler().getStackInSlot(TileEntityCubeChamber.BOOSTER_SLOT);
+        double successRate = ItemBooster.getSuccessRate(boosterStack);
+        int chanceScaled = getChanceScaled(41);
+        this.mc.getTextureManager().bindTexture(CUBE_CHAMBER_GUI_TEXTURE);
+        this.drawTexturedModalRect(
+                startX + 42, startY + 44,
+                202, 2,
+                chanceScaled, 7
+        );
+
         // Render RF Indicator TODO: Extract to a new GUI component
         int powerScaled = 69 - getPowerScaled(69);
+        this.mc.getTextureManager().bindTexture(CUBE_CHAMBER_GUI_TEXTURE);
         this.drawTexturedModalRect(
                 startX + 9, startY + 8 + powerScaled, // X, Y
                 178, 22 + powerScaled, // U, V
                 17, 69 - powerScaled // W, H
         );
-        this.fontRenderer.drawString("RF", startX + 12, startY + 67, 0x404040);
 
-        // Draw Block's Name
+        // Draw Typographic elements
         String blockName = "Cube Chamber";
         this.fontRenderer.drawString(blockName, startX + (this.xSize - this.fontRenderer.getStringWidth(blockName)) / 2, startY + 6, 4210752);
+
+        this.fontRenderer.drawString("RF", startX + 12, startY + 67, 0x000000);
+
+        this.fontRenderer.drawString(
+                "Success: " + (int) (100 * successRate) + "%",
+                startX + 35, startY + 54, 0x007E33
+        );
+
+        this.fontRenderer.drawString(
+                "Failure: " + (int) (100 - 100 * successRate) + "%",
+                startX + 37, startY + 64, 0xFF6562
+        );
+
+//        this.fontRenderer.drawString(TextFormatting.GREEN + "" + (100 * successRate) + "% / "
+//                        + TextFormatting.RED + "" + (100 - 100 * successRate) + "%",
+//                startX + 42, startY + 54, 0x1515FF);
 
         // Render button
         this.startButton.drawButton(this.mc, mouseX, mouseY, partialTicks);
@@ -136,10 +168,24 @@ public class GuiContainerCubeChamber extends GuiContainer {
         int startX = (this.width - this.xSize) / 2;
         int startY = (this.height - this.ySize) / 2;
 
-        // Render hovering text of RF Indicator TODO: Extract to a new GUI component
-        if (mouseX > startX + 9 && mouseY > startY + 8 && mouseX < startX + 26 && mouseY < startY + 77) {
-            this.drawHoveringText("RF: " + this.cubeChamber.getEnergyStorage().getEnergyStored(),
+        // Render hovering text of RF Indicator
+        if (mouseX > startX + 9 && mouseY > startY + 8
+                && mouseX < startX + 26 && mouseY < startY + 77) {
+            this.drawHoveringText(this.cubeChamber.getEnergyStorage().getEnergyStored() + " RF",
                     mouseX - startX, mouseY - startY);
+        }
+
+        // Render hovering text of Chance Indicator
+        if (mouseX > startX + 42 && mouseY > startY + 44
+                && mouseX < startX + 82 && mouseY < startY + 50) {
+            ItemStack boosterStack = cubeChamber.getInventoryHandler().getStackInSlot(TileEntityCubeChamber.BOOSTER_SLOT);
+            double successRate = ItemBooster.getSuccessRate(boosterStack);
+
+            List<String> tooltipLines = new LinkedList<>();
+            tooltipLines.add(TextFormatting.GREEN + "Infusion Success Rate: " + (int) (successRate * 100) + "%");
+            tooltipLines.add(TextFormatting.RED + "Infusion Failure Rate: " + (int) (100 - 100 * successRate) + "%");
+
+            this.drawHoveringText(tooltipLines, mouseX - startX, mouseY - startY);
         }
 
         // Render hovered tooltip
@@ -154,10 +200,17 @@ public class GuiContainerCubeChamber extends GuiContainer {
         return current != 0 && max != 0 ? current * pixels / max : 0;
     }
 
-    public int getInfusionScaled(int pixes) {
+    public int getInfusionScaled(int pixels) {
         int current = cubeChamber.getRemainingTicks();
         int max = TileEntityCubeChamber.REQUIRED_PROCESS_TICKS;
-        return current != 0 ? current * pixes / max : 0;
+        return current != 0 ? current * pixels / max : 0;
+    }
+
+    public int getChanceScaled(int pixels) {
+        ItemStack boosterStack = cubeChamber.getInventoryHandler().getStackInSlot(TileEntityCubeChamber.BOOSTER_SLOT);
+        double current = ItemBooster.getSuccessRate(boosterStack);
+        double max = 1.0; // 100% chance
+        return current != 0 ? (int) (current * pixels / max) : 0;
     }
 
 }

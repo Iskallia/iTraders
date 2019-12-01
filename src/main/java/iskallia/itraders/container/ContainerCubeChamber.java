@@ -30,9 +30,9 @@ public class ContainerCubeChamber extends Container {
         this.inventoryCubeChamber = cubeChamber.getCapability(
                 CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, player.getHorizontalFacing());
 
-        this.addSlotToContainer(new SlotItemHandler(this.inventoryCubeChamber, 0, 65, 30)); // 0 = Input
-        this.addSlotToContainer(new SlotItemHandler(this.inventoryCubeChamber, 1, 43, 30)); // 1 = Booster
-        this.addSlotToContainer(new SlotItemHandler(this.inventoryCubeChamber, 2, 130, 30)); // 2 = Output
+        this.addSlotToContainer(new SlotItemHandler(this.inventoryCubeChamber, 0, 65, 21)); // 0 = Input
+        this.addSlotToContainer(new SlotItemHandler(this.inventoryCubeChamber, 1, 43, 21)); // 1 = Booster
+        this.addSlotToContainer(new SlotItemHandler(this.inventoryCubeChamber, 2, 130, 21)); // 2 = Output
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
