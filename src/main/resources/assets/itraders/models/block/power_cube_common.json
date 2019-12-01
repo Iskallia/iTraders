@@ -1,6 +1,25 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/block",
   "textures": {
-    "all": "itraders:blocks/power_cube_common"
-  }
+    "particle": "itraders:blocks/power_cube_common",
+    "down": "itraders:blocks/power_cube_common",
+    "up": "itraders:blocks/power_cube_common",
+    "north": "itraders:blocks/power_cube_common",
+    "east": "itraders:blocks/power_cube_common",
+    "south": "itraders:blocks/power_cube_common",
+    "west": "itraders:blocks/power_cube_common"
+  },
+  "elements": [
+    {   "from": [ 1, 1, 1 ],
+      "to": [ 15, 15, 15 ],
+      "faces": {
+        "down":  { "texture": "#down", "cullface": "down", "uv": [0, 0, 16, 16]},
+        "up":    { "texture": "#up", "cullface": "up", "uv": [0, 0, 16, 16] },
+        "north": { "texture": "#north", "cullface": "north", "uv": [0, 0, 16, 16] },
+        "south": { "texture": "#south", "cullface": "south", "uv": [0, 0, 16, 16] },
+        "west":  { "texture": "#west", "cullface": "west", "uv": [0, 0, 16, 16] },
+        "east":  { "texture": "#east", "cullface": "east", "uv": [0, 0, 16, 16] }
+      }
+    }
+  ]
 }

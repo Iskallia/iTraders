@@ -8,6 +8,7 @@ import iskallia.itraders.util.math.Randomizer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -16,10 +17,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -38,6 +42,11 @@ import java.util.List;
 public class BlockPowerCube extends Block {
 
     public static final PropertyEnum<CubeRarity> RARITY = PropertyEnum.create("rarity", CubeRarity.class);
+
+    protected static final AxisAlignedBB AABB = new AxisAlignedBB(
+            1 / 16D, 1 / 16D, 1 / 16D,
+            15 / 16D, 15 / 16D, 15 / 16D
+    );
 
     public static ItemStack generateRandomly(ItemStack eggStack) {
         if (eggStack.getItem() != InitItem.SPAWN_EGG_FIGHTER)
@@ -79,6 +88,22 @@ public class BlockPowerCube extends Block {
         this.setDefaultState(this.blockState.getBaseState()
                 .withProperty(RARITY, CubeRarity.COMMON)
         );
+    }
+
+    @Nullable
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+        return AABB;
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return AABB;
+    }
+
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        return BlockFaceShape.UNDEFINED;
     }
 
     @Override
