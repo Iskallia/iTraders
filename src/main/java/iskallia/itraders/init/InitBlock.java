@@ -4,12 +4,19 @@ package iskallia.itraders.init;
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.*;
 import iskallia.itraders.block.entity.*;
+import iskallia.itraders.item.itemblock.ItemBlockPowerCube;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 public class InitBlock {
 
@@ -32,7 +39,7 @@ public class InitBlock {
     public static final ItemBlock ITEM_CUBE_CHAMBER = getItemBlock(CUBE_CHAMBER);
 
     public static final BlockPowerCube POWER_CUBE = new BlockPowerCube("power_cube");
-    public static final ItemBlock ITEM_POWER_CUBE = getItemBlock(POWER_CUBE, 1);
+    public static final ItemBlock ITEM_POWER_CUBE = new ItemBlockPowerCube("item_power_cube", POWER_CUBE);
 
     public static void registerBlocks(IForgeRegistry<Block> registry) {
         registerBlock(GRAVE_STONE, registry);
