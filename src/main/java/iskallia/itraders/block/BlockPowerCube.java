@@ -7,10 +7,17 @@ import iskallia.itraders.item.ItemSpawnEggFighter;
 import iskallia.itraders.util.math.Randomizer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -29,6 +36,8 @@ import java.util.List;
  * }
  */
 public class BlockPowerCube extends Block {
+
+    public static final PropertyEnum<CubeRarity> RARITY = PropertyEnum.create("rarity", CubeRarity.class);
 
     public static ItemStack generateRandomly(ItemStack eggStack) {
         if (eggStack.getItem() != InitItem.SPAWN_EGG_FIGHTER)
@@ -66,6 +75,51 @@ public class BlockPowerCube extends Block {
 
         this.setCreativeTab(InitItem.ITRADERS_TAB);
         this.setHardness(2f);
+
+        this.setDefaultState(this.blockState.getBaseState()
+                .withProperty(RARITY, CubeRarity.COMMON)
+        );
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return (state.getValue(RARITY).ordinal());
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState()
+                .withProperty(RARITY, CubeRarity.values()[meta]);
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, RARITY);
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        NBTTagCompound stackNBT = stack.getTagCompound();
+
+        if (stackNBT != null) {
+            CubeRarity rarity = CubeRarity.values()[stackNBT.getInteger("Rarity")];
+            world.setBlockState(pos, state.withProperty(RARITY, rarity));
+        }
+    }
+
+    @Override
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.TRANSLUCENT;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return true;
     }
 
     @Override
@@ -101,7 +155,7 @@ public class BlockPowerCube extends Block {
 
     /* ------------------------------- */
 
-    public enum CubeRarity {
+    public enum CubeRarity implements IStringSerializable {
 
         COMMON(0.7, "common", TextFormatting.AQUA),
         RARE(0.15, "rare", TextFormatting.GOLD),
@@ -133,6 +187,11 @@ public class BlockPowerCube extends Block {
 
         public String translation() {
             return I18n.format("itraders.cube.rarity." + i18nKey + ".name");
+        }
+
+        @Override
+        public String getName() {
+            return i18nKey;
         }
 
     }
