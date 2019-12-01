@@ -7,6 +7,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerFurnace;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -19,7 +20,6 @@ public class ContainerCubeChamber extends Container {
     private TileEntityCubeChamber cubeChamber;
 
     private InventoryPlayer inventoryPlayer;
-    private IItemHandler inventoryCubeChamber;
 
     public ContainerCubeChamber(World world, EntityPlayer player, TileEntityCubeChamber cubeChamber) {
         this.world = world;
@@ -27,12 +27,15 @@ public class ContainerCubeChamber extends Container {
         this.cubeChamber = cubeChamber;
 
         this.inventoryPlayer = player.inventory;
-        this.inventoryCubeChamber = cubeChamber.getCapability(
-                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, player.getHorizontalFacing());
 
-        this.addSlotToContainer(new SlotItemHandler(this.inventoryCubeChamber, 0, 65, 21)); // 0 = Input
-        this.addSlotToContainer(new SlotItemHandler(this.inventoryCubeChamber, 1, 43, 21)); // 1 = Booster
-        this.addSlotToContainer(new SlotItemHandler(this.inventoryCubeChamber, 2, 130, 21)); // 2 = Output
+        IItemHandler inputCubeChamber = cubeChamber.getCapability(
+                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
+        IItemHandler outputCubeChamber = cubeChamber.getCapability(
+                CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.DOWN);
+
+        this.addSlotToContainer(new SlotItemHandler(inputCubeChamber, 0, 65, 21)); // 0 = Input
+        this.addSlotToContainer(new SlotItemHandler(inputCubeChamber, 1, 43, 21)); // 1 = Booster
+        this.addSlotToContainer(new SlotItemHandler(outputCubeChamber, 2, 130, 21)); // 2 = Output
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {

@@ -89,7 +89,7 @@ public class GuiContainerCubeChamber extends GuiContainer {
             return false;
 
         ItemStack eggStack = cubeChamber.getInventoryHandler().getStackInSlot(0);
-        ItemStack outputStack = cubeChamber.getInventoryHandler().getStackInSlot(2);
+        ItemStack outputStack = cubeChamber.getOutputHandler().getStackInSlot(2);
 
         return !eggStack.isEmpty() && outputStack.isEmpty();
     }
@@ -128,30 +128,30 @@ public class GuiContainerCubeChamber extends GuiContainer {
                 chanceScaled, 7
         );
 
-        // Render RF Indicator TODO: Extract to a new GUI component
-        int powerScaled = 69 - getPowerScaled(69);
+        // Render RF Indicator
+        int powerScaled = 68 - getPowerScaled(68);
         this.mc.getTextureManager().bindTexture(CUBE_CHAMBER_GUI_TEXTURE);
         this.drawTexturedModalRect(
-                startX + 9, startY + 8 + powerScaled, // X, Y
-                178, 22 + powerScaled, // U, V
-                17, 69 - powerScaled // W, H
+                startX + 9, startY + 9 + powerScaled, // X, Y
+                176, 20 + powerScaled, // U, V
+                6, 68 - powerScaled // W, H
         );
 
         // Draw Typographic elements
         String blockName = "Cube Chamber";
         this.fontRenderer.drawString(blockName, startX + (this.xSize - this.fontRenderer.getStringWidth(blockName)) / 2, startY + 6, 4210752);
 
-        this.fontRenderer.drawString("RF", startX + 12, startY + 67, 0x000000);
+//        this.fontRenderer.drawString("RF", startX + 12, startY + 67, 0x000000);
 
         this.fontRenderer.drawString(
                 "Success: " + (int) (100 * successRate) + "%",
-                startX + 35, startY + 54, 0x007E33
+                startX + 35, startY + 54, 0x0F0F0F
         );
 
-        this.fontRenderer.drawString(
-                "Failure: " + (int) (100 - 100 * successRate) + "%",
-                startX + 37, startY + 64, 0xFF6562
-        );
+//        this.fontRenderer.drawString(
+//                "Failure: " + (int) (100 - 100 * successRate) + "%",
+//                startX + 37, startY + 64, 0xFF6562
+//        );
 
 //        this.fontRenderer.drawString(TextFormatting.GREEN + "" + (100 * successRate) + "% / "
 //                        + TextFormatting.RED + "" + (100 - 100 * successRate) + "%",
@@ -169,8 +169,8 @@ public class GuiContainerCubeChamber extends GuiContainer {
         int startY = (this.height - this.ySize) / 2;
 
         // Render hovering text of RF Indicator
-        if (mouseX > startX + 9 && mouseY > startY + 8
-                && mouseX < startX + 26 && mouseY < startY + 77) {
+        if (mouseX > startX + 9 && mouseY > startY + 9
+                && mouseX < startX + 14 && mouseY < startY + 76) {
             List<String> tooltipLines = new LinkedList<>();
             tooltipLines.add(TextFormatting.RED + "" + this.cubeChamber.getEnergyStorage().getEnergyStored() + " RF");
             tooltipLines.add("");

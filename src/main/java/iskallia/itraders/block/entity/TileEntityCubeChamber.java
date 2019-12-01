@@ -17,6 +17,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 /*
  * Inventory Slots:
@@ -49,6 +50,7 @@ public class TileEntityCubeChamber extends TileInventoryBase {
     private int remainingTicks = 0;
     private ItemStack boosterInUse = ItemStack.EMPTY;
     private ModifiableEnergyStorage energyStorage = generateEnergyStorage();
+    private ItemHandlerTile outputHandler = createNewExtractionHandler();
 
     private ModifiableEnergyStorage generateEnergyStorage() {
         return new ModifiableEnergyStorage(CAPACITY, MAX_RECEIVE, 0) {
@@ -74,6 +76,10 @@ public class TileEntityCubeChamber extends TileInventoryBase {
         return energyStorage;
     }
 
+    public ItemHandlerTile getOutputHandler() {
+        return outputHandler;
+    }
+
     public int getRemainingTicks() {
         return remainingTicks;
     }
@@ -81,7 +87,10 @@ public class TileEntityCubeChamber extends TileInventoryBase {
     /* --------------------------------- */
 
     public TileEntityCubeChamber() {
-        super(3); // 0: input, 1: booster, 2: output
+        super(3,// 0: input, 1: booster, 2: output
+                EnumFacing.EAST, EnumFacing.WEST,
+                EnumFacing.SOUTH, EnumFacing.NORTH,
+                EnumFacing.UP);
     }
 
     /**
@@ -98,7 +107,7 @@ public class TileEntityCubeChamber extends TileInventoryBase {
             return false;
 
         // Output slot is occupied, cannot
-        if (inventoryHandler.getStackInSlot(OUTPUT_SLOT) != ItemStack.EMPTY)
+        if (outputHandler.getStackInSlot(OUTPUT_SLOT) != ItemStack.EMPTY)
             return false;
 
         // Cannot restart an on-going infusion
@@ -126,7 +135,7 @@ public class TileEntityCubeChamber extends TileInventoryBase {
     private void onInfusingFinished() {
         ItemHandlerTile inventoryHandler = getInventoryHandler();
 
-        assert inventoryHandler.getStackInSlot(OUTPUT_SLOT).isEmpty();
+        assert outputHandler.getStackInSlot(OUTPUT_SLOT).isEmpty();
 
         ItemStack eggStack = inventoryHandler.getStackInSlot(INPUT_SLOT);
 
@@ -136,14 +145,14 @@ public class TileEntityCubeChamber extends TileInventoryBase {
         if (rand.nextDouble() <= chance) {
             System.out.println("Generating Power Cube");
             ItemStack cubeStack = BlockPowerCube.generateRandomly(eggStack);
-            inventoryHandler.setStackInSlot(OUTPUT_SLOT, cubeStack);
+            outputHandler.setStackInSlot(OUTPUT_SLOT, cubeStack);
 
         } else {
             ItemStack skullStack = new ItemStack(Items.SKULL, 1, 3);
             NBTTagCompound stackNBT = new NBTTagCompound();
             stackNBT.setString("SkullOwner", eggStack.getDisplayName());
             skullStack.setTagCompound(stackNBT);
-            inventoryHandler.setStackInSlot(OUTPUT_SLOT, skullStack);
+            outputHandler.setStackInSlot(OUTPUT_SLOT, skullStack);
         }
 
         // Consume the egg & reset booster in use
@@ -154,25 +163,6 @@ public class TileEntityCubeChamber extends TileInventoryBase {
     @Override
     protected ItemHandlerTile createNewItemHandler() {
         return new ItemHandlerTileFiltered(this) {
-            @Nonnull
-            @Override
-            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-                // If it's not the right item for the right slot, return the stack
-//                if (!this.canInsertItem(slot, stack, stack))
-//                    return stack;
-
-                return super.insertItem(slot, stack, simulate);
-            }
-
-            @Nonnull
-            @Override
-            public ItemStack extractItem(int slot, int amount, boolean simulate) {
-//                if (!this.canExtractItem(slot, amount, this.getStackInSlot(slot)))
-//                    return ItemStack.EMPTY;
-
-                return super.extractItem(slot, amount, simulate);
-            }
-
             @Override
             public boolean canInsertItem(int slot, ItemStack toAdd, @Nonnull ItemStack existing) {
                 if (state == CubeChamberStates.PROCESSING)
@@ -191,12 +181,27 @@ public class TileEntityCubeChamber extends TileInventoryBase {
 
             @Override
             public boolean canExtractItem(int slot, int amount, @Nonnull ItemStack existing) {
-//                if (slot != 2 || this.getStackInSlot(2) == ItemStack.EMPTY)
-//                    return false;
+                if (slot == 2)
+                    return false;
+
                 if (state == CubeChamberStates.PROCESSING)
                     return false;
 
                 return super.canExtractItem(slot, amount, existing);
+            }
+        };
+    }
+
+    protected ItemHandlerTile createNewExtractionHandler() {
+        return new ItemHandlerTileFiltered(this) {
+            @Override
+            public boolean canInsertItem(int slot, ItemStack toAdd, @Nonnull ItemStack existing) {
+                return false;
+            }
+
+            @Override
+            public boolean canExtractItem(int slot, int amount, @Nonnull ItemStack existing) {
+                return (slot == 2 && state != CubeChamberStates.PROCESSING);
             }
         };
     }
@@ -241,6 +246,9 @@ public class TileEntityCubeChamber extends TileInventoryBase {
         if (capability == CapabilityEnergy.ENERGY)
             return true;
 
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            return true;
+
         return super.hasCapability(capability, facing);
     }
 
@@ -249,6 +257,9 @@ public class TileEntityCubeChamber extends TileInventoryBase {
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityEnergy.ENERGY)
             return CapabilityEnergy.ENERGY.cast(energyStorage);
+
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing == EnumFacing.DOWN)
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(outputHandler);
 
         return super.getCapability(capability, facing);
     }
