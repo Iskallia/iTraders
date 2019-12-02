@@ -9,8 +9,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,44 +24,68 @@ public class EntityAccelerator extends EntityLivingBase implements IEntityAdditi
 	private int timeRemaining;
 	private BlockPos target;
 
+	// private static final DataParameter<Integer> TIME_REMAINING =
+	// EntityDataManager.<Integer>createKey(EntityAccelerator.class,
+	// DataSerializers.VARINT);
+
 	public final SkinProfile skin = new SkinProfile();
 	private String previousName = "";
+	private String subName;
 
 	public EntityAccelerator(World world) {
 		super(world);
-		this.setSize(0.1f, 0.1f);
+		this.setSize(0.25f, 0.25f);
 		this.noClip = true;
+		// this.dataManager.register(TIME_REMAINING, 0);
 	}
 
 	public EntityAccelerator(World worldIn, String name, BlockPos target) {
 		super(worldIn);
-
+		
+		this.subName = name;
 		this.target = target;
 
 		this.setSize(0.1f, 0.1f);
 
-		this.setPosition(target.getX() + 0.5D, target.getY() + 1.5D, target.getZ() + 0.5D);
+		this.setPosition(target.getX() + 0.5D, target.getY() + 1.0D, target.getZ() + 0.5D);
 
 		this.noClip = true;
 
 		this.setCustomNameTag(name);
-		this.setAlwaysRenderNameTag(true);
+		this.setAlwaysRenderNameTag(false);
+	}
+
+	public String getSubName() {
+		return subName;
+	}
+
+	public void setSubName(String subName) {
+		this.subName = subName;
 	}
 
 	@Override
 	public void onEntityUpdate() {
 		super.onEntityUpdate();
 
-		if (this.world.isRemote) {
+		if (previousName.isEmpty() && this.world.isRemote) {
 			String name = this.getCustomNameTag();
-			if (!previousName.equals(name)) {
-				this.skin.updateSkin(name);
-				this.previousName = name;
+			previousName = name;
+			this.skin.updateSkin(name);
+		}
+
+		if (this.world.isRemote)
+			return;
+
+		TileEntity te = this.world.getTileEntity(this.target);
+		if (te != null && te instanceof ITickable) {
+			for (int i = 0; i < 100; i++) {
+				((ITickable) te).update();
 			}
 		}
+
 		this.timeRemaining -= 1;
 
-		if (this.timeRemaining == 0 && !this.world.isRemote)
+		if (this.timeRemaining == 0)
 			this.setDead();
 	}
 

@@ -3,7 +3,10 @@ package iskallia.itraders.entity.render;
 import javax.annotation.Nullable;
 
 import iskallia.itraders.entity.EntityAccelerator;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelPlayer;
+import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
@@ -17,6 +20,7 @@ public class RenderAccelerator extends RenderLivingBase<EntityAccelerator> {
 	protected static IRenderFactory renderFactory = new Factory();
 
 	private long animationStart = System.currentTimeMillis();
+	private int prevTime = 0;
 
 	public RenderAccelerator(RenderManager renderManager) {
 		super(renderManager, new ModelPlayer(0.1f, false), 0.25f);
@@ -35,7 +39,7 @@ public class RenderAccelerator extends RenderLivingBase<EntityAccelerator> {
 
 	@Override
 	protected void renderEntityName(EntityAccelerator entityIn, double x, double y, double z, String name, double distanceSq) {
-		super.renderEntityName(entityIn, x, y, z, name, distanceSq);
+		// super.renderEntityName(entityIn, x, y, z, name, distanceSq);
 	}
 
 	@Override
@@ -47,10 +51,8 @@ public class RenderAccelerator extends RenderLivingBase<EntityAccelerator> {
 	@Override
 	public void doRender(EntityAccelerator entity, double x, double y, double z, float entityYaw, float partialTicks) {
 
-		// float oneVoxel = 1 / 16f;
-		// float alpha = InitConfig.CONFIG_SKULL_NECKLACE.GHOST_RENDER_OPACITY;
-		// float dt = (System.currentTimeMillis() - animationStart) / 1000f;
-
+		float dt = (System.currentTimeMillis() - animationStart) / 1000f;
+		entity.limbSwingAmount = dt / 250f;
 		GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 		GlStateManager.enableAlpha();
 		GlStateManager.pushMatrix();
@@ -58,8 +60,6 @@ public class RenderAccelerator extends RenderLivingBase<EntityAccelerator> {
 		GlStateManager.color(.9f, .9f, .9f, 1.0f);
 		GlStateManager.translate(x, y, z);
 		GlStateManager.rotate(0f, 0f, 1f, 0f);
-		// GlStateManager.translate(7 * oneVoxel, Math.sin(dt + entity.getEntityId()) /
-		// 20f, -2 * oneVoxel);
 
 		super.doRender(entity, 0, 0, 0, entityYaw, partialTicks);
 

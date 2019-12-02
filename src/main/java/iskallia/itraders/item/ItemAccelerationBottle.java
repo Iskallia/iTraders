@@ -53,10 +53,12 @@ public class ItemAccelerationBottle extends Item {
 		int uses = selectedSub.getInteger(NBTConstants.USES);
 
 		// TODO: use the sub for stuff
-		Optional<EntityAccelerator> o = world.getEntitiesWithinAABB(EntityAccelerator.class, new AxisAlignedBB(pos).expand(0, 1.0D, 0)).stream().findFirst();
+		Optional<EntityAccelerator> o = world.getEntitiesWithinAABB(EntityAccelerator.class, new AxisAlignedBB(pos.up())).stream().findFirst();
 
 		if (o.isPresent()) {
 			EntityAccelerator e = o.get();
+			if (!e.getName().equalsIgnoreCase(name))
+				return EnumActionResult.PASS;
 
 			e.setTimeRemaining(e.getTimeRemaining() + 10 * 20);
 
