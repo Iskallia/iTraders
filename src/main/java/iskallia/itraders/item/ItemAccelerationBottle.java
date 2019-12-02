@@ -1,8 +1,10 @@
 package iskallia.itraders.item;
 
 import java.util.List;
+import java.util.Optional;
 
 import iskallia.itraders.Traders;
+import iskallia.itraders.entity.EntityAccelerator;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,8 +15,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -29,9 +31,9 @@ public class ItemAccelerationBottle extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (worldIn.isRemote)
-			return EnumActionResult.PASS;
+	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+		if (world.isRemote)
+			return EnumActionResult.SUCCESS;
 
 		ItemStack stack = player.getHeldItem(hand);
 
@@ -51,13 +53,26 @@ public class ItemAccelerationBottle extends Item {
 		int uses = selectedSub.getInteger(NBTConstants.USES);
 
 		// TODO: use the sub for stuff
+		Optional<EntityAccelerator> o = world.getEntitiesWithinAABB(EntityAccelerator.class, new AxisAlignedBB(pos).expand(0, 1.0D, 0)).stream().findFirst();
+
+		if (o.isPresent()) {
+			EntityAccelerator e = o.get();
+
+			e.setTimeRemaining(e.getTimeRemaining() + 10 * 20);
+
+		} else {
+			EntityAccelerator e = new EntityAccelerator(world, name, pos);
+			e.setTimeRemaining(10 * 20);
+
+			world.spawnEntity(e);
+		}
+
 		if (uses > 1)
 			selectedSub.setInteger(NBTConstants.USES, uses - 1);
 		else
 			subList.removeTag(selectedSubIndex);
 
-
-		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+		return EnumActionResult.SUCCESS;
 	}
 
 	@Override
@@ -84,8 +99,6 @@ public class ItemAccelerationBottle extends Item {
 
 		String name = selectedSub.getString(NBTConstants.NAME);
 		int uses = selectedSub.getInteger(NBTConstants.USES);
-
-		int storedSeconds = uses;
 
 		tooltip.add(TextFormatting.DARK_AQUA + "Sub Count" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + subCount + "/10");
 		tooltip.add(" ");
