@@ -51,13 +51,11 @@ public class ItemAccelerationBottle extends Item {
 		int uses = selectedSub.getInteger(NBTConstants.USES);
 
 		// TODO: use the sub for stuff
-		player.sendMessage(new TextComponentString(name + " - Uses Before: " + uses));
 		if (uses > 1)
 			selectedSub.setInteger(NBTConstants.USES, uses - 1);
 		else
 			subList.removeTag(selectedSubIndex);
 
-		player.sendMessage(new TextComponentString(name + " - Uses Before: " + uses));
 
 		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 	}
