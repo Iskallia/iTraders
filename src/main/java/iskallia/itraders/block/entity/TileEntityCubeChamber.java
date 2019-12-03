@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import iskallia.itraders.block.BlockPowerCube;
 import iskallia.itraders.capability.ModifiableEnergyStorage;
+import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitItem;
 import iskallia.itraders.item.ItemBooster;
 import net.minecraft.init.Items;
@@ -31,12 +32,6 @@ public class TileEntityCubeChamber extends TileInventoryBase {
     public static final int BOOSTER_SLOT = 1;
     public static final int OUTPUT_SLOT = 2;
 
-    // TODO: Extract to config <-- No rush on this tho. Can be postponed!
-    public static final int CAPACITY = 10000;
-    public static final int MAX_RECEIVE = 10;
-    public static final int ENERGY_USAGE_PER_TICK = 10;
-    public static final int REQUIRED_PROCESS_TICKS = 20;
-
     /* --------------------------------- */
 
     private boolean receivedRedstoneSignal = false;
@@ -48,7 +43,9 @@ public class TileEntityCubeChamber extends TileInventoryBase {
     private ItemHandlerTile outputHandler = createNewExtractionHandler();
 
     private ModifiableEnergyStorage generateEnergyStorage() {
-        return new ModifiableEnergyStorage(CAPACITY, MAX_RECEIVE, 0) {
+        return new ModifiableEnergyStorage(
+                InitConfig.CONFIG_CUBE_CHAMBER.CAPACITY,
+                InitConfig.CONFIG_CUBE_CHAMBER.ENERGY_MAX_INPUT, 0) {
             @Override
             public int receiveEnergy(int maxReceive, boolean simulate) {
                 int received = super.receiveEnergy(maxReceive, simulate);
@@ -134,7 +131,7 @@ public class TileEntityCubeChamber extends TileInventoryBase {
             boosterStack.shrink(1);
         }
 
-        this.remainingTicks = REQUIRED_PROCESS_TICKS;
+        this.remainingTicks = InitConfig.CONFIG_CUBE_CHAMBER.INFUSION_TICKS;
         this.state = CubeChamberStates.PROCESSING;
         this.markForUpdate();
         return true;
@@ -242,12 +239,13 @@ public class TileEntityCubeChamber extends TileInventoryBase {
      */
     public boolean processInfusion() {
         int currentEnergy = energyStorage.getEnergyStored();
+        int energyRequired = InitConfig.CONFIG_CUBE_CHAMBER.INFUSION_ENERGY_CONSUMPTION_PER_TICK;
 
         // Does not have enough energy for this tick
-        if (currentEnergy < ENERGY_USAGE_PER_TICK)
+        if (currentEnergy < energyRequired)
             return false;
 
-        int extracted = energyStorage.voidEnergy(ENERGY_USAGE_PER_TICK, false);
+        int extracted = energyStorage.voidEnergy(energyRequired, false);
         remainingTicks--;
         return true;
     }

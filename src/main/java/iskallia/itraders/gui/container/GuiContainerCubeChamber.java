@@ -8,6 +8,7 @@ import iskallia.itraders.Traders;
 import iskallia.itraders.block.BlockCubeChamber;
 import iskallia.itraders.block.entity.TileEntityCubeChamber;
 import iskallia.itraders.container.ContainerCubeChamber;
+import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitPacket;
 import iskallia.itraders.item.ItemBooster;
 import iskallia.itraders.net.packet.C2SCubeChamberStart;
@@ -164,7 +165,7 @@ public class GuiContainerCubeChamber extends GuiContainer {
             List<String> tooltipLines = new LinkedList<>();
             tooltipLines.add(TextFormatting.RED + "" + this.cubeChamber.getEnergyStorage().getEnergyStored() + " RF");
             tooltipLines.add("");
-            tooltipLines.add(TextFormatting.BLUE + "Accepts: " + TileEntityCubeChamber.MAX_RECEIVE + " RF/tick");
+            tooltipLines.add(TextFormatting.BLUE + "Accepts: " + InitConfig.CONFIG_CUBE_CHAMBER.ENERGY_MAX_INPUT + " RF/tick");
             this.drawHoveringText(tooltipLines, mouseX - startX, mouseY - startY);
         }
 
@@ -185,7 +186,7 @@ public class GuiContainerCubeChamber extends GuiContainer {
         if (mouseX > startX + 94 && mouseY > startY + 21
                 && mouseX < startX + 115 && mouseY < startY + 35) {
             this.drawHoveringText(TextFormatting.BLUE + "Infusion consumes "
-                            + TileEntityCubeChamber.ENERGY_USAGE_PER_TICK + " RF/tick",
+                            + InitConfig.CONFIG_CUBE_CHAMBER.INFUSION_ENERGY_CONSUMPTION_PER_TICK + " RF/tick",
                     mouseX - startX, mouseY - startY);
         }
 
@@ -203,7 +204,7 @@ public class GuiContainerCubeChamber extends GuiContainer {
 
     public int getInfusionScaled(int pixels) {
         int current = cubeChamber.getRemainingTicks();
-        int max = TileEntityCubeChamber.REQUIRED_PROCESS_TICKS;
+        int max = InitConfig.CONFIG_CUBE_CHAMBER.INFUSION_TICKS;
         return current != 0 ? current * pixels / max : 0;
     }
 
