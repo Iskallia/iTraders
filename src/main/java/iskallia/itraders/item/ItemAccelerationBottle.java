@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import iskallia.itraders.Traders;
 import iskallia.itraders.entity.EntityAccelerator;
+import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -78,6 +79,7 @@ public class ItemAccelerationBottle extends Item {
 
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
+		int maxSubs = InitConfig.CONFIG_ACCELERATION_BOTTLE.MAX_CONTAINED_SUBS;
 		NBTTagCompound stackNBT = stack.getTagCompound();
 
 		if (isEmpty(stack)) {
@@ -95,7 +97,7 @@ public class ItemAccelerationBottle extends Item {
 		String name = selectedSub.getString(BottleNBT.NAME);
 		int uses = selectedSub.getInteger(BottleNBT.USES);
 
-		tooltip.add(TextFormatting.DARK_AQUA + "Sub Count" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + subCount + "/10");
+		tooltip.add(TextFormatting.DARK_AQUA + "Sub Count" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + subCount + "/" + maxSubs);
 		tooltip.add(" ");
 		tooltip.add(TextFormatting.DARK_AQUA + "Selected Sub" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + name);
 		tooltip.add(TextFormatting.DARK_AQUA + "Uses" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + uses);
@@ -104,6 +106,8 @@ public class ItemAccelerationBottle extends Item {
 	}
 
 	private boolean useSub(World world, BlockPos pos, String name) {
+		int duration = InitConfig.CONFIG_ACCELERATION_BOTTLE.DURATION_PER_USE;
+
 		Optional<EntityAccelerator> o = world.getEntitiesWithinAABB(EntityAccelerator.class, new AxisAlignedBB(pos.up())).stream().findFirst();
 
 		if (o.isPresent()) {
@@ -112,12 +116,13 @@ public class ItemAccelerationBottle extends Item {
 			if (!e.getName().equalsIgnoreCase(name))
 				return false;
 
-			e.setTimeRemaining(e.getTimeRemaining() + 10 * 20);
+			// magic number 20 = ticks
+			e.setTimeRemaining(e.getTimeRemaining() + (duration * 20));
 
 		} else {
 			EntityAccelerator e = new EntityAccelerator(world, name, pos);
 
-			e.setTimeRemaining(10 * 20);
+			e.setTimeRemaining(duration * 20);
 
 			world.spawnEntity(e);
 		}

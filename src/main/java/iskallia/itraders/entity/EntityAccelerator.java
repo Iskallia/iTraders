@@ -3,6 +3,7 @@ package iskallia.itraders.entity;
 import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
+import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.util.profile.SkinProfile;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
@@ -89,7 +90,7 @@ public class EntityAccelerator extends EntityLivingBase implements IEntityAdditi
 
 		TileEntity te = this.world.getTileEntity(this.target);
 		if (te != null && te instanceof ITickable) {
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < InitConfig.CONFIG_ACCELERATION_BOTTLE.SPEED_MULTIPLIER; i++) {
 				((ITickable) te).update();
 			}
 		}
