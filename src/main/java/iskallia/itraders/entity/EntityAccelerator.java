@@ -4,14 +4,16 @@ import javax.annotation.Nonnull;
 
 import io.netty.buffer.ByteBuf;
 import iskallia.itraders.util.profile.SkinProfile;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
@@ -41,13 +43,22 @@ public class EntityAccelerator extends EntityLivingBase implements IEntityAdditi
 
 	public EntityAccelerator(World worldIn, String name, BlockPos target) {
 		super(worldIn);
-		
+
 		this.subName = name;
 		this.target = target;
 
 		this.setSize(0.1f, 0.1f);
 
 		this.setPosition(target.getX() + 0.5D, target.getY() + 1.0D, target.getZ() + 0.5D);
+
+		IBlockState state = worldIn.getBlockState(target);
+
+		if (state.getProperties().containsKey(BlockHorizontal.FACING)) {
+			EnumFacing facing = (EnumFacing) state.getProperties().get(BlockHorizontal.FACING);
+			this.setRotation(facing.getHorizontalAngle(), 0.0f);
+			this.setRotationYawHead(facing.getHorizontalAngle());
+
+		}
 
 		this.noClip = true;
 

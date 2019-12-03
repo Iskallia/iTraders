@@ -66,7 +66,7 @@ public class ItemAccelerationBottle extends Item {
 			return EnumActionResult.PASS;
 
 		if (player.capabilities.isCreativeMode)
-			return EnumActionResult.PASS;
+			return EnumActionResult.SUCCESS;
 
 		if (uses > 1)
 			selectedSub.setInteger(BottleNBT.USES, uses - 1);
