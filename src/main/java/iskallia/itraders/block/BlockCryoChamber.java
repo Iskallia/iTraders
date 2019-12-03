@@ -3,6 +3,7 @@ package iskallia.itraders.block;
 import java.util.Random;
 
 import iskallia.itraders.block.entity.TileEntityCryoChamber;
+import iskallia.itraders.block.entity.TileEntityVendingMachine;
 import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;

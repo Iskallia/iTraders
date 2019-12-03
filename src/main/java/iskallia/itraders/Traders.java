@@ -12,7 +12,10 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
-@Mod(modid = Traders.MOD_ID, name = Traders.MOD_NAME, version = Traders.MOD_VERSION)
+@Mod(modid = Traders.MOD_ID,
+		name = Traders.MOD_NAME,
+		version = Traders.MOD_VERSION,
+		dependencies = "required-after:astralsorcery;required-after:baubles")
 public class Traders {
 
 	public static final Logger LOG = LogManager.getLogger(Traders.MOD_NAME);
@@ -26,7 +29,7 @@ public class Traders {
 
 	public static Traders getInstance() {
 		return INSTANCE;
-	}	
+	}
 
 	public static ResourceLocation getResource(String name) {
 		return new ResourceLocation(Traders.MOD_ID, name);

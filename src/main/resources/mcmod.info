@@ -11,6 +11,6 @@
   "credits": "Iskall85 for designing and testing the mod.",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": []
+  "requiredMods": ["astralsorcery", "baubles"]
 }
 ]

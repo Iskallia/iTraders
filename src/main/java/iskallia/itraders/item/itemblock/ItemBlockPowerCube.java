@@ -19,6 +19,9 @@ public class ItemBlockPowerCube extends ItemBlock {
 
         this.setUnlocalizedName(name);
         this.setRegistryName(Traders.getResource(name));
+
+        this.setMaxStackSize(1);
+
         this.setCreativeTab(InitItem.ITRADERS_TAB);
     }
 

@@ -5,6 +5,8 @@ import iskallia.itraders.Traders;
 import iskallia.itraders.block.*;
 import iskallia.itraders.block.entity.*;
 import iskallia.itraders.item.itemblock.ItemBlockPowerCube;
+import iskallia.itraders.block.BlockGraveStone;
+import iskallia.itraders.block.BlockInfusionCauldron;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -35,6 +37,8 @@ public class InitBlock {
     public static final BlockMagicOre MAGIC_ORE_BLOCK = new BlockMagicOre("magic_ore_block");
     public static final ItemBlock ITEM_MAGIC_ORE_BLOCK = getItemBlock(MAGIC_ORE_BLOCK);
 
+    public static final BlockVendingMachine VENDING_MACHINE = new BlockVendingMachine("vending_machine");
+
     public static final BlockCubeChamber CUBE_CHAMBER = new BlockCubeChamber("cube_chamber");
     public static final ItemBlock ITEM_CUBE_CHAMBER = getItemBlock(CUBE_CHAMBER);
 
@@ -50,6 +54,7 @@ public class InitBlock {
         registerBlock(MAGIC_ORE_BLOCK, registry);
         registerBlock(CUBE_CHAMBER, registry);
         registerBlock(POWER_CUBE, registry);
+        registerBlock(VENDING_MACHINE, registry);
     }
 
     public static void registerTileEntities() { // TODO: Eliminate redefinition of Resource Names
@@ -60,6 +65,8 @@ public class InitBlock {
         GameRegistry.registerTileEntity(TileEntityGhostPedestal.class, Traders.getResource("ghost_pedestal"));
         GameRegistry.registerTileEntity(TileEntityCubeChamber.class, Traders.getResource("cube_chamber"));
         GameRegistry.registerTileEntity(TileEntityPowerCube.class, Traders.getResource("power_cube"));
+        GameRegistry.registerTileEntity(TileEntityGhostPedestal.class, Traders.getResource("ghost_pedestal"));
+        GameRegistry.registerTileEntity(TileEntityVendingMachine.class, Traders.getResource("vending_machine"));
     }
 
     public static void registerItemBlocks(IForgeRegistry<Item> registry) {

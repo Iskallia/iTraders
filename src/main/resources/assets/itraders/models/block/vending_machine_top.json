@@ -1,0 +1,88 @@
+{
+  "__comment": "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)",
+  "textures": {
+    "particle": "itraders:blocks/vending_machine_top",
+    "vending_machine_top_side": "itraders:blocks/vending_machine_top_side",
+    "vending_machine_top": "itraders:blocks/vending_machine_top",
+    "vending_machine_top_front": "itraders:blocks/vending_machine_top_front"
+  },
+  "display": {
+    "gui": {
+      "rotation": [ 45, 45, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 0.625, 0.625, 0.625 ]
+    },
+    "ground": {
+      "rotation": [ 0, 0, 0 ],
+      "translation": [ 0, 3, 0 ],
+      "scale": [ 0.25, 0.25, 0.25 ]
+    },
+    "fixed": {
+      "rotation": [ 0, 180, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 1, 1, 1 ]
+    },
+    "head": {
+      "rotation": [ 0, 180, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 1, 1, 1 ]
+    },
+    "firstperson_righthand": {
+      "rotation": [ 0, 114, 0 ],
+      "translation": [ 0, 2.5, 0 ],
+      "scale": [ 0.4, 0.4, 0.4 ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [ 75, 315, 0 ],
+      "translation": [ 0, 2.5, 0 ],
+      "scale": [ 0.375, 0.375, 0.375 ]
+    }
+  },
+  "elements": [
+    {
+      "name": "Top",
+      "from": [ 0, 16, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "up": { "texture": "#vending_machine_top", "uv": [ 0, 0, 16, 16 ], "cullface": "up" },
+        "down": { "texture": "#vending_machine_top", "uv": [ 0, 0, 16, 16 ] }
+      }
+    },
+    {
+      "name": "Front",
+      "from": [ 0, 0, 0 ],
+      "to": [ 0, 16, 16 ],
+      "faces": {
+        "east": { "texture": "#vending_machine_top_front", "uv": [ 0, 0, 16, 16 ] },
+        "west": { "texture": "#vending_machine_top_front", "uv": [ 0, 0, 16, 16 ], "cullface": "west" }
+      }
+    },
+    {
+      "name": "Side",
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 0 ],
+      "faces": {
+        "north": { "texture": "#vending_machine_top_side", "uv": [ 0, 0, 16, 16 ], "cullface": "north" },
+        "south": { "texture": "#vending_machine_top_side", "uv": [ 0, 0, 16, 16 ] }
+      }
+    },
+    {
+      "name": "Side",
+      "from": [ 0, 0, 16 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "north": { "texture": "#vending_machine_top_side", "uv": [ 0, 0, 16, 16 ], "cullface": "north" },
+        "south": { "texture": "#vending_machine_top_side", "uv": [ 0, 0, 16, 16 ] }
+      }
+    },
+    {
+      "name": "Side",
+      "from": [ 16, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "east": { "texture": "#vending_machine_top_side", "uv": [ 0, 0, 16, 16 ] },
+        "west": { "texture": "#vending_machine_top_side", "uv": [ 0, 0, 16, 16 ], "cullface": "west" }
+      }
+    }
+  ]
+}

@@ -23,6 +23,8 @@ item.booster_tier_2.name=Booster Tier 2
 item.booster_tier_3.name=Booster Tier 3
 item.booster_tier_4.name=Booster Tier 4
 item.booster_tier_5.name=Booster Tier 5
+item.item_vending_machine.name=Vending Machine
+item.cardboard_box.name=Cardboard Box
 
 tile.infusion_cauldron.name=Infusion Cauldron
 tile.grave_stone.name=Grave Stone
@@ -37,6 +39,9 @@ itraders.cube.rarity.common.name=Common
 itraders.cube.rarity.rare.name=Rare
 itraders.cube.rarity.epic.name=Epic
 itraders.cube.rarity.mega.name=Mega
+tile.vending_machine.name=Vending Machine
+
+item.raens22_stick.name=Raens22's Poke Stick
 
 itraders.card.rarity.common.name=
 itraders.card.rarity.rare.name=Rare
