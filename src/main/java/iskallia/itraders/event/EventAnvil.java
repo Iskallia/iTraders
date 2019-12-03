@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import iskallia.itraders.Traders;
 import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitItem;
-import iskallia.itraders.item.ItemAccelerationBottle.NBTConstants;
+import iskallia.itraders.item.ItemAccelerationBottle.BottleNBT;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -121,20 +121,20 @@ public class EventAnvil {
 		NBTTagCompound nbt = output.getTagCompound();
 
 
-		if (!nbt.hasKey(NBTConstants.SELECTED_SUB_INDEX))
-			nbt.setInteger(NBTConstants.SELECTED_SUB_INDEX, 0);
+		if (!nbt.hasKey(BottleNBT.SELECTED_SUB_INDEX))
+			nbt.setInteger(BottleNBT.SELECTED_SUB_INDEX, 0);
 
 
-		if (!nbt.hasKey(NBTConstants.SUB_LIST))
-			nbt.setTag(NBTConstants.SUB_LIST, new NBTTagList());
-		NBTTagList subList = nbt.getTagList(NBTConstants.SUB_LIST, Constants.NBT.TAG_COMPOUND);
+		if (!nbt.hasKey(BottleNBT.SUB_LIST))
+			nbt.setTag(BottleNBT.SUB_LIST, new NBTTagList());
+		NBTTagList subList = nbt.getTagList(BottleNBT.SUB_LIST, Constants.NBT.TAG_COMPOUND);
 		
 		//TODO: 10 needs to be configurable
 		if(subList.tagCount() >= 10) return;
 
 		NBTTagCompound newSub = new NBTTagCompound();
-		newSub.setString(NBTConstants.NAME, name);
-		newSub.setInteger(NBTConstants.USES, uses);
+		newSub.setString(BottleNBT.NAME, name);
+		newSub.setInteger(BottleNBT.USES, uses);
 
 		subList.appendTag(newSub);
 

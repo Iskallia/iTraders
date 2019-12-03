@@ -3,10 +3,7 @@ package iskallia.itraders.entity.render;
 import javax.annotation.Nullable;
 
 import iskallia.itraders.entity.EntityAccelerator;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelPlayer;
-import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
@@ -51,8 +48,8 @@ public class RenderAccelerator extends RenderLivingBase<EntityAccelerator> {
 	@Override
 	public void doRender(EntityAccelerator entity, double x, double y, double z, float entityYaw, float partialTicks) {
 
-		float dt = (System.currentTimeMillis() - animationStart) / 1000f;
-		entity.limbSwingAmount = dt / 250f;
+		entity.limbSwingAmount = 2.0f;
+
 		GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 		GlStateManager.enableAlpha();
 		GlStateManager.pushMatrix();
