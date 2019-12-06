@@ -9,16 +9,21 @@ import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.play.server.SPacketTitle;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -69,11 +74,22 @@ public class ItemAccelerationBottle extends Item {
 		if (player.capabilities.isCreativeMode)
 			return EnumActionResult.SUCCESS;
 
-		if (uses > 1)
+		if (uses > 1) {
 			selectedSub.setInteger(BottleNBT.USES, uses - 1);
-		else
+			world.playSound(player, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.MASTER, 0.75f, (float) Math.random());
+		} else {
 			subList.removeTag(selectedSubIndex);
+			world.playSound(player, pos, SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.MASTER, 0.75f, (float) Math.random());
+			
+			if(subList.hasNoTags()) return EnumActionResult.SUCCESS;
+			
+			nbt.setInteger(BottleNBT.SELECTED_SUB_INDEX, 0);
+			((EntityPlayerMP)player).connection.sendPacket(new SPacketTitle(SPacketTitle.Type.ACTIONBAR, 
+					new TextComponentString(TextFormatting.DARK_AQUA + "Selected Sub" + 
+											TextFormatting.WHITE + ": " + 
+											TextFormatting.YELLOW + subList.getCompoundTagAt(0).getString(BottleNBT.NAME))));
 
+		}
 		return EnumActionResult.SUCCESS;
 	}
 
