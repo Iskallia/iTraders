@@ -25,7 +25,6 @@ public class EntityAccelerator extends EntityLivingBase {
 
 	public final SkinProfile skin = new SkinProfile();
 	private String previousName = "";
-	private String subName;
 	private float rotation = 0.0f;
 
 	public EntityAccelerator(World world) {
@@ -37,21 +36,12 @@ public class EntityAccelerator extends EntityLivingBase {
 	public EntityAccelerator(World worldIn, String name, BlockPos target) {
 		super(worldIn);
 
-		this.subName = name;
 		this.target = target;
 
 		this.setPosition(target.getX() + 0.5D, target.getY() + 1.0D, target.getZ() + 0.5D);
 
 		this.setCustomNameTag(name);
 		this.setAlwaysRenderNameTag(false);
-	}
-
-	public String getSubName() {
-		return subName;
-	}
-
-	public void setSubName(String subName) {
-		this.subName = subName;
 	}
 
 	public float getRotation() {
