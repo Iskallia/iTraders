@@ -109,7 +109,7 @@ public class EventAnvil {
 			return;
 		String name = event.getRight().getDisplayName();
 
-		int uses = getDuration(event.getLeft(), event.getRight());
+		int uses = getUses(event.getLeft(), event.getRight());
 		if (uses == 0)
 			return;
 
@@ -129,8 +129,7 @@ public class EventAnvil {
 			nbt.setTag(BottleNBT.SUB_LIST, new NBTTagList());
 		NBTTagList subList = nbt.getTagList(BottleNBT.SUB_LIST, Constants.NBT.TAG_COMPOUND);
 		
-		//TODO: 10 needs to be configurable
-		if(subList.tagCount() >= 10) return;
+		if(subList.tagCount() >= InitConfig.CONFIG_ACCELERATION_BOTTLE.MAX_CONTAINED_SUBS) return;
 
 		NBTTagCompound newSub = new NBTTagCompound();
 		newSub.setString(BottleNBT.NAME, name);
@@ -145,7 +144,7 @@ public class EventAnvil {
 		event.setMaterialCost(1);
 	}
 
-	private static int getDuration(ItemStack left, ItemStack right) {
+	private static int getUses(ItemStack left, ItemStack right) {
 
 		if (left.getItem() != InitItem.ACCELERATION_BOTTLE)
 			return 0;

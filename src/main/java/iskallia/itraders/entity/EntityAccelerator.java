@@ -2,7 +2,6 @@ package iskallia.itraders.entity;
 
 import javax.annotation.Nonnull;
 
-import io.netty.buffer.ByteBuf;
 import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.util.profile.SkinProfile;
 import net.minecraft.entity.Entity;
@@ -10,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
@@ -17,9 +17,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityAccelerator extends EntityLivingBase implements IEntityAdditionalSpawnData {
+public class EntityAccelerator extends EntityLivingBase {
 
 	private int timeRemaining;
 	private BlockPos target;
@@ -97,18 +96,17 @@ public class EntityAccelerator extends EntityLivingBase implements IEntityAdditi
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		this.timeRemaining = compound.getInteger("TimeRemaining");
+		this.target = NBTUtil.getPosFromTag(compound.getCompoundTag("Target"));
+		this.previousName = "";
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
-	}
-
-	@Override
-	public void writeSpawnData(ByteBuf buffer) {
-	}
-
-	@Override
-	public void readSpawnData(ByteBuf additionalData) {
+		compound.setInteger("TimeRemaining", this.timeRemaining);
+		compound.setTag("Target", NBTUtil.createPosTag(this.target));
+		super.writeEntityToNBT(compound);
 	}
 
 	public int getTimeRemaining() {
@@ -151,7 +149,7 @@ public class EntityAccelerator extends EntityLivingBase implements IEntityAdditi
 
 	@Override
 	public boolean writeToNBTOptional(NBTTagCompound compound) {
-		return false; // Disable saving
+		return super.writeToNBTOptional(compound);
 	}
 
 	@Override
