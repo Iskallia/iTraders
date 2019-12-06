@@ -49,7 +49,7 @@ public class ItemAccelerationBottle extends Item {
 
 		ItemStack stack = player.getHeldItem(hand);
 
-		if (isEmpty(stack))
+		if (isBottleEmpty(stack))
 			return EnumActionResult.PASS;
 
 		NBTTagCompound nbt = stack.getTagCompound();
@@ -79,10 +79,13 @@ public class ItemAccelerationBottle extends Item {
 
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flagIn) {
+		if (InitConfig.CONFIG_ACCELERATION_BOTTLE == null)
+			return;
+
 		int maxSubs = InitConfig.CONFIG_ACCELERATION_BOTTLE.MAX_CONTAINED_SUBS;
 		NBTTagCompound stackNBT = stack.getTagCompound();
 
-		if (isEmpty(stack)) {
+		if (isBottleEmpty(stack)) {
 			tooltip.add(TextFormatting.GRAY + "" + TextFormatting.ITALIC + "There are no subs contained.");
 			return;
 		}
@@ -116,17 +119,17 @@ public class ItemAccelerationBottle extends Item {
 			if (!e.getName().equalsIgnoreCase(name))
 				return false;
 
-			// magic number 20 = ticks
-			e.setTimeRemaining(e.getTimeRemaining() + (duration * 20));
+			e.setTimeRemaining(e.getTimeRemaining() + (duration * 20)); // magic number 20 = ticks
+
+			return true;
 
 		} else {
 			EntityAccelerator e = new EntityAccelerator(world, name, pos);
 
 			e.setTimeRemaining(duration * 20);
 
-			world.spawnEntity(e);
+			return world.spawnEntity(e);
 		}
-		return true;
 	}
 
 	public int getSelectedSubIndex(ItemStack stack) {
@@ -165,7 +168,7 @@ public class ItemAccelerationBottle extends Item {
 		return selectedSub.getString(BottleNBT.NAME);
 	}
 
-	public boolean isEmpty(ItemStack stack) {
+	public boolean isBottleEmpty(ItemStack stack) {
 
 		if (!stack.hasTagCompound())
 			return true;

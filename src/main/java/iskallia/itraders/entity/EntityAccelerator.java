@@ -5,8 +5,6 @@ import javax.annotation.Nonnull;
 import io.netty.buffer.ByteBuf;
 import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.util.profile.SkinProfile;
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -14,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
@@ -27,19 +24,15 @@ public class EntityAccelerator extends EntityLivingBase implements IEntityAdditi
 	private int timeRemaining;
 	private BlockPos target;
 
-	// private static final DataParameter<Integer> TIME_REMAINING =
-	// EntityDataManager.<Integer>createKey(EntityAccelerator.class,
-	// DataSerializers.VARINT);
-
 	public final SkinProfile skin = new SkinProfile();
 	private String previousName = "";
 	private String subName;
+	private float rotation = 0.0f;
 
 	public EntityAccelerator(World world) {
 		super(world);
-		this.setSize(0.25f, 0.25f);
+		this.setSize(0.1f, 0.1f);
 		this.noClip = true;
-		// this.dataManager.register(TIME_REMAINING, 0);
 	}
 
 	public EntityAccelerator(World worldIn, String name, BlockPos target) {
@@ -48,20 +41,7 @@ public class EntityAccelerator extends EntityLivingBase implements IEntityAdditi
 		this.subName = name;
 		this.target = target;
 
-		this.setSize(0.1f, 0.1f);
-
 		this.setPosition(target.getX() + 0.5D, target.getY() + 1.0D, target.getZ() + 0.5D);
-
-		IBlockState state = worldIn.getBlockState(target);
-
-		if (state.getProperties().containsKey(BlockHorizontal.FACING)) {
-			EnumFacing facing = (EnumFacing) state.getProperties().get(BlockHorizontal.FACING);
-			this.setRotation(facing.getHorizontalAngle(), 0.0f);
-			this.setRotationYawHead(facing.getHorizontalAngle());
-
-		}
-
-		this.noClip = true;
 
 		this.setCustomNameTag(name);
 		this.setAlwaysRenderNameTag(false);
@@ -73,6 +53,14 @@ public class EntityAccelerator extends EntityLivingBase implements IEntityAdditi
 
 	public void setSubName(String subName) {
 		this.subName = subName;
+	}
+
+	public float getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
 	}
 
 	@Override
@@ -109,26 +97,18 @@ public class EntityAccelerator extends EntityLivingBase implements IEntityAdditi
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public int getTimeRemaining() {
@@ -171,7 +151,7 @@ public class EntityAccelerator extends EntityLivingBase implements IEntityAdditi
 
 	@Override
 	public boolean writeToNBTOptional(NBTTagCompound compound) {
-		return false; // Disable saving of mini ghosts
+		return false; // Disable saving
 	}
 
 	@Override

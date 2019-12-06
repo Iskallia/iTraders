@@ -16,9 +16,6 @@ public class RenderAccelerator extends RenderLivingBase<EntityAccelerator> {
 
 	protected static IRenderFactory renderFactory = new Factory();
 
-	private long animationStart = System.currentTimeMillis();
-	private int prevTime = 0;
-
 	public RenderAccelerator(RenderManager renderManager) {
 		super(renderManager, new ModelPlayer(0.1f, false), 0.25f);
 	}
@@ -53,10 +50,9 @@ public class RenderAccelerator extends RenderLivingBase<EntityAccelerator> {
 		GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 		GlStateManager.enableAlpha();
 		GlStateManager.pushMatrix();
-
-		GlStateManager.color(.9f, .9f, .9f, 1.0f);
+		GlStateManager.color(1f, 1f, 1f, 1.0f);
 		GlStateManager.translate(x, y, z);
-		GlStateManager.rotate(0f, 0f, 1f, 0f);
+		GlStateManager.rotate(0f, 0f, 0f, 0f);
 
 		super.doRender(entity, 0, 0, 0, entityYaw, partialTicks);
 
