@@ -9,6 +9,8 @@ import iskallia.itraders.capability.ModifiableEnergyStorage;
 import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitItem;
 import iskallia.itraders.item.ItemBooster;
+import iskallia.itraders.util.math.Randomizer;
+import iskallia.itraders.util.profile.SkinProfile;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,6 +35,13 @@ public class TileEntityCubeChamber extends TileInventoryBase {
     public static final int OUTPUT_SLOT = 2;
 
     /* --------------------------------- */
+
+    @Nonnull
+    @SideOnly(Side.CLIENT)
+    public SkinProfile skin = new SkinProfile();
+
+    @SideOnly(Side.CLIENT)
+    public long animationStartTime = Randomizer.randomInt();
 
     private boolean receivedRedstoneSignal = false;
 
