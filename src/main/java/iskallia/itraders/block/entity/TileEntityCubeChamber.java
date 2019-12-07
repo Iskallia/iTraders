@@ -80,6 +80,12 @@ public class TileEntityCubeChamber extends TileInventoryBase {
         return remainingTicks;
     }
 
+    public float getInfusionPercentage() {
+        float maxTicks = InitConfig.CONFIG_CUBE_CHAMBER.INFUSION_TICKS;
+        float currentTicks = maxTicks - remainingTicks;
+        return currentTicks / maxTicks;
+    }
+
     /* --------------------------------- */
 
     public TileEntityCubeChamber() {
@@ -153,7 +159,6 @@ public class TileEntityCubeChamber extends TileInventoryBase {
         double chance = ItemBooster.getSuccessRate(boosterInUse); // TODO:
         System.out.println("Rolling on a chance of " + (chance * 100) + "%");
         if (rand.nextDouble() <= chance) {
-            System.out.println("Generating Power Cube");
             ItemStack cubeStack = BlockPowerCube.generateRandomly(eggStack);
             outputHandler.setStackInSlot(OUTPUT_SLOT, cubeStack);
 

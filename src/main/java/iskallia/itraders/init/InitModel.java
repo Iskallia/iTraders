@@ -1,17 +1,13 @@
 package iskallia.itraders.init;
 
 import iskallia.itraders.Traders;
-import iskallia.itraders.block.entity.TileEntityCryoChamber;
-import iskallia.itraders.block.entity.TileEntityGraveStone;
-import iskallia.itraders.block.entity.TileEntityPowerChamber;
-import iskallia.itraders.block.entity.TileEntityPowerCube;
+import iskallia.itraders.block.entity.*;
 import iskallia.itraders.block.render.*;
 import iskallia.itraders.item.mesh.FighterEggMesh;
 import iskallia.itraders.item.mesh.MinerEggMesh;
 import iskallia.itraders.item.mesh.SkullNeckMesh;
 import iskallia.itraders.item.mesh.SubCardMesh;
 import iskallia.itraders.item.mesh.TraderEggMesh;
-import iskallia.itraders.block.entity.TileEntityVendingMachine;
 import iskallia.itraders.block.render.TESRCryoChamber;
 import iskallia.itraders.block.render.TESRGraveStone;
 import iskallia.itraders.block.render.TESRVendingMachine;
@@ -51,6 +47,7 @@ public class InitModel {
         registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
         registerBlockModel(InitBlock.GHOST_PEDESTAL, 0);
         registerBlockModel(InitBlock.MAGIC_ORE_BLOCK, 0);
+        registerBlockModel(InitBlock.CUBE_CHAMBER, 0); // TODO: Do the blockstate magic for infusion percentage
 //        registerBlockModel(InitBlock.VENDING_MACHINE, 0); // Dis buddy is now placed with an item directly
 
         ModelLoader.setCustomMeshDefinition(InitItem.SPAWN_EGG_TRADER, new TraderEggMesh(InitItem.SPAWN_EGG_TRADER));
@@ -68,6 +65,7 @@ public class InitModel {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPowerChamber.class, new TESRPowerChamber());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPowerCube.class, new TESRPowerCube());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVendingMachine.class, new TESRVendingMachine());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCubeChamber.class, new TESRCubeChamber());
     }
 
     /* ---------------------------------- */
