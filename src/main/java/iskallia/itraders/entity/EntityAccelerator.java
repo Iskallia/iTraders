@@ -70,6 +70,8 @@ public class EntityAccelerator extends EntityLivingBase {
 			for (int i = 0; i < InitConfig.CONFIG_ACCELERATION_BOTTLE.SPEED_MULTIPLIER; i++) {
 				((ITickable) te).update();
 			}
+		} else {
+			this.setDead();
 		}
 
 		this.timeRemaining -= 1;

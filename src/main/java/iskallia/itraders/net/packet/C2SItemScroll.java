@@ -4,9 +4,6 @@ import io.netty.buffer.ByteBuf;
 import iskallia.itraders.item.ItemAccelerationBottle;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.SPacketTitle;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -45,14 +42,12 @@ public class C2SItemScroll implements IMessage {
 			ItemAccelerationBottle bottle = (ItemAccelerationBottle) stack.getItem();
 
 			bottle.setSelectedSubIndex(stack, message.index);
-			
-			String selectedSub = bottle.getSelectedSub(stack);
-			if(selectedSub == null) return null;
 
-			playerMP.connection.sendPacket(new SPacketTitle(SPacketTitle.Type.ACTIONBAR, 
-					new TextComponentString(TextFormatting.DARK_AQUA + "Selected Sub" + 
-											TextFormatting.WHITE + ": " + 
-											TextFormatting.YELLOW + selectedSub)));
+			String selectedSub = bottle.getSelectedSub(stack);
+			if (selectedSub == null)
+				return null;
+
+			bottle.setNameWithSub(stack, selectedSub);
 
 			return null;
 		}

@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
@@ -138,9 +139,13 @@ public class EventAnvil {
 		subList.appendTag(newSub);
 
 		output.setTagCompound(nbt);
+		
+		InitItem.ACCELERATION_BOTTLE.setNameWithSub(output, 
+				subList.getCompoundTagAt(nbt.getInteger(BottleNBT.SELECTED_SUB_INDEX))
+				.getString(BottleNBT.NAME));
 
 		event.setOutput(output);
-		event.setCost(uses / 10);
+		event.setCost(uses);
 		event.setMaterialCost(1);
 	}
 
