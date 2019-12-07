@@ -3,8 +3,11 @@ package iskallia.itraders.block.render;
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.BlockCubeChamber;
 import iskallia.itraders.block.entity.TileEntityCubeChamber;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -19,8 +22,8 @@ public class TESRCubeChamber extends TileEntitySpecialRenderer<TileEntityCubeCha
         if (!tileEntity.hasWorld())
             return;
 
-//        if (tileEntity.state == TileEntityCubeChamber.CubeChamberStates.IDLE)
-//            return;
+        if (tileEntity.state == TileEntityCubeChamber.CubeChamberStates.IDLE)
+            return;
 
         float infusionPercentage = tileEntity.getInfusionPercentage();
 
@@ -33,25 +36,42 @@ public class TESRCubeChamber extends TileEntitySpecialRenderer<TileEntityCubeCha
 
         bindTexture(PROGRESS_BAR_TEXTURE);
 
-        // TODO: Fix lighting
-
         GlStateManager.pushMatrix();
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+
+        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
 
         GlStateManager.translate(x + 0.5f, y + 0.5f, z + 0.5f);
         GlStateManager.rotate(-facing.getHorizontalAngle() + 180, 0f, 1f, 0f);
         GlStateManager.translate(-0.5f, -0.5f, -0.5f - (1 / 16f) * 0.2f);
 
-        GlStateManager.glBegin(GL11.GL_QUADS);
-        GlStateManager.glTexCoord2f(length, height);
-        GlStateManager.glVertex3f(1f - (marginSide + length), 1f - (marginTop + height), 0f);
-        GlStateManager.glTexCoord2f(length, 0f);
-        GlStateManager.glVertex3f(1f - (marginSide + length), 1f - marginTop, 0f);
-        GlStateManager.glTexCoord2f(0f, 0f);
-        GlStateManager.glVertex3f(1f - marginSide, 1f - marginTop, 0f);
-        GlStateManager.glTexCoord2f(0f, height);
-        GlStateManager.glVertex3f(1f - marginSide, 1f - (marginTop + height), 0f);
+        bufferBuilder.pos(1f - (marginSide + length), 1f - (marginTop + height), 0f)
+                .tex(length, height)
+                .lightmap(0xF0, 0xF0)
+                .color(1f, 1f, 1f, 1f)
+                .endVertex();
 
-        GlStateManager.glEnd();
+        bufferBuilder.pos(1f - (marginSide + length), 1f - marginTop, 0f)
+                .tex(length, 0f)
+                .lightmap(0xF0, 0xF0)
+                .color(1f, 1f, 1f, 1f)
+                .endVertex();
+
+        bufferBuilder.pos(1f - marginSide, 1f - marginTop, 0f)
+                .tex(0, 0)
+                .lightmap(0xF0, 0xF0)
+                .color(1f, 1f, 1f, 1f)
+                .endVertex();
+
+        bufferBuilder.pos(1f - marginSide, 1f - (marginTop + height), 0f)
+                .tex(0f, height)
+                .lightmap(0xF0, 0xF0)
+                .color(1f, 1f, 1f, 1f)
+                .endVertex();
+
+        tessellator.draw();
 
         GlStateManager.popMatrix();
     }

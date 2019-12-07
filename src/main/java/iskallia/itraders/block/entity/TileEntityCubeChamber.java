@@ -157,7 +157,6 @@ public class TileEntityCubeChamber extends TileInventoryBase {
 
         // Roll the dice for Head or Power Cube
         double chance = ItemBooster.getSuccessRate(boosterInUse); // TODO:
-        System.out.println("Rolling on a chance of " + (chance * 100) + "%");
         if (rand.nextDouble() <= chance) {
             ItemStack cubeStack = BlockPowerCube.generateRandomly(eggStack);
             outputHandler.setStackInSlot(OUTPUT_SLOT, cubeStack);

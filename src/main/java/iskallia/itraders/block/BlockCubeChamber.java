@@ -108,7 +108,6 @@ public class BlockCubeChamber extends Block {
 
         if (tileEntity instanceof TileEntityCubeChamber) {
             playerIn.openGui(Traders.getInstance(), GuiHandler.POWER_CHAMBER, world, pos.getX(), pos.getY(), pos.getZ());
-            System.out.println(state.getValue(FACING));
             return true;
         }
 
