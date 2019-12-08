@@ -10,6 +10,7 @@ public class InitConfig {
     public static ConfigCardGenerator CONFIG_CARD_GENERATOR = null;
     public static ConfigCryoChamber CONFIG_CRYO_CHAMBER = null;
     public static ConfigCubeChamber CONFIG_CUBE_CHAMBER = null;
+	  public static ConfigAccelerationBottle CONFIG_ACCELERATION_BOTTLE = null;
 
     public static void registerConfigs() {
         CONFIG_TRADER = (ConfigTrader) new ConfigTrader().readConfig();
@@ -18,6 +19,7 @@ public class InitConfig {
         CONFIG_CARD_GENERATOR = (ConfigCardGenerator) new ConfigCardGenerator().readConfig();
         CONFIG_CRYO_CHAMBER = (ConfigCryoChamber) new ConfigCryoChamber().readConfig();
         CONFIG_CUBE_CHAMBER = (ConfigCubeChamber) new ConfigCubeChamber().readConfig();
+		    CONFIG_ACCELERATION_BOTTLE = (ConfigAccelerationBottle) new ConfigAccelerationBottle().readConfig();
     }
 
 }

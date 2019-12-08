@@ -25,6 +25,7 @@ item.booster_tier_4.name=Booster Tier 4
 item.booster_tier_5.name=Booster Tier 5
 item.item_vending_machine.name=Vending Machine
 item.cardboard_box.name=Cardboard Box
+item.acceleration_bottle.name=Sub Bottle
 
 tile.infusion_cauldron.name=Infusion Cauldron
 tile.grave_stone.name=Grave Stone

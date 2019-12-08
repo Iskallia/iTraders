@@ -31,6 +31,8 @@ public class InitItem {
 	public static ItemVendingMachine ITEM_VENDING_MACHINE = new ItemVendingMachine("item_vending_machine");
 	public static ItemRaens22Stick RAENS22_STICK = new ItemRaens22Stick("raens22_stick");
 	public static ItemCardboardBox CARDBOARD_BOX = new ItemCardboardBox("cardboard_box");
+	
+	public static ItemAccelerationBottle ACCELERATION_BOTTLE = new ItemAccelerationBottle("acceleration_bottle");
 
     public static ItemBooster BOOSTER_TIER_1 = new ItemBooster("booster_tier_1", 1);
     public static ItemBooster BOOSTER_TIER_2 = new ItemBooster("booster_tier_2", 2);
@@ -65,7 +67,8 @@ public class InitItem {
 		registerItem(RAENS22_STICK, registry);
 		registerItem(ITEM_VENDING_MACHINE, registry);
 		registerItem(CARDBOARD_BOX, registry);
-    }
+		registerItem(ACCELERATION_BOTTLE, registry);
+	}
 
     private static void registerItem(Item item, IForgeRegistry<Item> registry) {
         registry.register(item);

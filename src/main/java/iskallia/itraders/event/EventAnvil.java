@@ -6,12 +6,13 @@ import java.util.regex.Pattern;
 import iskallia.itraders.Traders;
 import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitItem;
+import iskallia.itraders.item.ItemAccelerationBottle.BottleNBT;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
@@ -103,6 +104,77 @@ public class EventAnvil {
 		event.setMaterialCost(Math.abs(amount));
 	}
 	
+	@SubscribeEvent
+	public static void onAcceleratorCharge(AnvilUpdateEvent event) {
+		if (!event.getRight().hasDisplayName())
+			return;
+		String name = event.getRight().getDisplayName();
+
+		int uses = getUses(event.getLeft(), event.getRight());
+		if (uses == 0)
+			return;
+
+		ItemStack left = event.getLeft();
+		ItemStack output = left.copy();
+
+		if (!output.hasTagCompound())
+			output.setTagCompound(new NBTTagCompound());
+		NBTTagCompound nbt = output.getTagCompound();
+
+
+		if (!nbt.hasKey(BottleNBT.SELECTED_SUB_INDEX))
+			nbt.setInteger(BottleNBT.SELECTED_SUB_INDEX, 0);
+
+
+		if (!nbt.hasKey(BottleNBT.SUB_LIST))
+			nbt.setTag(BottleNBT.SUB_LIST, new NBTTagList());
+		NBTTagList subList = nbt.getTagList(BottleNBT.SUB_LIST, Constants.NBT.TAG_COMPOUND);
+		
+		if(subList.tagCount() >= InitConfig.CONFIG_ACCELERATION_BOTTLE.MAX_CONTAINED_SUBS) return;
+
+		NBTTagCompound newSub = new NBTTagCompound();
+		newSub.setString(BottleNBT.NAME, name);
+		newSub.setInteger(BottleNBT.USES, uses);
+
+		subList.appendTag(newSub);
+
+		output.setTagCompound(nbt);
+		
+		InitItem.ACCELERATION_BOTTLE.setNameWithSub(output, 
+				subList.getCompoundTagAt(nbt.getInteger(BottleNBT.SELECTED_SUB_INDEX))
+				.getString(BottleNBT.NAME));
+
+		event.setOutput(output);
+		event.setCost(uses);
+		event.setMaterialCost(1);
+	}
+
+	private static int getUses(ItemStack left, ItemStack right) {
+
+		if (left.getItem() != InitItem.ACCELERATION_BOTTLE)
+			return 0;
+		if (right.getItem() != InitItem.SPAWN_EGG_FIGHTER)
+			return 0;
+
+		if (!right.hasTagCompound())
+			return 0;
+
+		NBTTagCompound nbt = right.getTagCompound();
+
+		if (!nbt.hasKey("EntityTag"))
+			return 0;
+
+		NBTTagCompound entityTag = nbt.getCompoundTag("EntityTag");
+
+		if (!entityTag.hasKey("SubData"))
+			return 0;
+
+		NBTTagCompound subData = entityTag.getCompoundTag("SubData");
+
+		return subData.getInteger("Months");
+
+	}
+
 	private static int getScalingAmount(ItemStack left, ItemStack right) {
 		if(!InitConfig.CONFIG_FIGHTER.CRAFTABLE_EGGS)return 0;
 		
