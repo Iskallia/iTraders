@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
@@ -58,6 +59,20 @@ public class RenderAccelerator extends RenderLivingBase<EntityAccelerator> {
 
 		GlStateManager.popMatrix();
 		GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
+	}
+
+	protected float getFacingAngle(EnumFacing facing) {
+		switch (facing) {
+		case NORTH:
+			return 0;
+		case SOUTH:
+			return 180;
+		case WEST:
+			return 90;
+		case EAST:
+		default:
+			return -90;
+		}
 	}
 
 	public static IRenderFactory getRenderFactory() {

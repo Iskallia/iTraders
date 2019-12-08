@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
@@ -25,7 +26,7 @@ public class EntityAccelerator extends EntityLivingBase {
 
 	public final SkinProfile skin = new SkinProfile();
 	private String previousName = "";
-	private float rotation = 0.0f;
+	private EnumFacing facing;
 
 	public EntityAccelerator(World world) {
 		super(world);
@@ -38,18 +39,16 @@ public class EntityAccelerator extends EntityLivingBase {
 
 		this.target = target;
 
-		this.setPosition(target.getX() + 0.5D, target.getY() + 1.0D, target.getZ() + 0.5D);
-
 		this.setCustomNameTag(name);
 		this.setAlwaysRenderNameTag(false);
 	}
 
-	public float getRotation() {
-		return rotation;
+	public EnumFacing getFacing() {
+		return facing;
 	}
 
-	public void setRotation(float rotation) {
-		this.rotation = rotation;
+	public void setFacing(EnumFacing facing) {
+		this.facing = facing;
 	}
 
 	@Override
@@ -78,6 +77,27 @@ public class EntityAccelerator extends EntityLivingBase {
 
 		if (this.timeRemaining == 0)
 			this.setDead();
+	}
+
+	@Override
+	public void onUpdate() {
+		
+		float rotation = 0f;
+		float headRotation = 0f;
+
+		super.onUpdate();
+		if (this.world.isRemote)
+			return;
+
+		if(this.facing != null) {
+			headRotation = this.facing.getHorizontalAngle();
+			rotation = headRotation + 40f;
+		}
+
+		if (this.rotationYaw < rotation)
+			this.rotationYaw += 20f;
+		if (this.rotationYawHead < headRotation)
+			this.rotationYawHead += 20f;
 	}
 
 	@Override
@@ -190,6 +210,20 @@ public class EntityAccelerator extends EntityLivingBase {
 	@Override
 	public boolean canBePushed() {
 		return false;
+	}
+
+	public float getFacingAngle(EnumFacing facing) {
+		switch (facing) {
+		case NORTH:
+			return 0;
+		case SOUTH:
+			return 180;
+		case WEST:
+			return 90;
+		case EAST:
+		default:
+			return -90;
+		}
 	}
 
 }

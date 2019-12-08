@@ -7,6 +7,8 @@ import iskallia.itraders.Traders;
 import iskallia.itraders.entity.EntityAccelerator;
 import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitItem;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -72,31 +74,23 @@ public class ItemAccelerationBottle extends Item {
 			if (!player.capabilities.isCreativeMode)
 				selectedSub.setInteger(BottleNBT.USES, uses - 1);
 
-			world.playSound(null, pos, 
-					SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 
-					SoundCategory.MASTER, 
-					1.0f, 
-					(world.rand.nextFloat() - world.rand.nextFloat()) * 0.35F + 0.9F);
+			world.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.MASTER, 1.0f, (world.rand.nextFloat() - world.rand.nextFloat()) * 0.35F + 0.9F);
 		} else {
 			if (!player.capabilities.isCreativeMode)
 				subList.removeTag(selectedSubIndex);
 
-			world.playSound(null, pos, 
-					SoundEvents.BLOCK_BREWING_STAND_BREW, 
-					SoundCategory.MASTER, 
-					1.0f, 
-					1.0f);
+			world.playSound(null, pos, SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.MASTER, 1.0f, 1.0f);
 
 			if (subList.hasNoTags()) {
-				
+
 				setNameWithSub(stack, "Empty");
-				
+
 				return EnumActionResult.SUCCESS;
 			}
 
 			nbt.setInteger(BottleNBT.SELECTED_SUB_INDEX, 0);
 			String nextSub = subList.getCompoundTagAt(0).getString(BottleNBT.NAME);
-			
+
 			setNameWithSub(stack, nextSub);
 
 		}
@@ -126,10 +120,16 @@ public class ItemAccelerationBottle extends Item {
 		String name = selectedSub.getString(BottleNBT.NAME);
 		int uses = selectedSub.getInteger(BottleNBT.USES);
 
-		tooltip.add(TextFormatting.DARK_AQUA + "Sub Count" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + subCount + "/" + maxSubs);
+		tooltip.add(TextFormatting.DARK_AQUA + "Sub Count" + 
+				    TextFormatting.GRAY + ": " + 
+				    TextFormatting.YELLOW + subCount + "/" + maxSubs);
 		tooltip.add(" ");
-		tooltip.add(TextFormatting.DARK_AQUA + "Selected Sub" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + name);
-		tooltip.add(TextFormatting.DARK_AQUA + "Uses" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + uses);
+		tooltip.add(TextFormatting.DARK_AQUA + "Selected Sub" + 
+				    TextFormatting.GRAY + ": " + 
+				    TextFormatting.YELLOW + name);
+		tooltip.add(TextFormatting.DARK_AQUA + "Uses" + 
+				    TextFormatting.GRAY + ": " + 
+				    TextFormatting.YELLOW + uses);
 
 		super.addInformation(stack, world, tooltip, flagIn);
 	}
@@ -152,8 +152,17 @@ public class ItemAccelerationBottle extends Item {
 		} else {
 			EntityAccelerator e = new EntityAccelerator(world, name, pos);
 
-			e.setTimeRemaining(duration * 20);
+			IBlockState state = world.getBlockState(pos);
+			if (state.getProperties().containsValue(BlockHorizontal.FACING)) {
+				EnumFacing facing = state.getValue(BlockHorizontal.FACING);
+				e.setFacing(facing);
+			}
 
+			e.setPosition(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
+
+			e.setTimeRemaining(duration * 20);
+			e.setTarget(pos);
+			
 			return world.spawnEntity(e);
 		}
 	}
@@ -208,14 +217,13 @@ public class ItemAccelerationBottle extends Item {
 		return false;
 
 	}
-	
+
 	public void setNameWithSub(ItemStack stack, String name) {
 		stack.setStackDisplayName(TextFormatting.RESET + "" + 
-				  TextFormatting.DARK_AQUA + "Sub Bottle " + 
-				  TextFormatting.WHITE + "(" +
-				  TextFormatting.YELLOW + name + 
-				  TextFormatting.WHITE + ")");
-		
+								  TextFormatting.DARK_AQUA + "Sub Bottle " + 
+								  TextFormatting.WHITE + "(" + 
+								  TextFormatting.YELLOW + name + 
+								  TextFormatting.WHITE + ")");
 	}
 
 }
