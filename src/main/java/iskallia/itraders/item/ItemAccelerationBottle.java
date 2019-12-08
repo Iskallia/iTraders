@@ -67,7 +67,7 @@ public class ItemAccelerationBottle extends Item {
 		String name = selectedSub.getString(BottleNBT.NAME);
 		int uses = selectedSub.getInteger(BottleNBT.USES);
 
-		if (!useSub(world, pos, name))
+		if (!useSub(world, player, pos, name))
 			return EnumActionResult.SUCCESS;
 
 		if (uses > 1) {
