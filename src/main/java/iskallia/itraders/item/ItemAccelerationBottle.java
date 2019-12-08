@@ -134,7 +134,7 @@ public class ItemAccelerationBottle extends Item {
 		super.addInformation(stack, world, tooltip, flagIn);
 	}
 
-	private boolean useSub(World world, BlockPos pos, String name) {
+	private boolean useSub(World world, EntityPlayer player, BlockPos pos, String name) {
 		int duration = InitConfig.CONFIG_ACCELERATION_BOTTLE.DURATION_PER_USE;
 
 		Optional<EntityAccelerator> o = world.getEntitiesWithinAABB(EntityAccelerator.class, new AxisAlignedBB(pos.up())).stream().findFirst();
@@ -155,6 +155,9 @@ public class ItemAccelerationBottle extends Item {
 			IBlockState state = world.getBlockState(pos);
 			if (state.getProperties().containsValue(BlockHorizontal.FACING)) {
 				EnumFacing facing = state.getValue(BlockHorizontal.FACING);
+				e.setFacing(facing);
+			} else {
+				EnumFacing facing = player.getAdjustedHorizontalFacing().getOpposite();
 				e.setFacing(facing);
 			}
 
