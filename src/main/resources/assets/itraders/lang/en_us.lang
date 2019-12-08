@@ -15,7 +15,14 @@ item.egg_pouch.name=Egg Pouch
 item.sub_card.name=[WIP] SubCard
 item.skull_neck.name=Skull Necklace
 item.magic_ore_dust.name=Magic Ore Dust
+item.magic_crystal.name=Magic Crystal
 item.item_cryo_chamber.name=Cryo Chamber
+item.item_power_chamber.name=Power Chamber
+item.booster_tier_1.name=Booster Tier 1
+item.booster_tier_2.name=Booster Tier 2
+item.booster_tier_3.name=Booster Tier 3
+item.booster_tier_4.name=Booster Tier 4
+item.booster_tier_5.name=Booster Tier 5
 item.item_vending_machine.name=Vending Machine
 item.cardboard_box.name=Cardboard Box
 item.acceleration_bottle.name=Sub Bottle
@@ -26,9 +33,16 @@ tile.ghost_pedestal.name=Ghost Pedestal
 tile.stone.andesite.name=Andersite
 tile.stone.andesiteSmooth.name=Polished Andersite
 tile.magic_ore_block.name=Magic Ore Block
+tile.cube_chamber.name=Cube Chamber
+tile.power_cube.name=Power Cube
+
+itraders.cube.rarity.common.name=Common
+itraders.cube.rarity.rare.name=Rare
+itraders.cube.rarity.epic.name=Epic
+itraders.cube.rarity.mega.name=Mega
 tile.vending_machine.name=Vending Machine
 
-item.raens22_stick.name=Raens22's Poke Stick
+item.raens22_stick.name=Stick of Doom
 
 itraders.card.rarity.common.name=
 itraders.card.rarity.rare.name=Rare

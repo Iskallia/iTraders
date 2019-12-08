@@ -1,7 +1,9 @@
 package iskallia.itraders.block.entity;
 
+import javax.annotation.Nonnull;
+
 import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
-import iskallia.itraders.block.BlockCryoChamber;
+import iskallia.itraders.block.BlockDoublePartDirectional;
 import iskallia.itraders.card.SubCardData;
 import iskallia.itraders.card.SubCardGenerator;
 import iskallia.itraders.card.SubCardRarity;
@@ -24,8 +26,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
-
-import javax.annotation.Nonnull;
 
 public class TileEntityCryoChamber extends TileInventoryBase {
 
@@ -64,7 +64,7 @@ public class TileEntityCryoChamber extends TileInventoryBase {
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        if (getBlockState().getValue(BlockCryoChamber.PART) == BlockCryoChamber.EnumPartType.TOP) {
+        if (getBlockState().getValue(BlockDoublePartDirectional.PART) == BlockDoublePartDirectional.EnumPartType.TOP) {
             TileEntity master = getWorld().getTileEntity(pos.down());
             if (master != null) return master.hasCapability(capability, facing);
         }
@@ -73,7 +73,7 @@ public class TileEntityCryoChamber extends TileInventoryBase {
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if (getBlockState().getValue(BlockCryoChamber.PART) == BlockCryoChamber.EnumPartType.TOP) {
+        if (getBlockState().getValue(BlockDoublePartDirectional.PART) == BlockDoublePartDirectional.EnumPartType.TOP) {
             TileEntity master = getWorld().getTileEntity(pos.down());
             if (master != null) return master.getCapability(capability, facing);
         }

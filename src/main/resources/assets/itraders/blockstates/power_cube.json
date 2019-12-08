@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "rarity=common":  { "model": "itraders:power_cube_common" },
+    "rarity=rare":  { "model": "itraders:power_cube_rare" },
+    "rarity=epic":  { "model": "itraders:power_cube_epic" },
+    "rarity=mega":  { "model": "itraders:power_cube_mega" }
+  }
+}

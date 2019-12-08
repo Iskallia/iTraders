@@ -20,6 +20,7 @@ public class InitEntity {
 		registerEntity("item_magic_ore_dust", EntityItemMagicOreDust.class);
 		registerEntity("pedestal_ghost", EntityPedestalGhost.class);
 		registerEntity("accelerator", EntityAccelerator.class);
+		registerEntity("item_power_cube", EntityItemPowerCube.class);
 	}
 
 	public static void registerEntityRenderers() {
@@ -30,6 +31,7 @@ public class InitEntity {
 		registerEntityRenderer(EntityItemMagicOreDust.class, RenderItemMagicOreDust.getRenderFactory());
 		registerEntityRenderer(EntityPedestalGhost.class, RenderPedestalGhost.getRenderFactory());
 		registerEntityRenderer(EntityAccelerator.class, RenderAccelerator.getRenderFactory());
+		registerEntityRenderer(EntityItemPowerCube.class, RenderItemPowerCube.getRenderFactory());
 	}
 
 	/* --------------------------------------------- */

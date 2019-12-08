@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "facing=east,part=bottom":  { "model": "itraders:power_chamber_bottom" },
+        "facing=south,part=bottom": { "model": "itraders:power_chamber_bottom", "y": 90 },
+        "facing=west,part=bottom":  { "model": "itraders:power_chamber_bottom", "y": 180 },
+        "facing=north,part=bottom": { "model": "itraders:power_chamber_bottom", "y": 270 },
+        "facing=east,part=top":  { "model": "itraders:power_chamber_top" },
+        "facing=south,part=top": { "model": "itraders:power_chamber_top", "y": 90 },
+        "facing=west,part=top":  { "model": "itraders:power_chamber_top", "y": 180 },
+        "facing=north,part=top": { "model": "itraders:power_chamber_top", "y": 270 }
+    }
+}

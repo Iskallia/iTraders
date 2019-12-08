@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": {"model": "itraders:cube_chamber"},
+    "facing=south": {"model": "itraders:cube_chamber", "y": 180},
+    "facing=west": {"model": "itraders:cube_chamber", "y": 270},
+    "facing=east": {"model": "itraders:cube_chamber", "y": 90}
+  }
+}
