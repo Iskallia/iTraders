@@ -120,16 +120,10 @@ public class ItemAccelerationBottle extends Item {
 		String name = selectedSub.getString(BottleNBT.NAME);
 		int uses = selectedSub.getInteger(BottleNBT.USES);
 
-		tooltip.add(TextFormatting.DARK_AQUA + "Sub Count" + 
-				    TextFormatting.GRAY + ": " + 
-				    TextFormatting.YELLOW + subCount + "/" + maxSubs);
+		tooltip.add(TextFormatting.DARK_AQUA + "Sub Count" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + subCount + "/" + maxSubs);
 		tooltip.add(" ");
-		tooltip.add(TextFormatting.DARK_AQUA + "Selected Sub" + 
-				    TextFormatting.GRAY + ": " + 
-				    TextFormatting.YELLOW + name);
-		tooltip.add(TextFormatting.DARK_AQUA + "Uses" + 
-				    TextFormatting.GRAY + ": " + 
-				    TextFormatting.YELLOW + uses);
+		tooltip.add(TextFormatting.DARK_AQUA + "Selected Sub" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + name);
+		tooltip.add(TextFormatting.DARK_AQUA + "Uses" + TextFormatting.GRAY + ": " + TextFormatting.YELLOW + uses);
 
 		super.addInformation(stack, world, tooltip, flagIn);
 	}
@@ -153,19 +147,19 @@ public class ItemAccelerationBottle extends Item {
 			EntityAccelerator e = new EntityAccelerator(world, name, pos);
 
 			IBlockState state = world.getBlockState(pos);
-			if (state.getProperties().containsValue(BlockHorizontal.FACING)) {
-				EnumFacing facing = state.getValue(BlockHorizontal.FACING);
-				e.setFacing(facing);
-			} else {
-				EnumFacing facing = player.getAdjustedHorizontalFacing().getOpposite();
-				e.setFacing(facing);
+			EnumFacing facing = player.getAdjustedHorizontalFacing().getOpposite();
+			try {
+				facing = state.getValue(BlockHorizontal.FACING);
+			} catch (Exception ex) {
+				Traders.LOG.error("Failed to retrieve facing from the Block. Using the player's.");
 			}
 
 			e.setPosition(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
 
 			e.setTimeRemaining(duration * 20);
 			e.setTarget(pos);
-			
+			e.setFacing(facing);
+
 			return world.spawnEntity(e);
 		}
 	}
@@ -222,11 +216,7 @@ public class ItemAccelerationBottle extends Item {
 	}
 
 	public void setNameWithSub(ItemStack stack, String name) {
-		stack.setStackDisplayName(TextFormatting.RESET + "" + 
-								  TextFormatting.DARK_AQUA + "Sub Bottle " + 
-								  TextFormatting.WHITE + "(" + 
-								  TextFormatting.YELLOW + name + 
-								  TextFormatting.WHITE + ")");
+		stack.setStackDisplayName(TextFormatting.RESET + "" + TextFormatting.DARK_AQUA + "Sub Bottle " + TextFormatting.WHITE + "(" + TextFormatting.YELLOW + name + TextFormatting.WHITE + ")");
 	}
 
 }
