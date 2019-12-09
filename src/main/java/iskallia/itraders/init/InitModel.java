@@ -44,6 +44,7 @@ public class InitModel {
         registerSimpleItemModel(InitItem.RAENS22_STICK, 0);
         registerSimpleItemModel(InitItem.ITEM_VENDING_MACHINE, 0);
         registerSimpleItemModel(InitItem.ACCELERATION_BOTTLE, 0);
+        registerSimpleItemModel(InitBlock.ITEM_CUBE_CHAMBER, 0);
 
         registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
         registerBlockModel(InitBlock.GHOST_PEDESTAL, 0);
