@@ -145,7 +145,7 @@ public class EventAnvil {
 				.getString(BottleNBT.NAME));
 
 		event.setOutput(output);
-		event.setCost(uses);
+		event.setCost(1);
 		event.setMaterialCost(1);
 	}
 
