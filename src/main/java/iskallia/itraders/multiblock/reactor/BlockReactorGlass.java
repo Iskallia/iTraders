@@ -1,23 +1,19 @@
 package iskallia.itraders.multiblock.reactor;
 
-import iskallia.itraders.Traders;
-import iskallia.itraders.init.InitItem;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import iskallia.itraders.multiblock.reactor.entity.TileEntityReactorGlass;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockReactorGlass extends Block {
+import javax.annotation.Nullable;
+
+public class BlockReactorGlass extends BlockReactorSlave {
 
     public BlockReactorGlass(String name) {
-        super(Material.ROCK);
-
-        this.setUnlocalizedName(name);
-        this.setRegistryName(Traders.getResource(name));
-
-        this.setCreativeTab(InitItem.ITRADERS_TAB);
+        super(name);
     }
 
     public boolean isFullCube(IBlockState state) {
@@ -32,6 +28,12 @@ public class BlockReactorGlass extends Block {
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
+        return new TileEntityReactorGlass();
     }
 
 }

@@ -6,7 +6,7 @@ import iskallia.itraders.block.*;
 import iskallia.itraders.block.entity.*;
 import iskallia.itraders.multiblock.reactor.*;
 import iskallia.itraders.item.itemblock.ItemBlockPowerCube;
-import iskallia.itraders.multiblock.reactor.entity.TileEntityReactorCore;
+import iskallia.itraders.multiblock.reactor.entity.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -82,6 +82,10 @@ public class InitBlock {
         GameRegistry.registerTileEntity(TileEntityGhostPedestal.class, Traders.getResource("ghost_pedestal"));
         GameRegistry.registerTileEntity(TileEntityVendingMachine.class, Traders.getResource("vending_machine"));
         GameRegistry.registerTileEntity(TileEntityReactorCore.class, Traders.getResource("reactor_core"));
+        GameRegistry.registerTileEntity(TileEntityReactorBlock.class, Traders.getResource("reactor_block"));
+        GameRegistry.registerTileEntity(TileEntityReactorGlass.class, Traders.getResource("reactor_glass"));
+        GameRegistry.registerTileEntity(TileEntityReactorHeatSink.class, Traders.getResource("reactor_heat_sink"));
+        GameRegistry.registerTileEntity(TileEntityReactorCPU.class, Traders.getResource("reactor_cpu"));
     }
 
     public static void registerItemBlocks(IForgeRegistry<Item> registry) {

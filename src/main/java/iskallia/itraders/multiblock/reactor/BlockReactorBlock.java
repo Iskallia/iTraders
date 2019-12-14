@@ -1,19 +1,22 @@
 package iskallia.itraders.multiblock.reactor;
 
-import iskallia.itraders.Traders;
-import iskallia.itraders.init.InitItem;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import iskallia.itraders.multiblock.reactor.entity.TileEntityReactorBlock;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
-public class BlockReactorBlock extends Block {
+import javax.annotation.Nullable;
+
+public class BlockReactorBlock extends BlockReactorSlave {
 
     public BlockReactorBlock(String name) {
-        super(Material.ROCK);
+        super(name);
+    }
 
-        this.setUnlocalizedName(name);
-        this.setRegistryName(Traders.getResource(name));
-
-        this.setCreativeTab(InitItem.ITRADERS_TAB);
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state) {
+        return new TileEntityReactorBlock();
     }
 
 }

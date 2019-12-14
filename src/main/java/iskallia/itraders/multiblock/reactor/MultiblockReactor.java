@@ -3,8 +3,15 @@ package iskallia.itraders.multiblock.reactor;
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import iskallia.itraders.Traders;
 import iskallia.itraders.init.InitBlock;
+import iskallia.itraders.multiblock.reactor.entity.TileEntityReactorCore;
+import iskallia.itraders.multiblock.reactor.entity.TileEntityReactorSlave;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import java.util.Map;
 
 public class MultiblockReactor extends PatternBlockArray {
 
@@ -205,6 +212,44 @@ public class MultiblockReactor extends PatternBlockArray {
     private void addBlockFromPalette(int x, int y, int z, IBlockState blockFromPalette) {
         if (blockFromPalette == null) return;
         super.addBlock(x, y, z, blockFromPalette);
+    }
+
+    public boolean structureReactor(World world, BlockPos masterPos) {
+        for (Map.Entry<BlockPos, BlockInformation> entry : pattern.entrySet()) {
+            BlockInformation info = entry.getValue();
+            BlockPos pos = masterPos.add(entry.getKey());
+
+            TileEntity tileEntity = world.getTileEntity(pos);
+
+            if (tileEntity instanceof TileEntityReactorSlave) {
+                ((TileEntityReactorSlave) tileEntity).connectToMaster(masterPos);
+
+            } else if (!(tileEntity instanceof TileEntityReactorCore)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void destructReactor(World world, BlockPos masterPos) {
+        for (Map.Entry<BlockPos, BlockInformation> entry : pattern.entrySet()) {
+            BlockInformation info = entry.getValue();
+            BlockPos pos = masterPos.add(entry.getKey());
+
+            TileEntityReactorSlave reactorSlave = TileEntityReactorSlave.getReactorSlave(world, pos);
+
+            if (reactorSlave == null)
+                continue;
+
+            reactorSlave.disconnectFromMaster();
+        }
+
+        TileEntityReactorCore reactorCore = TileEntityReactorCore.getReactorCore(world, masterPos);
+
+        if (reactorCore != null) {
+            reactorCore.onReactorDestructed();
+        }
     }
 
 }
