@@ -30,22 +30,20 @@ public class BlockReactorSlave extends Block {
 
         // TODO: if neighbor is in Reactor:
         // TODO:    include in master TE
-        System.out.println(neighbor + " is changed!");
+//        System.out.println(neighbor + " is changed!");
     }
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!world.isRemote) {
-            TileEntityReactorSlave reactorSlave = TileEntityReactorSlave.getReactorSlave(world, pos);
+        TileEntityReactorSlave reactorSlave = TileEntityReactorSlave.getReactorSlave(world, pos);
 
-            if (reactorSlave != null && reactorSlave.hasMaster()) {
-                // TODO: Open Reactor GUI
-                System.out.println("Opened Reactor GUI! :p");
-                return true;
-            }
-            System.out.println("Not structured yet!");
+        if (reactorSlave != null && reactorSlave.hasMaster()) {
+            // TODO: Open Reactor GUI
+            System.out.println("Opened Reactor GUI! :p");
+            return true;
         }
 
+        System.out.println("Not structured yet!");
         return super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ);
     }
 

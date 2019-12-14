@@ -3,10 +3,13 @@ package iskallia.itraders.multiblock.reactor.entity;
 import hellfirepvp.astralsorcery.common.tile.base.TileEntitySynchronized;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class TileEntityReactorSlave extends TileEntitySynchronized {
@@ -21,6 +24,7 @@ public abstract class TileEntityReactorSlave extends TileEntitySynchronized {
         return masterPos != null;
     }
 
+    @Nullable
     public TileEntityReactorCore getMaster() {
         if (!hasMaster()) return null;
 
@@ -45,6 +49,29 @@ public abstract class TileEntityReactorSlave extends TileEntitySynchronized {
             this.masterPos = null;
             this.markForUpdate();
         }
+    }
+
+    /* ----------------------------- */
+
+    @Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+        TileEntityReactorCore reactorCore = getMaster();
+
+        if (reactorCore == null)
+            return false;
+
+        return reactorCore.hasCapability(capability, facing);
+    }
+
+    @Nullable
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+        TileEntityReactorCore reactorCore = getMaster();
+
+        if (reactorCore == null)
+            return null;
+
+        return reactorCore.getCapability(capability, facing);
     }
 
     /* ----------------------------- */

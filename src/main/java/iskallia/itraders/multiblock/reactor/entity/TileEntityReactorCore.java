@@ -5,10 +5,14 @@ import iskallia.itraders.capability.ModifiableEnergyStorage;
 import iskallia.itraders.multiblock.reactor.MultiblockReactor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class TileEntityReactorCore extends TileEntitySynchronized implements ITickable {
@@ -53,14 +57,15 @@ public class TileEntityReactorCore extends TileEntitySynchronized implements ITi
                 this.onReactorStructured();
 
             } else {
-                System.out.println("Still tracing for valid Reactor structure...");
+                // Still tracing for a valid structure...
             }
         }
     }
 
     public void updateReactor() {
         // TODO
-//        System.out.println("Updating reactor!");
+        energyStorage.setEnergy(energyStorage.getEnergyStored() + 100);
+        this.markForUpdate();
     }
 
     public void onReactorStructured() {
@@ -79,10 +84,27 @@ public class TileEntityReactorCore extends TileEntitySynchronized implements ITi
     /* --------------------------------- */
 
     @Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+        return capability == CapabilityEnergy.ENERGY;
+    }
+
+    @Nullable
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY)
+            return CapabilityEnergy.ENERGY.cast(energyStorage);
+
+        return null;
+    }
+
+    /* --------------------------------- */
+
+    @Override
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
         compound.setBoolean("Structured", structured);
+        compound.setInteger("Energy", energyStorage.getEnergyStored());
     }
 
     @Override
@@ -90,6 +112,7 @@ public class TileEntityReactorCore extends TileEntitySynchronized implements ITi
         super.readCustomNBT(compound);
 
         this.structured = compound.getBoolean("Structured");
+        this.energyStorage.setEnergy(compound.getInteger("Energy"));
     }
 
     /* --------------------------------- */
