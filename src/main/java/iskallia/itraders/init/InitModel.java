@@ -45,6 +45,11 @@ public class InitModel {
         registerSimpleItemModel(InitItem.ITEM_VENDING_MACHINE, 0);
         registerSimpleItemModel(InitItem.ACCELERATION_BOTTLE, 0);
         registerSimpleItemModel(InitBlock.ITEM_CUBE_CHAMBER, 0);
+        registerSimpleItemModel(InitBlock.ITEM_REACTOR_BLOCK, 0);
+        registerSimpleItemModel(InitBlock.ITEM_REACTOR_GLASS, 0);
+        registerSimpleItemModel(InitBlock.ITEM_REACTOR_CORE, 0);
+        registerSimpleItemModel(InitBlock.ITEM_REACTOR_HEAT_SINK, 0);
+        registerSimpleItemModel(InitBlock.ITEM_REACTOR_CPU, 0);
 
         registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
         registerBlockModel(InitBlock.GHOST_PEDESTAL, 0);

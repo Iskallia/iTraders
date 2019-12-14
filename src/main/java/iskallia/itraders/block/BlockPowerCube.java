@@ -27,6 +27,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -143,6 +144,10 @@ public class BlockPowerCube extends Block {
 
         if (powerCube != null && stackNBT != null) {
             powerCube.readCustomNBT(stackNBT);
+//            Vec3d A = placer.getPositionVector();
+//            Vec3d B = new Vec3d(pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5f);
+//            Vec3d C = A.subtract(B);
+//            powerCube.setFighterRotation((float) (Math.atan2(C.y, C.x) * (180f / Math.PI)) + 180f);
             powerCube.setFighterRotation(180f + placer.getRotationYawHead());
         }
     }

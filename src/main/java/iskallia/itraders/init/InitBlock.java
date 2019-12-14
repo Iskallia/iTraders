@@ -4,6 +4,7 @@ package iskallia.itraders.init;
 import iskallia.itraders.Traders;
 import iskallia.itraders.block.*;
 import iskallia.itraders.block.entity.*;
+import iskallia.itraders.block.multiblock.reactor.*;
 import iskallia.itraders.item.itemblock.ItemBlockPowerCube;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -37,6 +38,21 @@ public class InitBlock {
     public static final BlockPowerCube POWER_CUBE = new BlockPowerCube("power_cube");
     public static final ItemBlock ITEM_POWER_CUBE = new ItemBlockPowerCube("item_power_cube", POWER_CUBE);
 
+    public static final BlockReactorCore REACTOR_CORE = new BlockReactorCore("reactor_core");
+    public static final ItemBlock ITEM_REACTOR_CORE = getItemBlock(REACTOR_CORE);
+
+    public static final BlockReactorBlock REACTOR_BLOCK = new BlockReactorBlock("reactor_block");
+    public static final ItemBlock ITEM_REACTOR_BLOCK = getItemBlock(REACTOR_BLOCK);
+
+    public static final BlockReactorHeatSink REACTOR_HEAT_SINK = new BlockReactorHeatSink("reactor_heat_sink");
+    public static final ItemBlock ITEM_REACTOR_HEAT_SINK = getItemBlock(REACTOR_HEAT_SINK);
+
+    public static final BlockReactorGlass REACTOR_GLASS = new BlockReactorGlass("reactor_glass");
+    public static final ItemBlock ITEM_REACTOR_GLASS = getItemBlock(REACTOR_GLASS);
+
+    public static final BlockReactorCPU REACTOR_CPU = new BlockReactorCPU("reactor_cpu");
+    public static final ItemBlock ITEM_REACTOR_CPU = getItemBlock(REACTOR_CPU);
+
     public static void registerBlocks(IForgeRegistry<Block> registry) {
         registerBlock(GRAVE_STONE, registry);
         registerBlock(INFUSION_CAULDRON, registry);
@@ -47,6 +63,11 @@ public class InitBlock {
         registerBlock(CUBE_CHAMBER, registry);
         registerBlock(POWER_CUBE, registry);
         registerBlock(VENDING_MACHINE, registry);
+        registerBlock(REACTOR_CORE, registry);
+        registerBlock(REACTOR_BLOCK, registry);
+        registerBlock(REACTOR_HEAT_SINK, registry);
+        registerBlock(REACTOR_GLASS, registry);
+        registerBlock(REACTOR_CPU, registry);
     }
 
     public static void registerTileEntities() { // TODO: Eliminate redefinition of Resource Names
@@ -59,6 +80,7 @@ public class InitBlock {
         GameRegistry.registerTileEntity(TileEntityPowerCube.class, Traders.getResource("power_cube"));
         GameRegistry.registerTileEntity(TileEntityGhostPedestal.class, Traders.getResource("ghost_pedestal"));
         GameRegistry.registerTileEntity(TileEntityVendingMachine.class, Traders.getResource("vending_machine"));
+        GameRegistry.registerTileEntity(TileEntityReactorCore.class, Traders.getResource("reactor_core"));
     }
 
     public static void registerItemBlocks(IForgeRegistry<Item> registry) {
@@ -68,6 +90,11 @@ public class InitBlock {
         registry.register(ITEM_MAGIC_ORE_BLOCK);
         registry.register(ITEM_CUBE_CHAMBER);
         registry.register(ITEM_POWER_CUBE);
+        registry.register(ITEM_REACTOR_CORE);
+        registry.register(ITEM_REACTOR_BLOCK);
+        registry.register(ITEM_REACTOR_HEAT_SINK);
+        registry.register(ITEM_REACTOR_GLASS);
+        registry.register(ITEM_REACTOR_CPU);
     }
 
     /* -------------------------- */
