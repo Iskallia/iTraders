@@ -1,6 +1,7 @@
 package iskallia.itraders.multiblock.reactor.entity;
 
 import hellfirepvp.astralsorcery.common.tile.base.TileEntitySynchronized;
+import iskallia.itraders.block.entity.TileEntityPowerCube;
 import iskallia.itraders.capability.ModifiableEnergyStorage;
 import iskallia.itraders.multiblock.reactor.MultiblockReactor;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,6 +15,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class TileEntityReactorCore extends TileEntitySynchronized implements ITickable {
 
@@ -64,8 +66,19 @@ public class TileEntityReactorCore extends TileEntitySynchronized implements ITi
 
     public void updateReactor() {
         // TODO
-        energyStorage.setEnergy(energyStorage.getEnergyStored() + 100);
-        this.markForUpdate();
+        List<TileEntityPowerCube> powerCubes = MultiblockReactor.INSTANCE.getPowerCubes(world, pos);
+        int energyToGenerate = 0;
+
+        for (TileEntityPowerCube powerCube : powerCubes) {
+            if (powerCube.getRemainingTicks() > 0) {
+                energyToGenerate += powerCube.getBaseRFRate() * powerCube.getRarity().getMultiplier();
+            }
+        }
+
+        if (energyToGenerate > 0) {
+            energyStorage.setEnergy(energyToGenerate); // TODO: Include core efficiency
+            this.markForUpdate();
+        }
     }
 
     public void onReactorStructured() {

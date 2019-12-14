@@ -2,6 +2,7 @@ package iskallia.itraders.multiblock.reactor;
 
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import iskallia.itraders.Traders;
+import iskallia.itraders.block.entity.TileEntityPowerCube;
 import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.multiblock.reactor.entity.TileEntityReactorCore;
 import iskallia.itraders.multiblock.reactor.entity.TileEntityReactorSlave;
@@ -11,6 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class MultiblockReactor extends PatternBlockArray {
@@ -250,6 +253,24 @@ public class MultiblockReactor extends PatternBlockArray {
         if (reactorCore != null) {
             reactorCore.onReactorDestructed();
         }
+    }
+
+    public List<TileEntityPowerCube> getPowerCubes(World world, BlockPos masterPos) {
+        List<TileEntityPowerCube> cubes = new LinkedList<>();
+
+        for (int xOffset = -1; xOffset <= 1; xOffset++) {
+            for (int yOffset = -1; yOffset <= 1; yOffset++) {
+                for (int zOffset = -1; zOffset <= 1; zOffset++) {
+                    BlockPos pos = masterPos.add(xOffset, yOffset, zOffset);
+                    TileEntity tileEntity = world.getTileEntity(pos);
+
+                    if (tileEntity instanceof TileEntityPowerCube)
+                        cubes.add((TileEntityPowerCube) tileEntity);
+                }
+            }
+        }
+
+        return cubes;
     }
 
 }
