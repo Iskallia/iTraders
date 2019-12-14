@@ -1,6 +1,6 @@
-package iskallia.itraders.block.entity;
+package iskallia.itraders.multiblock.reactor.entity;
 
-import iskallia.itraders.block.multiblock.reactor.MultiblockReactor;
+import iskallia.itraders.multiblock.reactor.MultiblockReactor;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 

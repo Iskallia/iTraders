@@ -1,7 +1,7 @@
-package iskallia.itraders.block.multiblock.reactor;
+package iskallia.itraders.multiblock.reactor;
 
 import iskallia.itraders.Traders;
-import iskallia.itraders.block.entity.TileEntityReactorCore;
+import iskallia.itraders.multiblock.reactor.entity.TileEntityReactorCore;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

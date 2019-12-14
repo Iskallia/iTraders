@@ -1,4 +1,4 @@
-package iskallia.itraders.block.multiblock.reactor;
+package iskallia.itraders.multiblock.reactor;
 
 import iskallia.itraders.Traders;
 import iskallia.itraders.init.InitItem;

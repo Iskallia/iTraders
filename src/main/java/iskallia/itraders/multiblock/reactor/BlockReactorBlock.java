@@ -1,13 +1,13 @@
-package iskallia.itraders.block.multiblock.reactor;
+package iskallia.itraders.multiblock.reactor;
 
 import iskallia.itraders.Traders;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 
-public class BlockReactorHeatSink extends Block {
+public class BlockReactorBlock extends Block {
 
-    public BlockReactorHeatSink(String name) {
+    public BlockReactorBlock(String name) {
         super(Material.ROCK);
 
         this.setUnlocalizedName(name);

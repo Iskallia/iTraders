@@ -1,10 +1,9 @@
-package iskallia.itraders.block.multiblock.reactor;
+package iskallia.itraders.multiblock.reactor;
 
 import hellfirepvp.astralsorcery.common.structure.array.PatternBlockArray;
 import iskallia.itraders.Traders;
 import iskallia.itraders.init.InitBlock;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 
 public class MultiblockReactor extends PatternBlockArray {
