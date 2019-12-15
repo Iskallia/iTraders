@@ -43,7 +43,6 @@ public class InitModel {
         registerSimpleItemModel(InitItem.MAGIC_CRYSTAL, 0);
         registerSimpleItemModel(InitItem.RAENS22_STICK, 0);
         registerSimpleItemModel(InitItem.ITEM_VENDING_MACHINE, 0);
-        registerSimpleItemModel(InitItem.ACCELERATION_BOTTLE, 0);
         registerSimpleItemModel(InitBlock.ITEM_CUBE_CHAMBER, 0);
 
         registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
@@ -59,6 +58,7 @@ public class InitModel {
         ModelLoader.setCustomMeshDefinition(InitItem.SUB_CARD, new SubCardMesh(InitItem.SUB_CARD));
         ModelLoader.setCustomMeshDefinition(InitBlock.ITEM_POWER_CUBE, new PowerCubeMesh(InitBlock.ITEM_POWER_CUBE));
         ModelLoader.setCustomMeshDefinition(InitItem.CARDBOARD_BOX, new CardboardBoxMesh(InitItem.CARDBOARD_BOX));
+        ModelLoader.setCustomMeshDefinition(InitItem.ACCELERATION_BOTTLE, new AccelerationBottleMesh(InitItem.ACCELERATION_BOTTLE));
     }
 
     public static void registerTileEntityRenderers() {
