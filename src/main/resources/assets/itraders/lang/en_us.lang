@@ -26,6 +26,9 @@ item.booster_tier_5.name=Booster Tier 5
 item.item_vending_machine.name=Vending Machine
 item.cardboard_box.name=Cardboard Box
 item.acceleration_bottle.name=Sub Bottle
+item.chance_bag_common.name=Chance Bag (Common)
+item.chance_bag_rare.name=Chance Bag (Rare)
+item.chance_bag_epic.name=Chance Bag (Epic)
 
 tile.infusion_cauldron.name=Infusion Cauldron
 tile.grave_stone.name=Grave Stone

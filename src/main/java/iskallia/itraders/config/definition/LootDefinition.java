@@ -15,4 +15,15 @@ public class LootDefinition {
 		this.weight = weight;
 	}
 
+	public String getItemId() {
+		return itemId;
+	}
+
+
+	public int getWeight() {
+		return weight;
+	}
+	
+	
+
 }
