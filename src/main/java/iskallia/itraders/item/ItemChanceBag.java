@@ -51,7 +51,7 @@ public class ItemChanceBag extends Item {
 
 		return super.onItemRightClick(world, player, hand);
 	}
-	
+
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
 		return this.rarity;
@@ -85,7 +85,9 @@ public class ItemChanceBag extends Item {
 
 		String itemId = weightedLoot.getRandom();
 
-		return new ItemStack(Item.getByNameOrId(itemId));
+		Item item = Item.getByNameOrId(itemId);
+
+		return item == null ? ItemStack.EMPTY : new ItemStack(item);
 	}
 
 	public EnumRarity getRarity() {
