@@ -43,15 +43,21 @@ public class ItemEggPouch extends Item {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!world.isRemote && player.isSneaking()) {
+        if (!world.isRemote) {
             TileEntity tileEntity = world.getTileEntity(pos);
 
             if (tileEntity != null && tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing)) {
                 IItemHandler capability = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
-                if (capability != null)
-                    return this.fillInventory(player, tileEntity, capability);
+                if (capability != null) {
+                    if (player.isSneaking())
+                        return this.fillInventory(player, tileEntity, capability);
+                    else
+                        return this.ejectOneRandom(player, tileEntity, capability);
+                }
 
-            } else {
+            }
+
+            if (player.isSneaking()) {
                 return this.spawnRandomFighter(player, world, pos, hand, facing, hitX, hitY, hitZ);
             }
         }
@@ -59,7 +65,30 @@ public class ItemEggPouch extends Item {
         return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
     }
 
-//    @SideOnly(Side.SERVER)
+    @Override
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, EnumHand hand) {
+        if (!world.isRemote) {
+            TileEntity tileEntity = world.getTileEntity(pos);
+
+            if (tileEntity != null && tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing)) {
+                IItemHandler capability = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
+                if (capability != null) {
+                    if (player.isSneaking())
+                        return this.fillInventory(player, tileEntity, capability);
+                    else
+                        return this.ejectOneRandom(player, tileEntity, capability);
+                }
+
+            }
+
+            if (player.isSneaking()) {
+                return this.spawnRandomFighter(player, world, pos, hand, facing, hitX, hitY, hitZ);
+            }
+        }
+
+        return super.onItemUseFirst(player, world, pos, facing, hitX, hitY, hitZ, hand);
+    }
+
     private EnumActionResult fillInventory(EntityPlayer player, TileEntity tileEntity, IItemHandler itemHandler) {
         EnumActionResult result = EnumActionResult.PASS;
         WorldServer world = (WorldServer) tileEntity.getWorld();
@@ -81,14 +110,51 @@ public class ItemEggPouch extends Item {
         }
 
         if (result == EnumActionResult.SUCCESS) {
-            BlockPos pos = tileEntity.getPos();
-            int particleCount = 100;
-            world.spawnParticle(EnumParticleTypes.SPELL_WITCH, false,
-                    pos.getX() + .5d, pos.getY() + .5d, pos.getZ() + .5d,
-                    particleCount, 0, 0, 0, Math.PI);
             world.playSound(null, player.getPosition(),
                     SoundEvents.BLOCK_NOTE_BELL,
-                    SoundCategory.PLAYERS, 1.0f, 0.2f * (Item.itemRand.nextFloat() - Item.itemRand.nextFloat()) + 0.6f);
+                    SoundCategory.PLAYERS, 1.0f, 0f);
+        }
+
+        return result;
+    }
+
+    private EnumActionResult ejectOneRandom(EntityPlayer player, TileEntity tileEntity, IItemHandler itemHandler) {
+        EnumActionResult result = EnumActionResult.PASS;
+        WorldServer world = (WorldServer) tileEntity.getWorld();
+        PouchInventory pouch = DataEggPouch.get(world).getOrCreatePouch(player);
+
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            if (itemHandler.getStackInSlot(i) != ItemStack.EMPTY)
+                continue;
+
+            ItemStack itemStack = pouch.randomFighterEgg();
+
+            if (itemStack == ItemStack.EMPTY)
+                break;
+
+            pouch.move(1);
+
+            if (itemHandler.insertItem(i, itemStack, false) == ItemStack.EMPTY) {
+                if (itemStack.hasDisplayName()) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(TextFormatting.GREEN).append(itemStack.getDisplayName());
+
+                    int months = InitItem.SPAWN_EGG_FIGHTER.getMonths(itemStack);
+
+                    sb.append(TextFormatting.GRAY);
+                    if (months != -1)
+                        sb.append("(").append(months).append(")");
+                    sb.append(", I choose you!");
+
+                    player.sendStatusMessage(new TextComponentString(sb.toString()), true);
+                }
+
+                world.playSound(null, player.getPosition(),
+                        SoundEvents.BLOCK_NOTE_BELL,
+                        SoundCategory.PLAYERS, 1.0f, 0.2f * (Item.itemRand.nextFloat() - Item.itemRand.nextFloat()) + 0.6f);
+
+                return EnumActionResult.SUCCESS;
+            }
         }
 
         return result;
