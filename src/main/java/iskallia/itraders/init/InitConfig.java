@@ -11,6 +11,7 @@ public class InitConfig {
 	public static ConfigCryoChamber CONFIG_CRYO_CHAMBER = null;
 	public static ConfigCubeChamber CONFIG_CUBE_CHAMBER = null;
 	public static ConfigAccelerationBottle CONFIG_ACCELERATION_BOTTLE = null;
+	public static ConfigChanceBag CONFIG_CHANCE_BAG = null;
 
 	public static void registerConfigs() {
 		CONFIG_TRADER = (ConfigTrader) new ConfigTrader().readConfig();
@@ -20,6 +21,7 @@ public class InitConfig {
 		CONFIG_CRYO_CHAMBER = (ConfigCryoChamber) new ConfigCryoChamber().readConfig();
 		CONFIG_CUBE_CHAMBER = (ConfigCubeChamber) new ConfigCubeChamber().readConfig();
 		CONFIG_ACCELERATION_BOTTLE = (ConfigAccelerationBottle) new ConfigAccelerationBottle().readConfig();
+		CONFIG_CHANCE_BAG = (ConfigChanceBag) new ConfigChanceBag().readConfig();
 	}
 
 }
