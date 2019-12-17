@@ -33,7 +33,7 @@ public class InitItem {
 	public static ItemRaens22Stick RAENS22_STICK = new ItemRaens22Stick("raens22_stick");
 	public static ItemCardboardBox CARDBOARD_BOX = new ItemCardboardBox("cardboard_box");
 
-	public static ItemAccelerationBottle ACCELERATION_BOTTLE = new ItemAccelerationBottle("acceleration_bottle");
+	public static ItemAccelerationBottle ACCELERATION_BOTTLE = new ItemAccelerationBottle("sub_soul_essence");
 
 	public static ItemBooster BOOSTER_TIER_1 = new ItemBooster("booster_tier_1", 1);
 	public static ItemBooster BOOSTER_TIER_2 = new ItemBooster("booster_tier_2", 2);
