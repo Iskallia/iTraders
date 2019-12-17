@@ -9,12 +9,14 @@ import iskallia.itraders.config.definition.LootDefinition;
 import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class ItemChanceBag extends Item {
@@ -36,6 +38,7 @@ public class ItemChanceBag extends Item {
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(hand));
 
 		ItemStack stack = player.getHeldItem(hand);
+
 		if (stack.isEmpty() || !(stack.getItem() instanceof ItemChanceBag))
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(hand));
 
@@ -49,6 +52,8 @@ public class ItemChanceBag extends Item {
 		if (!player.capabilities.isCreativeMode)
 			stack.shrink(1);
 
+		world.playSound(null, player.getPosition(), SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, SoundCategory.PLAYERS, 1.0f, (float) Math.max(Math.random(), 0.9));
+
 		return super.onItemRightClick(world, player, hand);
 	}
 
@@ -59,6 +64,7 @@ public class ItemChanceBag extends Item {
 
 	private ItemStack getLoot(EnumRarity rarity) {
 		List<LootDefinition> loot;
+
 		switch (rarity) {
 		case COMMON:
 			loot = InitConfig.CONFIG_CHANCE_BAG.COMMON_LOOT;
