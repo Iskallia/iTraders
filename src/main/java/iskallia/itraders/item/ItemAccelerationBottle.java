@@ -216,7 +216,7 @@ public class ItemAccelerationBottle extends Item {
 	}
 
 	public void setNameWithSub(ItemStack stack, String name) {
-		stack.setStackDisplayName(TextFormatting.RESET + "" + TextFormatting.DARK_AQUA + "Sub Bottle " + TextFormatting.WHITE + "(" + TextFormatting.YELLOW + name + TextFormatting.WHITE + ")");
+		stack.setStackDisplayName(TextFormatting.RESET + "" + TextFormatting.DARK_AQUA + "Soul Essence " + TextFormatting.WHITE + "(" + TextFormatting.YELLOW + name + TextFormatting.WHITE + ")");
 	}
 
 }
