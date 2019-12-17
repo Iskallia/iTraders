@@ -8,11 +8,16 @@ import iskallia.itraders.Traders;
 import iskallia.itraders.config.definition.LootDefinition;
 import iskallia.itraders.init.InitConfig;
 import iskallia.itraders.init.InitItem;
+import iskallia.itraders.item.ItemChanceBag.WeightedRandomBag.Entry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTException;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -86,14 +91,31 @@ public class ItemChanceBag extends Item {
 		WeightedRandomBag<String> weightedLoot = new WeightedRandomBag<>();
 
 		for (LootDefinition def : loot) {
-			weightedLoot.addEntry(def.getItemId(), def.getWeight());
+			weightedLoot.addEntry(def.getItemId(), def.getWeight(), def.getAmount(), def.getMeta(), def.getNbt());
 		}
 
-		String itemId = weightedLoot.getRandom();
+		Entry e = weightedLoot.getRandom();
 
-		Item item = Item.getByNameOrId(itemId);
+		Item item = Item.getByNameOrId(e.itemId);
 
-		return item == null ? ItemStack.EMPTY : new ItemStack(item);
+		if (item == null)
+			return ItemStack.EMPTY;
+
+		int amount = e.amount;
+		int meta = e.meta;
+		NBTTagCompound nbt = new NBTTagCompound();
+		if (e.nbt != null) {
+			try {
+				nbt = JsonToNBT.getTagFromJson(e.nbt);
+			} catch (NBTException ex) {
+				Traders.LOG.error("Invalid NBT on item: " + e.itemId);
+			}
+		}
+
+		ItemStack stack = new ItemStack(item, amount, meta);
+		stack.setTagCompound(nbt);
+
+		return stack;
 	}
 
 	public EnumRarity getRarity() {
@@ -102,29 +124,35 @@ public class ItemChanceBag extends Item {
 
 	public class WeightedRandomBag<T extends Object> {
 
-		private class Entry {
+		public class Entry {
 			double accumulatedWeight;
-			T object;
+			String itemId;
+			int amount;
+			int meta;
+			String nbt;
 		}
 
 		private List<Entry> entries = new ArrayList<>();
 		private double accumulatedWeight;
 		private Random rand = new Random();
 
-		public void addEntry(T object, double weight) {
+		public void addEntry(String itemId, double weight, int amount, int meta, String nbt) {
 			accumulatedWeight += weight;
 			Entry e = new Entry();
-			e.object = object;
+			e.itemId = itemId;
+			e.amount = amount;
+			e.meta = meta;
+			e.nbt = nbt;
 			e.accumulatedWeight = accumulatedWeight;
 			entries.add(e);
 		}
 
-		public T getRandom() {
+		public Entry getRandom() {
 			double r = rand.nextDouble() * accumulatedWeight;
 
 			for (Entry entry : entries) {
 				if (entry.accumulatedWeight >= r) {
-					return entry.object;
+					return entry;
 				}
 			}
 			return null; // should only happen when there are no entries
