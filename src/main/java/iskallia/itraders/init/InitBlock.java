@@ -14,8 +14,8 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class InitBlock {
 
-    public static BlockGraveStone GRAVE_STONE = new BlockGraveStone("grave_stone", Material.ROCK);
-    public static ItemBlock ITEM_GRAVE_STONE = getItemBlock(GRAVE_STONE);
+    public static final BlockGraveStone GRAVE_STONE = new BlockGraveStone("grave_stone", Material.ROCK);
+    public static final ItemBlock ITEM_GRAVE_STONE = getItemBlock(GRAVE_STONE);
 
     public static final BlockInfusionCauldron INFUSION_CAULDRON = new BlockInfusionCauldron("infusion_cauldron");
     public static final ItemBlock ITEM_INFUSION_CAULDRON = getItemBlock(INFUSION_CAULDRON);
@@ -36,7 +36,10 @@ public class InitBlock {
 
     public static final BlockPowerCube POWER_CUBE = new BlockPowerCube("power_cube");
     public static final ItemBlock ITEM_POWER_CUBE = new ItemBlockPowerCube("item_power_cube", POWER_CUBE);
-
+    
+    public static final BlockJar JAR = new BlockJar("jar");
+    public static final ItemBlock ITEM_JAR = getItemBlock(JAR);
+    
     public static void registerBlocks(IForgeRegistry<Block> registry) {
         registerBlock(GRAVE_STONE, registry);
         registerBlock(INFUSION_CAULDRON, registry);
@@ -47,6 +50,7 @@ public class InitBlock {
         registerBlock(CUBE_CHAMBER, registry);
         registerBlock(POWER_CUBE, registry);
         registerBlock(VENDING_MACHINE, registry);
+        registerBlock(JAR, registry);
     }
 
     public static void registerTileEntities() { // TODO: Eliminate redefinition of Resource Names
@@ -59,6 +63,7 @@ public class InitBlock {
         GameRegistry.registerTileEntity(TileEntityPowerCube.class, Traders.getResource("power_cube"));
         GameRegistry.registerTileEntity(TileEntityGhostPedestal.class, Traders.getResource("ghost_pedestal"));
         GameRegistry.registerTileEntity(TileEntityVendingMachine.class, Traders.getResource("vending_machine"));
+        GameRegistry.registerTileEntity(TileEntityJar.class, Traders.getResource("jar"));
     }
 
     public static void registerItemBlocks(IForgeRegistry<Item> registry) {
@@ -68,6 +73,7 @@ public class InitBlock {
         registry.register(ITEM_MAGIC_ORE_BLOCK);
         registry.register(ITEM_CUBE_CHAMBER);
         registry.register(ITEM_POWER_CUBE);
+        registry.register(ITEM_JAR);
     }
 
     /* -------------------------- */

@@ -8,9 +8,6 @@ import iskallia.itraders.item.mesh.MinerEggMesh;
 import iskallia.itraders.item.mesh.SkullNeckMesh;
 import iskallia.itraders.item.mesh.SubCardMesh;
 import iskallia.itraders.item.mesh.TraderEggMesh;
-import iskallia.itraders.block.render.TESRCryoChamber;
-import iskallia.itraders.block.render.TESRGraveStone;
-import iskallia.itraders.block.render.TESRVendingMachine;
 import iskallia.itraders.item.mesh.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
@@ -44,7 +41,8 @@ public class InitModel {
         registerSimpleItemModel(InitItem.RAENS22_STICK, 0);
         registerSimpleItemModel(InitItem.ITEM_VENDING_MACHINE, 0);
         registerSimpleItemModel(InitBlock.ITEM_CUBE_CHAMBER, 0);
-
+        registerSimpleItemModel(InitBlock.ITEM_JAR, 0);
+        
         registerBlockModel(InitBlock.INFUSION_CAULDRON, 0);
         registerBlockModel(InitBlock.GHOST_PEDESTAL, 0);
         registerBlockModel(InitBlock.MAGIC_ORE_BLOCK, 0);
@@ -68,6 +66,7 @@ public class InitModel {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPowerCube.class, new TESRPowerCube());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVendingMachine.class, new TESRVendingMachine());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCubeChamber.class, new TESRCubeChamber());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityJar.class, new TESRJar());
     }
 
     /* ---------------------------------- */
