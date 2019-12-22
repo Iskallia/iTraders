@@ -1,29 +1,42 @@
 package iskallia.itraders.multiblock.reactor.entity;
 
-import hellfirepvp.astralsorcery.common.tile.base.TileEntitySynchronized;
+import hellfirepvp.astralsorcery.common.tile.base.TileInventoryBase;
 import iskallia.itraders.block.entity.TileEntityPowerCube;
 import iskallia.itraders.capability.ModifiableEnergyStorage;
+import iskallia.itraders.init.InitBlock;
 import iskallia.itraders.multiblock.reactor.MultiblockReactor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.Map;
 
-public class TileEntityReactorCore extends TileEntitySynchronized implements ITickable {
+public class TileEntityReactorCore extends TileInventoryBase implements ITickable {
 
     private boolean structured = false;
     private ModifiableEnergyStorage energyStorage = generateEnergyStorage();
 
     public TileEntityReactorCore() {
-        super();
+        super(24);
+    }
+
+    @Override
+    protected ItemHandlerTile createNewItemHandler() {
+        return new ItemHandlerTileFiltered(this) {
+            @Override
+            public boolean canInsertItem(int slot, ItemStack toAdd, @Nonnull ItemStack existing) {
+                return existing.isEmpty() && (toAdd.getItem() == InitBlock.ITEM_POWER_CUBE);
+            }
+        };
     }
 
     public ModifiableEnergyStorage generateEnergyStorage() {
@@ -46,6 +59,14 @@ public class TileEntityReactorCore extends TileEntitySynchronized implements ITi
         };
     }
 
+    public ModifiableEnergyStorage getEnergyStorage() {
+        return energyStorage;
+    }
+
+    public boolean isStructured() {
+        return structured;
+    }
+
     /* --------------------------------- */
 
     @Override
@@ -66,10 +87,10 @@ public class TileEntityReactorCore extends TileEntitySynchronized implements ITi
 
     public void updateReactor() {
         // TODO
-        List<TileEntityPowerCube> powerCubes = MultiblockReactor.INSTANCE.getPowerCubes(world, pos);
+        Map<BlockPos, TileEntityPowerCube> powerCubes = MultiblockReactor.INSTANCE.getPowerCubes(world, pos);
         int energyToGenerate = 0;
 
-        for (TileEntityPowerCube powerCube : powerCubes) {
+        for (TileEntityPowerCube powerCube : powerCubes.values()) {
             if (powerCube.getRemainingTicks() > 0) {
                 energyToGenerate += powerCube.getBaseRFRate() * powerCube.getRarity().getMultiplier();
             }
@@ -131,7 +152,7 @@ public class TileEntityReactorCore extends TileEntitySynchronized implements ITi
     /* --------------------------------- */
 
     @Nullable
-    public static TileEntityReactorCore getReactorCore(World world, BlockPos pos) {
+    public static TileEntityReactorCore getReactorCore(IBlockAccess world, BlockPos pos) {
         TileEntity tileEntity = world.getTileEntity(pos);
 
         if (!(tileEntity instanceof TileEntityReactorCore))

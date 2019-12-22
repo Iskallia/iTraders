@@ -16,6 +16,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,10 +25,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -81,6 +79,24 @@ public class BlockPowerCube extends Block {
         cubeStack.setTagCompound(cubeNBT);
 
         return cubeStack;
+    }
+
+    public static void placePowerCube(ItemStack cubeStack, World world, BlockPos pos) {
+        IBlockState blockState = InitBlock.POWER_CUBE.getDefaultState();
+
+        NBTTagCompound cubeStackNBT = cubeStack.getTagCompound();
+        CubeRarity rarity = cubeStackNBT != null
+                ? CubeRarity.values()[cubeStackNBT.getInteger("Rarity")] : CubeRarity.COMMON;
+
+        // Set block state
+        world.setBlockState(pos, blockState.withProperty(RARITY, rarity));
+
+        // Set tile entity
+        if (cubeStackNBT != null)
+            ((TileEntityPowerCube) world.getTileEntity(pos)).readCustomNBT(cubeStackNBT);
+
+        // Notify block update
+        world.notifyNeighborsOfStateChange(pos, InitBlock.POWER_CUBE, false);
     }
 
     /* ------------------------------- */
@@ -154,6 +170,24 @@ public class BlockPowerCube extends Block {
 
     @Override
     public void breakBlock(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        TileEntityPowerCube powerCube = TileEntityPowerCube.getTileEntity(world, pos);
+
+        if (powerCube != null) {
+            ItemStack cubeStack = new ItemStack(InitBlock.ITEM_POWER_CUBE);
+
+            NBTTagCompound cubeNBT = new NBTTagCompound();
+            powerCube.writeCustomNBT(cubeNBT);
+            cubeStack.setTagCompound(cubeNBT);
+
+            InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), cubeStack);
+        }
+
+        super.breakBlock(world, pos, state);
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
         ItemStack cubeStack = new ItemStack(InitBlock.ITEM_POWER_CUBE);
 
         TileEntityPowerCube powerCube = TileEntityPowerCube.getTileEntity(world, pos);
@@ -164,9 +198,7 @@ public class BlockPowerCube extends Block {
             cubeStack.setTagCompound(cubeNBT);
         }
 
-        InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), cubeStack);
-
-        super.breakBlock(world, pos, state);
+        return cubeStack;
     }
 
     @Override

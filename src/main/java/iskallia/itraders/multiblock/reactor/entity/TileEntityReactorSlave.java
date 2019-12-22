@@ -5,6 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
@@ -112,7 +113,7 @@ public abstract class TileEntityReactorSlave extends TileEntitySynchronized {
     /* ----------------------------- */
 
     @Nullable
-    public static TileEntityReactorSlave getReactorSlave(World world, BlockPos pos) {
+    public static TileEntityReactorSlave getReactorSlave(IBlockAccess world, BlockPos pos) {
         TileEntity tileEntity = world.getTileEntity(pos);
 
         if (!(tileEntity instanceof TileEntityReactorSlave))

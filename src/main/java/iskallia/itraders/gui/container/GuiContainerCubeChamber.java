@@ -96,7 +96,6 @@ public class GuiContainerCubeChamber extends GuiContainer {
         int startX = (this.width - this.xSize) / 2;
         int startY = (this.height - this.ySize) / 2;
 
-        // TODO: (93,30) -> (176,2)
         // Render current infusion progress, if still processing
         this.mc.getTextureManager().bindTexture(CUBE_CHAMBER_GUI_TEXTURE);
         if (cubeChamber.state == TileEntityCubeChamber.CubeChamberStates.PROCESSING) {
