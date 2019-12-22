@@ -169,20 +169,22 @@ public class BlockPowerCube extends Block {
     }
 
     @Override
-    public void breakBlock(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
-        TileEntityPowerCube powerCube = TileEntityPowerCube.getTileEntity(world, pos);
+    public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+        if (!world.isRemote && !player.isCreative()) {
+            TileEntityPowerCube powerCube = TileEntityPowerCube.getTileEntity(world, pos);
 
-        if (powerCube != null) {
-            ItemStack cubeStack = new ItemStack(InitBlock.ITEM_POWER_CUBE);
+            if (powerCube != null) {
+                ItemStack cubeStack = new ItemStack(InitBlock.ITEM_POWER_CUBE);
 
-            NBTTagCompound cubeNBT = new NBTTagCompound();
-            powerCube.writeCustomNBT(cubeNBT);
-            cubeStack.setTagCompound(cubeNBT);
+                NBTTagCompound cubeNBT = new NBTTagCompound();
+                powerCube.writeCustomNBT(cubeNBT);
+                cubeStack.setTagCompound(cubeNBT);
 
-            InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), cubeStack);
+                InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), cubeStack);
+            }
         }
 
-        super.breakBlock(world, pos, state);
+        super.onBlockHarvested(world, pos, state, player);
     }
 
     @Nonnull
