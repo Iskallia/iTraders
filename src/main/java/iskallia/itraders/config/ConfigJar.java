@@ -28,16 +28,16 @@ public class ConfigJar extends Config {
 		Item.REGISTRY.forEach(item -> {
 			if(item.getRegistryName().getResourceDomain().equals("minecraft")) {
 				if(item instanceof ItemFood) {
-					this.FOODS.add(new Product(item, 0, 0, null));
+					this.FOODS.add(new Product(item, 0, 1, null));
 				}
 			}
 		});
 		
-		this.POOPS.add(new Product(Items.DIAMOND, 0, 0, null));
-		this.POOPS.add(new Product(Items.EMERALD, 0, 0, null));
-		this.POOPS.add(new Product(Items.IRON_INGOT, 0, 0, null));
-		this.POOPS.add(new Product(Items.GOLD_INGOT, 0, 0, null));
-		this.POOPS.add(new Product(Items.QUARTZ, 0, 0, null));
+		this.POOPS.add(new Product(Items.DIAMOND, 0, 1, null));
+		this.POOPS.add(new Product(Items.EMERALD, 0, 1, null));
+		this.POOPS.add(new Product(Items.IRON_INGOT, 0, 1, null));
+		this.POOPS.add(new Product(Items.GOLD_INGOT, 0, 1, null));
+		this.POOPS.add(new Product(Items.QUARTZ, 0, 1, null));
 	}
 
 }

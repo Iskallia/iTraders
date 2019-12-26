@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": {"model": "itraders:jar"},
+        "facing=south": {"model": "itraders:jar", "y": 180},
+        "facing=west": {"model": "itraders:jar", "y": 270},
+        "facing=east": {"model": "itraders:jar", "y": 90}
+    }
+}

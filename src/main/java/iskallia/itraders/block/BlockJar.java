@@ -42,9 +42,9 @@ public class BlockJar extends BlockFacing implements ITileEntityProvider {
     	return false;
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
     public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
+        return BlockRenderLayer.TRANSLUCENT;
     }
 
 	@Override
@@ -57,10 +57,9 @@ public class BlockJar extends BlockFacing implements ITileEntityProvider {
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		
 		ItemStack heldItem = player.getHeldItem(hand);
+		TileEntityJar jar = world.isRemote ? null : (TileEntityJar)world.getTileEntity(pos);
 		
-		if(!heldItem.isEmpty() && heldItem.getItem() == InitItem.SPAWN_EGG_TRADER) {
-			TileEntityJar jar = world.isRemote ? null : (TileEntityJar)world.getTileEntity(pos);
-			
+		if(!heldItem.isEmpty() && heldItem.getItem() == InitItem.SPAWN_EGG_TRADER) {		
 			if(jar != null && jar.getDonator().isEmpty()) {
 				jar.setDonator(heldItem.copy());
 				
@@ -71,6 +70,10 @@ public class BlockJar extends BlockFacing implements ITileEntityProvider {
 				world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 1.0f, 0.8f);
 			}
 			
+			return true;
+		}
+		
+		if(jar != null && jar.feed(heldItem)) {
 			return true;
 		}
 		

@@ -44,7 +44,7 @@ public class UserNameChecker {
                 }
             };
             
-            SkinProfile.service.execute(() -> {repo.findProfilesByNames(new String[]{name}, Agent.MINECRAFT, callback);});
+            SkinProfile.SERVICE.execute(() -> {repo.findProfilesByNames(new String[]{name}, Agent.MINECRAFT, callback);});
 
             return TextFormatting.YELLOW.toString();
         }

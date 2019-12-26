@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 
 public class SkinProfile {
 
-	public static final ExecutorService service = Executors.newFixedThreadPool(5);
+	public static final ExecutorService SERVICE = Executors.newFixedThreadPool(5);
 
 	private String latestNickname;
 	public AtomicReference<GameProfile> gameProfile = new AtomicReference<GameProfile>();
@@ -26,12 +26,14 @@ public class SkinProfile {
 
 	@Nullable
 	public String getLatestNickname() {
-		return latestNickname;
+		return this.latestNickname;
 	}
 
 	public void updateSkin(String name) {
+		if(name.equals(this.latestNickname))return;
 		latestNickname = name;
-		service.submit(() -> {
+		
+		SERVICE.submit(() -> {
 			gameProfile.set(new GameProfile(null, name));
 			gameProfile.set(TileEntitySkull.updateGameprofile(gameProfile.get()));
 			playerInfo.set(new NetworkPlayerInfo(gameProfile.get()));
@@ -55,7 +57,7 @@ public class SkinProfile {
 	}
 
 	public static void updateGameProfile(GameProfile input, Consumer<GameProfile> consumer) {
-		service.submit(() -> {
+		SERVICE.submit(() -> {
 			GameProfile output = TileEntitySkull.updateGameprofile(input);
 			consumer.accept(output);
 		});
