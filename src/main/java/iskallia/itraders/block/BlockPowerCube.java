@@ -260,9 +260,15 @@ public class BlockPowerCube extends Block {
             tooltip.add("");
 
             NBTTagCompound decayNBT = stackNBT.getCompoundTag("Decay");
+
+            int remainingTicks = decayNBT.getInteger("RemainingTicks");
+            int maxTicks = decayNBT.getInteger("MaxTicks");
+
             tooltip.add(rarityColor + "Decay: "
-                    + TextFormatting.GRAY + decayNBT.getInteger("RemainingTicks")
-                    + "/" + decayNBT.getInteger("MaxTicks"));
+                    + TextFormatting.GRAY + (remainingTicks / 20)
+                    + "/" + (maxTicks / 20) + " seconds");
+            if (remainingTicks == 0)
+                tooltip.add(TextFormatting.DARK_GRAY + "" + TextFormatting.ITALIC + "* Power Fully Drained");
         }
 
     }

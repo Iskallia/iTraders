@@ -22,6 +22,7 @@ import java.util.Map;
 
 public class TileEntityReactorCore extends TileInventoryBase implements ITickable {
 
+    private boolean running = false;
     private boolean structured = false;
     private ModifiableEnergyStorage energyStorage = generateEnergyStorage();
 
@@ -40,7 +41,7 @@ public class TileEntityReactorCore extends TileInventoryBase implements ITickabl
     }
 
     public ModifiableEnergyStorage generateEnergyStorage() {
-        return new ModifiableEnergyStorage(100_000, 0, 100) {
+        return new ModifiableEnergyStorage(Integer.MAX_VALUE, 0, 100) {
             @Override
             public int receiveEnergy(int maxReceive, boolean simulate) {
                 int received = super.receiveEnergy(maxReceive, simulate);
@@ -63,8 +64,31 @@ public class TileEntityReactorCore extends TileInventoryBase implements ITickabl
         return energyStorage;
     }
 
+    public int getEnergyToGenerate() {
+        Map<BlockPos, TileEntityPowerCube> powerCubes = MultiblockReactor.INSTANCE.getPowerCubes(world, pos);
+        int energyToGenerate = 0;
+
+        for (TileEntityPowerCube powerCube : powerCubes.values()) {
+            if (powerCube.getRemainingTicks() > 0) {
+                energyToGenerate += powerCube.getBaseRFRate() * powerCube.getRarity().getMultiplier();
+                powerCube.consumeDecay(1);
+            }
+        }
+
+        return energyToGenerate;
+    }
+
     public boolean isStructured() {
         return structured;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void toggle() {
+        this.running = !this.running;
+        markForUpdate();
     }
 
     /* --------------------------------- */
@@ -87,18 +111,14 @@ public class TileEntityReactorCore extends TileInventoryBase implements ITickabl
 
     public void updateReactor() {
         // TODO
-        Map<BlockPos, TileEntityPowerCube> powerCubes = MultiblockReactor.INSTANCE.getPowerCubes(world, pos);
-        int energyToGenerate = 0;
+        if (running) {
+            int energyToGenerate = getEnergyToGenerate();
 
-        for (TileEntityPowerCube powerCube : powerCubes.values()) {
-            if (powerCube.getRemainingTicks() > 0) {
-                energyToGenerate += powerCube.getBaseRFRate() * powerCube.getRarity().getMultiplier();
+            if (energyToGenerate > 0) {
+                int currentEnergy = energyStorage.getEnergyStored();
+                energyStorage.setEnergy(currentEnergy + energyToGenerate); // TODO: Include core efficiency
+                this.markForUpdate();
             }
-        }
-
-        if (energyToGenerate > 0) {
-            energyStorage.setEnergy(energyToGenerate); // TODO: Include core efficiency
-            this.markForUpdate();
         }
     }
 
@@ -112,6 +132,7 @@ public class TileEntityReactorCore extends TileInventoryBase implements ITickabl
     public void onReactorDestructed() {
         // TODO
         this.structured = false;
+        this.running = false;
         this.markForUpdate();
     }
 
@@ -137,6 +158,7 @@ public class TileEntityReactorCore extends TileInventoryBase implements ITickabl
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
+        compound.setBoolean("Running", running);
         compound.setBoolean("Structured", structured);
         compound.setInteger("Energy", energyStorage.getEnergyStored());
     }
@@ -145,6 +167,7 @@ public class TileEntityReactorCore extends TileInventoryBase implements ITickabl
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
+        this.running = compound.getBoolean("Running");
         this.structured = compound.getBoolean("Structured");
         this.energyStorage.setEnergy(compound.getInteger("Energy"));
     }

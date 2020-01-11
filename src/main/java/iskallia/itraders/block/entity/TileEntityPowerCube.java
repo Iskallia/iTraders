@@ -86,6 +86,11 @@ public class TileEntityPowerCube extends TileEntitySynchronized implements ITick
         return remainingTicks;
     }
 
+    public void consumeDecay(int amount) {
+        this.remainingTicks -= amount;
+        this.markForUpdate();
+    }
+
     public int getMaxTicks() {
         return maxTicks;
     }
@@ -96,6 +101,7 @@ public class TileEntityPowerCube extends TileEntitySynchronized implements ITick
 
     public void setFighterRotation(float fighterRotation) {
         this.fighterRotation = fighterRotation;
+        this.markForUpdate();
     }
 
     @Override
